@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidekick — 5 дизайн-вариантов: сравнение (SK-52)</title>
+<style>
+  /* SK-52 сводная витрина. Утилита приёмки: одинаковые моки, тёмная+светлая, 5 вариантов в ряд.
+     Хозяйские правила: без эмодзи, градиентов, теней на покое, тонких рамок, тонких капсов. */
+  :root {
+    --bg: #101014;
+    --panel: #17171c;
+    --ink: #ececf1;
+    --ink-dim: #a7a9b3;
+    --accent: #e8b339;
+    --tile: #1d1d23;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f3f3f5;
+      --panel: #ffffff;
+      --ink: #17181d;
+      --ink-dim: #5b5e68;
+      --accent: #a06a00;
+      --tile: #ffffff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding: 24px 24px 80px;
+  }
+  h1 { font-size: 30px; line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 10px; max-width: 40ch; }
+  @media (max-width: 560px) { h1 { font-size: 22px; } }
+  .lead { color: var(--ink-dim); max-width: 70ch; margin: 0 0 22px; }
+  .pick {
+    background: var(--panel);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 0 0 36px;
+    max-width: 1392px;
+  }
+  .pick ol { margin: 8px 0 0; padding-left: 22px; display: grid; gap: 6px; }
+  .pick a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .pick a:hover { color: var(--accent); }
+  section { margin-top: 56px; max-width: 1392px; }
+  section > h2 {
+    font-size: 21px; letter-spacing: -0.01em; margin: 0 0 4px;
+  }
+  section > p.sub { color: var(--ink-dim); margin: 0 0 18px; font-size: 13.5px; }
+  .row5 {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .vcell { min-width: 0; }
+  .vlabel { font-size: 14.5px; font-weight: 600; margin: 0 0 10px; }
+  .vlabel a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .vlabel a:hover { color: var(--accent); }
+  figure { margin: 0 0 12px; }
+  figure img { display: block; width: 100%; height: auto; border-radius: 8px; background: var(--tile); }
+  figcaption { font-size: 13px; color: var(--ink-dim); margin-top: 5px; }
+  footer { margin-top: 64px; color: var(--ink-dim); font-size: 13.5px; max-width: 70ch; }
+  footer a { color: var(--ink-dim); }
+  @media (max-width: 980px) { .row5 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) {
+    body { padding: 16px 16px 60px; }
+    .row5 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<h1>Пять дизайн-вариантов — сравнение</h1>
+<p class="lead">Один и тот же мок-контент (чат с задачей, журнал, пермисс, композер, настройки) в пяти визуальных направлениях, тёмная и светлая темы. Отвечай цифрой 1–5. Полные витрины открываются по имени варианта.</p>
+
+<div class="pick">
+  <strong>Как выбирать:</strong> смотри поверхности сверху вниз; имена вариантов — ссылки на полноразмерную витрину (там и светлая тема, и фокус-состояния).
+  <ol>
+    <li><a href="preview-linear.html">Linear</a> — плоская угольная лестница, hairline, бренд-индиго только на CTA.</li>
+    <li><a href="preview-stripe.html">Stripe</a> — navy-шелл, solid #533afd, табличные цифры, Red-акценты.</li>
+    <li><a href="preview-apple.html">Apple</a> — системный HIG: grouped-фоны, hairline-сепараторы, systemBlue.</li>
+    <li><a href="preview-firefox.html">Нативный Firefox</a> — Nova/Photon: панели тулбара, нативные радиусы 2px, системный шрифт.</li>
+    <li><a href="preview-choice.html">Выбор агента «Steel Terminal»</a> — Binance-лестница + Warp: hairlines, моно-timestamps, тень только на всплывающих.</li>
+  </ol>
+</div>
+
+<section id="chat">
+  <h2>Чат с карточкой задачи</h2>
+  <p class="sub">Лестница шагов done / active / queued, карточка задачи, композер в нижней строке.</p>
+  <div class="row5">
+    <div class="vcell"><p class="vlabel"><a href="preview-linear.html">1 · Linear</a></p>
+      <figure><img src="gallery/linear-chat-dark.png" alt="Linear: чат, тёмная тема"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/linear-chat-light.png" alt="Linear: чат, светлая тема"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-stripe.html">2 · Stripe</a></p>
+      <figure><img src="gallery/stripe-chat-dark.png" alt="Stripe: чат, тёмная тема"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/stripe-chat-light.png" alt="Stripe: чат, светлая тема"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-apple.html">3 · Apple</a></p>
+      <figure><img src="gallery/apple-chat-dark.png" alt="Apple: чат, тёмная тема"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/apple-chat-light.png" alt="Apple: чат, светлая тема"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-firefox.html">4 · Нативный Firefox</a></p>
+      <figure><img src="gallery/firefox-chat-dark.png" alt="Firefox: чат, тёмная тема"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/firefox-chat-light.png" alt="Firefox: чат, светлая тема"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-choice.html">5 · Steel Terminal</a></p>
+      <figure><img src="gallery/choice-chat-dark.png" alt="Steel Terminal: чат, тёмная тема"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/choice-chat-light.png" alt="Steel Terminal: чат, светлая тема"><figcaption>светлая</figcaption></figure></div>
+  </div>
+</section>
+
+<section id="journal">
+  <h2>Журнал уведомлений</h2>
+  <p class="sub">Попапы журнала и меню, счётчик колокольчика — всплывающие слои с тенью.</p>
+  <div class="row5">
+    <div class="vcell"><p class="vlabel"><a href="preview-linear.html">1 · Linear</a></p>
+      <figure><img src="gallery/linear-journal-dark.png" alt="Linear: журнал, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/linear-journal-light.png" alt="Linear: журнал, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-stripe.html">2 · Stripe</a></p>
+      <figure><img src="gallery/stripe-journal-dark.png" alt="Stripe: журнал, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/stripe-journal-light.png" alt="Stripe: журнал, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-apple.html">3 · Apple</a></p>
+      <figure><img src="gallery/apple-journal-dark.png" alt="Apple: журнал, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/apple-journal-light.png" alt="Apple: журнал, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-firefox.html">4 · Нативный Firefox</a></p>
+      <figure><img src="gallery/firefox-journal-dark.png" alt="Firefox: журнал, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/firefox-journal-light.png" alt="Firefox: журнал, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-choice.html">5 · Steel Terminal</a></p>
+      <figure><img src="gallery/choice-journal-dark.png" alt="Steel Terminal: журнал, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/choice-journal-light.png" alt="Steel Terminal: журнал, светлая"><figcaption>светлая</figcaption></figure></div>
+  </div>
+</section>
+
+<section id="perm">
+  <h2>Карточка пермисса</h2>
+  <p class="sub">Запрос разрешения на действие агента: текст, кнопки «разрешить/отклонить», hand-off человеку.</p>
+  <div class="row5">
+    <div class="vcell"><p class="vlabel"><a href="preview-linear.html">1 · Linear</a></p>
+      <figure><img src="gallery/linear-perm-dark.png" alt="Linear: пермисс, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/linear-perm-light.png" alt="Linear: пермисс, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-stripe.html">2 · Stripe</a></p>
+      <figure><img src="gallery/stripe-perm-dark.png" alt="Stripe: пермисс, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/stripe-perm-light.png" alt="Stripe: пермисс, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-apple.html">3 · Apple</a></p>
+      <figure><img src="gallery/apple-perm-dark.png" alt="Apple: пермисс, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/apple-perm-light.png" alt="Apple: пермисс, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-firefox.html">4 · Нативный Firefox</a></p>
+      <figure><img src="gallery/firefox-perm-dark.png" alt="Firefox: пермисс, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/firefox-perm-light.png" alt="Firefox: пермисс, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-choice.html">5 · Steel Terminal</a></p>
+      <figure><img src="gallery/choice-perm-dark.png" alt="Steel Terminal: пермисс, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/choice-perm-light.png" alt="Steel Terminal: пермисс, светлая"><figcaption>светлая</figcaption></figure></div>
+  </div>
+</section>
+
+<section id="composer">
+  <h2>Композер</h2>
+  <p class="sub">Строка ввода с кнопкой отправки; состояние отправки (send → stop) у всех на месте.</p>
+  <div class="row5">
+    <div class="vcell"><p class="vlabel"><a href="preview-linear.html">1 · Linear</a></p>
+      <figure><img src="gallery/linear-composer-dark.png" alt="Linear: композер, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/linear-composer-light.png" alt="Linear: композер, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-stripe.html">2 · Stripe</a></p>
+      <figure><img src="gallery/stripe-composer-dark.png" alt="Stripe: композер, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/stripe-composer-light.png" alt="Stripe: композер, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-apple.html">3 · Apple</a></p>
+      <figure><img src="gallery/apple-composer-dark.png" alt="Apple: композер, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/apple-composer-light.png" alt="Apple: композер, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-firefox.html">4 · Нативный Firefox</a></p>
+      <figure><img src="gallery/firefox-composer-dark.png" alt="Firefox: композер, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/firefox-composer-light.png" alt="Firefox: композер, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-choice.html">5 · Steel Terminal</a></p>
+      <figure><img src="gallery/choice-composer-dark.png" alt="Steel Terminal: композер, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/choice-composer-light.png" alt="Steel Terminal: композер, светлая"><figcaption>светлая</figcaption></figure></div>
+  </div>
+</section>
+
+<section id="options">
+  <h2>Страница настроек</h2>
+  <p class="sub">Токен, сервер, вкладки агента — карточки, селекты, тумблеры.</p>
+  <div class="row5">
+    <div class="vcell"><p class="vlabel"><a href="preview-linear.html">1 · Linear</a></p>
+      <figure><img src="gallery/linear-options-dark.png" alt="Linear: настройки, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/linear-options-light.png" alt="Linear: настройки, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-stripe.html">2 · Stripe</a></p>
+      <figure><img src="gallery/stripe-options-dark.png" alt="Stripe: настройки, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/stripe-options-light.png" alt="Stripe: настройки, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-apple.html">3 · Apple</a></p>
+      <figure><img src="gallery/apple-options-dark.png" alt="Apple: настройки, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/apple-options-light.png" alt="Apple: настройки, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-firefox.html">4 · Нативный Firefox</a></p>
+      <figure><img src="gallery/firefox-options-dark.png" alt="Firefox: настройки, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/firefox-options-light.png" alt="Firefox: настройки, светлая"><figcaption>светлая</figcaption></figure></div>
+    <div class="vcell"><p class="vlabel"><a href="preview-choice.html">5 · Steel Terminal</a></p>
+      <figure><img src="gallery/choice-options-dark.png" alt="Steel Terminal: настройки, тёмная"><figcaption>тёмная</figcaption></figure>
+      <figure><img src="gallery/choice-options-light.png" alt="Steel Terminal: настройки, светлая"><figcaption>светлая</figcaption></figure></div>
+  </div>
+</section>
+
+<footer>
+  Карточка SK-52. Полные витрины: <a href="preview-linear.html">Linear</a> · <a href="preview-stripe.html">Stripe</a> · <a href="preview-apple.html">Apple</a> · <a href="preview-firefox.html">Firefox</a> · <a href="preview-choice.html">Steel Terminal</a>.
+  Сводный отчёт: <code>~/.hermes/notes/sidekick-variants-2026-10.md</code>. slop-скан (эмодзи/градиенты/AA) — в отчёте.
+</footer>
+</body>
+</html>

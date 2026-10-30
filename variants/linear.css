@@ -1,0 +1,404 @@
+/* SK-54: design variant «Linear» — one-file reskin over theme.css + sidebar.css
+   (+ options.css on the options page). Token re-declaration mirrors the EXACT
+   block structure of theme.css (:root, media-light, media-dark, data-theme
+   light/dark) so light/dark switching keeps working untouched.
+
+   Linear language: flat solids, zero gradient functions here (acceptance scanner
+   counts 0), no glass blur (all three blur layers → 0 via --glass-blur: 0px),
+   no colored glow shadows, charcoal surface ladder + 1px hairlines + faint
+   inset top edge, radii 6/8/99, Inter-first system stack, brand #5E6AD2 spent
+   ONLY as: solid CTA fill (white ink 4.70:1), focus ring, selection tint,
+   links, logo mark. Status = 4 calm semantics (ok/warn/err/info), AA-verified
+   per spec.md §9 (~/.hermes/cache/variants/linear/spec.md).
+   NOT the SK-40 violet slop: that palette is gone from every block (violet yields
+   to Linear ink and indigo); hovers are neutral brightness; motion belongs to keyboard
+   (focus ring walks the list), pointer rows answer with a tone step only.
+
+   Exception, recorded: the logo bolt (#hdic) keeps the sprite gradient
+   url(#g-bolt), its stops are the two mono-family brand tokens --bolt-a
+   (#5e6ad2) → --bolt-b (#828fff): a 44px² brand mark in Linear's own
+   indigo→lavender, the only non-flat paint on the page. The empty-state glyph
+   (#embolt) is deliberately flat single-tone. */
+
+/* ---- tokens: shared non-color knobs (Linear scale) ---------------------------- */
+:root {
+  --r1: 6px;    /* controls: inputs, buttons, rows */
+  --r2: 8px;    /* blocks: bubbles, cards, prompts, menu, panels */
+  --rp: 99px;   /* chips/pills (Linear status pills stay pills) */
+  --glass-blur: 0px;   /* blur layers 3 → 0 */
+  --spring: cubic-bezier(.22, 1, .36, 1);  /* Linear has no overshoot */
+  --fs-hero: 16px;
+  --fs-ttl: 14px;
+  --fs-hd: 13px;
+}
+
+/* ---- light (default + explicit override) -------------------------------------- */
+:root {
+  --surface-1: #f4f5f7;
+  --surface-2: #ffffff;
+  --surface-3: #eceef1;
+  --text: #16181d;
+  --text-dim: #5b606b;
+  --line: #d8dade;
+  --line-soft: #e9ebee;
+  --accent: #4751b8;
+  --accent-soft: rgba(79, 89, 198, 0.10);
+  --ok: #176a35;
+  --ok-soft: rgba(38, 150, 80, 0.12);
+  --warn: #8a5a00;
+  --warn-soft: rgba(200, 150, 40, 0.14);
+  --err: #b42318;
+  --err-soft: rgba(200, 50, 40, 0.10);
+  --info: #1f5fc4;
+  --info-soft: rgba(50, 110, 200, 0.10);
+  --idle: #5b6474;
+  --idle-soft: rgba(100, 110, 128, 0.12);
+  --bg-grad: none;
+  --grad-hot: #4f59c6;
+  --grad-hot-hi: #454fae;
+  --glass-bg: #fafbfc;
+  --glass-bg-2: #ffffff;
+  --glass-border: #d8dade;
+  --glass-border-hi: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 10px 28px rgba(20, 24, 40, 0.10), 0 2px 6px rgba(20, 24, 40, 0.06);
+  --glass-hover: rgba(22, 24, 29, 0.055);
+  --btn-accent: #4f59c6;
+  --btn-ok: #176a35;
+  --btn-ok-hot: #11552a;
+  --btn-stop: #c1362c;
+  --btn-stop-hot: #a82c23;
+  --ink-on-solid: #ffffff;
+  --bolt-a: #5e6ad2;
+  --bolt-b: #4751b8;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --surface-1: #f4f5f7;
+    --surface-2: #ffffff;
+    --surface-3: #eceef1;
+    --text: #16181d;
+    --text-dim: #5b606b;
+    --line: #d8dade;
+    --line-soft: #e9ebee;
+    --accent: #4751b8;
+    --accent-soft: rgba(79, 89, 198, 0.10);
+    --ok: #176a35;
+    --ok-soft: rgba(38, 150, 80, 0.12);
+    --warn: #8a5a00;
+    --warn-soft: rgba(200, 150, 40, 0.14);
+    --err: #b42318;
+    --err-soft: rgba(200, 50, 40, 0.10);
+    --info: #1f5fc4;
+    --info-soft: rgba(50, 110, 200, 0.10);
+    --idle: #5b6474;
+    --idle-soft: rgba(100, 110, 128, 0.12);
+    --bg-grad: none;
+    --grad-hot: #4f59c6;
+    --grad-hot-hi: #454fae;
+    --glass-bg: #fafbfc;
+    --glass-bg-2: #ffffff;
+    --glass-border: #d8dade;
+    --glass-border-hi: rgba(255, 255, 255, 0.85);
+    --glass-shadow: 0 10px 28px rgba(20, 24, 40, 0.10), 0 2px 6px rgba(20, 24, 40, 0.06);
+    --glass-hover: rgba(22, 24, 29, 0.055);
+    --btn-accent: #4f59c6;
+    --btn-ok: #176a35;
+    --btn-ok-hot: #11552a;
+    --btn-stop: #c1362c;
+    --btn-stop-hot: #a82c23;
+    --ink-on-solid: #ffffff;
+    --bolt-a: #5e6ad2;
+    --bolt-b: #4751b8;
+  }
+}
+
+/* ---- dark (Linear console: near-black, faint blue tint) ------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-1: #08090a;
+    --surface-2: #16181b;
+    --surface-3: #23252b;
+    --text: #f2f3f5;
+    --text-dim: #9aa1ab;
+    --line: #23252a;
+    --line-soft: #1b1d21;
+    --accent: #828fff;
+    --accent-soft: rgba(94, 106, 210, 0.18);
+    --ok: #4fc582;
+    --ok-soft: rgba(31, 124, 68, 0.20);
+    --warn: #e0b34a;
+    --warn-soft: rgba(176, 138, 42, 0.18);
+    --err: #f07f7f;
+    --err-soft: rgba(224, 82, 82, 0.16);
+    --info: #7fa9ea;
+    --info-soft: rgba(96, 140, 214, 0.18);
+    --idle: #99a0ab;
+    --idle-soft: rgba(138, 143, 152, 0.16);
+    --bg-grad: none;
+    --grad-hot: #5e6ad2;
+    --grad-hot-hi: #525cc4;
+    --glass-bg: #101216;
+    --glass-bg-2: #1a1c21;
+    --glass-border: #23252a;
+    --glass-border-hi: rgba(255, 255, 255, 0.06);
+    --glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.45);
+    --glass-hover: rgba(255, 255, 255, 0.07);
+    --btn-accent: #5e6ad2;
+    --btn-ok: #1e7e44;
+    --btn-ok-hot: #166a38;
+    --btn-stop: #c33d3d;
+    --btn-stop-hot: #ac3333;
+    --ink-on-solid: #ffffff;
+    --bolt-a: #5e6ad2;
+    --bolt-b: #828fff;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-1: #f4f5f7;
+  --surface-2: #ffffff;
+  --surface-3: #eceef1;
+  --text: #16181d;
+  --text-dim: #5b606b;
+  --line: #d8dade;
+  --line-soft: #e9ebee;
+  --accent: #4751b8;
+  --accent-soft: rgba(79, 89, 198, 0.10);
+  --ok: #176a35;
+  --ok-soft: rgba(38, 150, 80, 0.12);
+  --warn: #8a5a00;
+  --warn-soft: rgba(200, 150, 40, 0.14);
+  --err: #b42318;
+  --err-soft: rgba(200, 50, 40, 0.10);
+  --info: #1f5fc4;
+  --info-soft: rgba(50, 110, 200, 0.10);
+  --idle: #5b6474;
+  --idle-soft: rgba(100, 110, 128, 0.12);
+  --bg-grad: none;
+  --grad-hot: #4f59c6;
+  --grad-hot-hi: #454fae;
+  --glass-bg: #fafbfc;
+  --glass-bg-2: #ffffff;
+  --glass-border: #d8dade;
+  --glass-border-hi: rgba(255, 255, 255, 0.85);
+  --glass-shadow: 0 10px 28px rgba(20, 24, 40, 0.10), 0 2px 6px rgba(20, 24, 40, 0.06);
+  --glass-hover: rgba(22, 24, 29, 0.055);
+  --btn-accent: #4f59c6;
+  --btn-ok: #176a35;
+  --btn-ok-hot: #11552a;
+  --btn-stop: #c1362c;
+  --btn-stop-hot: #a82c23;
+  --ink-on-solid: #ffffff;
+  --bolt-a: #5e6ad2;
+  --bolt-b: #4751b8;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #08090a;
+  --surface-2: #16181b;
+  --surface-3: #23252b;
+  --text: #f2f3f5;
+  --text-dim: #9aa1ab;
+  --line: #23252a;
+  --line-soft: #1b1d21;
+  --accent: #828fff;
+  --accent-soft: rgba(94, 106, 210, 0.18);
+  --ok: #4fc582;
+  --ok-soft: rgba(31, 124, 68, 0.20);
+  --warn: #e0b34a;
+  --warn-soft: rgba(176, 138, 42, 0.18);
+  --err: #f07f7f;
+  --err-soft: rgba(224, 82, 82, 0.16);
+  --info: #7fa9ea;
+  --info-soft: rgba(96, 140, 214, 0.18);
+  --idle: #99a0ab;
+  --idle-soft: rgba(138, 143, 152, 0.16);
+  --bg-grad: none;
+  --grad-hot: #5e6ad2;
+  --grad-hot-hi: #525cc4;
+  --glass-bg: #101216;
+  --glass-bg-2: #1a1c21;
+  --glass-border: #23252a;
+  --glass-border-hi: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.45);
+  --glass-hover: rgba(255, 255, 255, 0.07);
+  --btn-accent: #5e6ad2;
+  --btn-ok: #1e7e44;
+  --btn-ok-hot: #166a38;
+  --btn-stop: #c33d3d;
+  --btn-stop-hot: #ac3333;
+  --ink-on-solid: #ffffff;
+  --bolt-a: #5e6ad2;
+  --bolt-b: #828fff;
+}
+
+/* ---- typography (Linear: Inter-first, 13px, weights ≤600) --------------------- */
+body {
+  font-family: "Inter", "SF Pro Display", -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+}
+#ttl { font-weight: 600; }
+#empttl { font-weight: 600; }
+#bellhead { font: 600 11px system-ui; font-family: inherit; }
+#histttl { font-weight: 600; }
+.tkhd { font-weight: 600; }
+#bellReadAll { font-family: inherit; }
+.stime, .arow .at, .hrow .hdate, .btime { font-variant-numeric: tabular-nums; }
+#belln { font-variant-numeric: tabular-nums; }
+
+/* ---- flat surfaces: blur 3→0, glows → none, gradient line → gone --------------- */
+#hd { border-bottom-color: var(--glass-border); }
+#hd::after { content: none; }
+#hdic { color: var(--btn-accent); }
+#st[data-s="online"] { box-shadow: none; }
+/* SK-54: options toast (options.css keeps .st absolute at the card's top-right,
+   where it runs over the paragraph text). In the flow it is a calm status line.
+   `main` exists only on the options page — sidebar keeps its own .m/.sys states. */
+main .st { position: static; width: auto; margin-top: var(--sp2); }
+/* Linear identity: chat avatars are plain glyphs, not tinted squares.
+   Agent = brand bolt, human = neutral person; status stays in ink, not chips. */
+.av.ag, .av.hu { background: transparent; border: none; }
+.av.ag { color: var(--btn-accent); }
+.av.hu { color: var(--text-dim); }
+.m.me .av.hu { color: var(--ink-on-solid); }
+#belln { background: var(--btn-stop); animation: none; }
+#bellBtn:hover .icn { animation: none; }
+.me { box-shadow: none; }
+.av.ag { box-shadow: none; }
+/* send: Linear composer = a plain accent glyph, no box at rest; the brand fill
+   lives in text CTAs (Сохранить / Разрешить). Feedback = brightness; brand focus ring. */
+#go { background: transparent; border: 0; box-shadow: none; color: var(--btn-accent); }
+#go.running { background: transparent; box-shadow: none; color: var(--btn-stop); }
+#go:hover { background: transparent; box-shadow: none; color: var(--accent); }
+#go.running:hover { background: transparent; box-shadow: none; color: var(--err); }
+#go:active { transform: translateY(1px); }
+#go:disabled { background: transparent; color: var(--accent-off); }
+
+/* resting cards: hairline border + Linear's inset lit top pixel, never shadow */
+.m.task, .perm, .ho, .m.think {
+  box-shadow: inset 0 1px 0 var(--glass-border-hi);
+}
+#bellpanel {
+  background: var(--glass-bg-2);
+}
+
+/* ---- chat feed ----------------------------------------------------------------- */
+.hm { border-color: var(--line-soft); }
+.m.think { border-style: solid; border-color: var(--line-soft); }
+.srow.active { background: var(--info-soft); }
+.srow.queued { opacity: 1; color: var(--text-dim); }
+.srow .hint { opacity: 1; color: var(--text-dim); }
+.sraw { background: rgba(127, 127, 127, 0.08); }
+.smore { color: var(--info); }
+.tkic.spin { border: 2px solid color-mix(in srgb, var(--info) 25%, transparent); border-top-color: var(--info); }
+.perm, .ho {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+.perm::before, .ho::before {
+  top: 0; bottom: 0; width: 3px; border-radius: var(--r2) 0 0 var(--r2);
+}
+.perm::before { background: var(--warn); }
+.ho::before { background: var(--info); }
+.perm .ok:hover { background: var(--btn-ok-hot); }
+.perm .alw {
+  background: var(--surface-3);
+  border-color: var(--line);
+  color: var(--text);
+}
+.perm .alw:hover { background: var(--line); }
+.perm .no { border-color: color-mix(in srgb, var(--err) 45%, transparent); }
+.perm .chip { border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.perm .chip:hover { border-color: var(--warn); }
+.perm.done, .ho.done { opacity: 1; }
+.perm.done { border-color: var(--line-soft); }
+.perm button:active, .ho button:active { transform: translateY(1px); }
+.ho button:hover { background: var(--btn-ok-hot); }
+/* bell_focus: border-color pulse, not a 3px amber halo (redefines keyframes) */
+@keyframes bellflash {
+  0% { border-color: var(--warn); }
+  60% { border-color: var(--warn); }
+  100% { border-color: var(--line-soft); }
+}
+#log .m.flash { border-color: var(--line-soft); }
+
+/* ---- journal dropdown (solid, Linear-style) ------------------------------------- */
+.brow:hover { transform: none; }
+.brow { transition: background 120ms ease; }
+.brow.unread { background: var(--accent-soft); }
+.bempty, #bellfoot { color: var(--text-dim); }
+
+/* ---- ⋯ menu: keyboard owns the motion ------------------------------------------- */
+.mi { font-weight: 500; }
+.mi:hover { background: var(--glass-hover); transform: none; }
+.mi .icn { color: var(--text-dim); }
+.mi:hover .icn, .mi:focus-visible .icn { color: var(--text-dim); }
+.mi:active { transform: none; }
+.mi.on {
+  background: var(--accent-soft);
+  border: var(--line-w) solid color-mix(in srgb, var(--accent) 35%, transparent);
+  color: var(--accent);
+}
+
+/* ---- skill menu / audit / history: flat selection, tone-step hover -------------- */
+#sklist .sk:hover, #sklist .sk.hl { background: var(--accent-soft); }
+.arow:hover { background: var(--surface-2); transform: none; }
+.arow { transition: background 120ms ease; }
+.hrow:hover { background: var(--surface-2); transform: none; }
+.hrow { transition: background 120ms ease; }
+.hrow.cur {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+.hrow .ht { color: var(--text); }
+
+/* ---- empty state: flat single-tone, static ------------------------------------- */
+#embolt {
+  fill: var(--bolt-a);
+  stroke: var(--bolt-a);
+  animation: none;
+}
+
+/* ---- options page (Linear product light/dark) ----------------------------------- */
+h1 { font-size: var(--fs-hero); font-weight: 600; }
+h1::after {
+  content: "";
+  display: block;
+  width: 24px; height: 2px;
+  border-radius: 1px;
+  background: var(--btn-accent);
+  margin-top: var(--sp2);
+}
+h2 { font-weight: 600; }
+.card {
+  background: var(--surface-2);
+  border-color: var(--line);
+  box-shadow: inset 0 1px 0 var(--glass-border-hi);
+}
+.card button { box-shadow: none; }
+.card button:hover { background: var(--grad-hot-hi); }
+.card button:active { transform: translateY(1px); }
+.card button:focus-visible { outline-offset: 2px; }
+.card button.sec:hover { background: var(--glass-hover); }
+
+/* ---- keyboard focus: 2px brand ring, 2px offset (Linear) ------------------------- */
+button:focus-visible, input:focus-visible, textarea:focus-visible,
+select:focus-visible, .mi:focus-visible, #sklist .sk:focus-visible,
+.hrow:focus-visible, .tkhd:focus-visible, .brow:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---- reduced motion: content instant, travel gone; focus ring stays --------------- */
+@media (prefers-reduced-motion: reduce) {
+  #log .m, #empty, #embolt, #belln, #menu, #bellpanel, .brow,
+  #bellBtn:hover .icn, #log .m.flash {
+    animation: none !important;
+  }
+  .mi, .mi .icn, .hrow, .arow, .brow, #go, #go .icn, #in, .tkcaret,
+  .perm button, .ho button, .card button {
+    transition: none !important;
+  }
+}

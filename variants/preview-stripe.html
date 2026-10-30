@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidekick · дизайн-вариант «Stripe» — витрина</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    --ink: #0d253d; --dim: #5d6d85; --ground: #f6f9fc; --card: #ffffff;
+    --line: #d3dde7; --accent: #533afd;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font: 15px/1.55 'Inter','SF Pro Display',system-ui,sans-serif;
+    letter-spacing: -0.006em;
+  }
+  main { max-width: 1240px; margin: 0 auto; padding: 40px 24px 96px; }
+  header { max-width: 1240px; margin: 0 auto; padding: 40px 24px 8px; }
+  h1 { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
+  .lede { font-size: 16px; color: var(--dim); margin: 0; max-width: 640px; }
+  .facts { margin: 16px 0 0; font-size: 13px; color: var(--dim); }
+  .facts b { color: var(--ink); font-weight: 600; }
+  section { margin-top: 56px; }
+  h2 { font-size: 16px; font-weight: 700; margin: 0 0 4px; }
+  .cap { font-size: 13px; color: var(--dim); margin: 0 0 10px; }
+  .pair { display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start; }
+  figure.cell { margin: 0; width: 380px; }
+  iframe {
+    display: block; width: 380px; height: 740px; max-width: 100%;
+    border: 1px solid var(--line); border-radius: 12px; background: #fff; /* taste-skill-ignore: outlined-box — рамка «устройства» мока */
+    box-shadow: 0 1px 3px rgba(0,55,112,0.08); /* taste-skill-ignore: shadow — Stripe L1, pin-мир */
+  }
+  figure.wide iframe { width: 560px; }
+  figure.wide { flex: 0 1 560px; width: 560px; }
+  footer { margin-top: 64px; padding-top: 24px; font-size: 12.5px; color: var(--dim); }
+  a { color: var(--accent); text-decoration: none; }
+  @media (max-width: 620px) {
+    h1 { font-size: 24px; }
+    .lede { font-size: 15px; }
+  }
+  @media (max-width: 860px) {
+    .pair { flex-direction: column; }
+    figure.wide iframe { width: 100%; }
+    main, header { padding-left: 16px; padding-right: 16px; }
+  }
+</style></head>
+<body>
+<header>
+  <h1>Sidekick — дизайн-вариант «Stripe»</h1>
+  <p class="lede">Пять поверхностей панели на моках, светлая и тёмная темы рядом.
+     Токены <b>theme.css</b> перекраивает оверлей <b>stripe.css</b>; в каждом моке он
+     подключён в том же порядке, что в расширении: theme → sidebar/options → stripe.</p>
+  <p class="facts">Индиго <b>#533afd</b> — единственная залитая пилюля · тёмный грунт
+     <b>#0e1e33</b> (navy) · hairline <b>#e3e8ee</b> · тени Stripe L1/L2 с синим тинтом ·
+     пилюли CTA · tabular-nums · AA-контраст 54/54 пар</p>
+</header>
+<main>
+<section class="row" id="sec-chat" data-surface="chat">
+  <h2>Чат с шагами задачи</h2>
+  <div class="pair"><figure class="cell" id="cell-chat-light" data-surface="chat" data-theme="light">
+  <div class="cap">светлая тема · карточка задачи со шагами, think-блок, реплики</div>
+  <iframe title="Чат с шагами задачи — светлая тема" width="380" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Чат с шагами задачи — light&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-settings&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&lt;path d=&quot;M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-play&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 4l14 8-14 8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-memory&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;3&quot; y=&quot;3&quot; width=&quot;18&quot; height=&quot;5&quot; rx=&quot;1&quot;/&gt;&lt;path d=&quot;M5 8v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8&quot;/&gt;&lt;path d=&quot;M10 12h4&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;&lt;/defs&gt;&lt;/svg&gt;
+&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+  &lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;h1 id=&quot;ttl&quot;&gt;Купить монитор на Ozon&lt;/h1&gt;
+  &lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: ws://127.0.0.1:8791 — online&quot;&gt;&lt;/span&gt;
+  &lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot; hidden&gt;0&lt;/span&gt;&lt;/button&gt;
+  &lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;&lt;div class=&quot;m sys&quot;&gt;чат от 26 октября · 04:09&lt;/div&gt;&lt;div class=&quot;m me&quot;&gt;найди монитор 27&amp;quot; 2K до 30 000 ₽ на Ozon и сравни три карточки&lt;/div&gt;
+&lt;div class=&quot;m task running open&quot;&gt;
+  &lt;div class=&quot;tkhd&quot;&gt;
+    &lt;span class=&quot;tkic spin&quot; role=&quot;img&quot; aria-label=&quot;выполняется&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;tktx&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-settings&quot;/&gt;&lt;/svg&gt;сравнение мониторов&lt;/span&gt;
+    &lt;span class=&quot;tktab&quot; title=&quot;https://ozon.ru/mcms/search/&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-globe&quot;/&gt;&lt;/svg&gt;Ozon 27″&lt;/span&gt;
+    &lt;span class=&quot;tkcaret&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-chevron&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;tksteps&quot;&gt;
+    &lt;div class=&quot;srow done&quot;&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;1. открыл поиск мониторов на Ozon&lt;/span&gt;&lt;span class=&quot;stime&quot;&gt;04:09:41&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow done&quot;&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;2. применил фильтр «27″, 2K, до 30 000 ₽»&lt;/span&gt;&lt;span class=&quot;stime&quot;&gt;04:10:02&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow active&quot;&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-play&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;3. сравниваю три карточки: яркость, герцовка, доставка&lt;/span&gt;&lt;span class=&quot;stime&quot;&gt;04:11:58&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow queued&quot;&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-ring&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;4. сохраню сравнение в заметку&lt;/span&gt;&lt;span class=&quot;stime&quot;&gt;04:12:07&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;&lt;div class=&quot;m hm&quot;&gt;Нашёл три подходящих: XG271QM (29 990 ₽), 27G4S (28 490 ₽), VG27AQ3A (30 990 ₽). Сравниваю яркость и герцовку, сейчас сохраню сравнение в заметку.&lt;/div&gt;
+&lt;div class=&quot;m think done&quot;&gt;
+  &lt;div class=&quot;thd&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-think&quot;/&gt;&lt;/svg&gt;Подумал (18 сек)&lt;/div&gt;
+  &lt;div class=&quot;tx2&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m task done&quot;&gt;
+  &lt;div class=&quot;tkhd&quot;&gt;
+    &lt;span class=&quot;tkic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class=&quot;tktx&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-settings&quot;/&gt;&lt;/svg&gt;итог: 3 монитора, лучший — XG271QM 165Hz&lt;/span&gt;
+    &lt;span class=&quot;tkcaret&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-chevron&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;tksteps&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; value=&quot;добавь XG271QM в заметку и посчитай сумму&quot; autofocus autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph off&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить текущую задачу&quot; aria-label=&quot;Стоп задача&quot;&gt;
+  &lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;
+  &lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure><figure class="cell" id="cell-chat-dark" data-surface="chat" data-theme="dark">
+  <div class="cap">тёмная тема · карточка задачи со шагами, think-блок, реплики</div>
+  <iframe title="Чат с шагами задачи — тёмная тема" width="380" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Чат с шагами задачи — dark&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-settings&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&lt;path d=&quot;M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-play&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 4l14 8-14 8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-memory&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;3&quot; y=&quot;3&quot; width=&quot;18&quot; height=&quot;5&quot; rx=&quot;1&quot;/&gt;&lt;path d=&quot;M5 8v11a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8&quot;/&gt;&lt;path d=&quot;M10 12h4&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;&lt;/defs&gt;&lt;/svg&gt;
+&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+  &lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;h1 id=&quot;ttl&quot;&gt;Купить монитор на Ozon&lt;/h1&gt;
+  &lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: ws://127.0.0.1:8791 — online&quot;&gt;&lt;/span&gt;
+  &lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot; hidden&gt;0&lt;/span&gt;&lt;/button&gt;
+  &lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;&lt;div class=&quot;m sys&quot;&gt;чат от 26 октября · 04:09&lt;/div&gt;&lt;div class=&quot;m me&quot;&gt;найди монитор 27&amp;quot; 2K до 30 000 ₽ на Ozon и сравни три карточки&lt;/div&gt;
+&lt;div class=&quot;m task running open&quot;&gt;
+  &lt;div class=&quot;tkhd&quot;&gt;
+    &lt;span class=&quot;tkic spin&quot; role=&quot;img&quot; aria-label=&quot;выполняется&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;tktx&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-settings&quot;/&gt;&lt;/svg&gt;сравнение мониторов&lt;/span&gt;
+    &lt;span class=&quot;tktab&quot; title=&quot;https://ozon.ru/mcms/search/&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-globe&quot;/&gt;&lt;/svg&gt;Ozon 27″&lt;/span&gt;
+    &lt;span class=&quot;tkcaret&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-chevron&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;tksteps&quot;&gt;
+    &lt;div class=&quot;srow done&quot;&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;1. открыл поиск мониторов на Ozon&lt;/span&gt;&lt;span class=&quot;stime&quot;&gt;04:09:41&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow done&quot;&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;2. применил фильтр «27″, 2K, до 30 000 ₽»&lt;/span&gt;&lt;span class=&quot;stime&quot;&gt;04:10:02&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow active&quot;&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-play&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;3. сравниваю три карточки: яркость, герцовка, доставка&lt;/span&gt;&lt;span class=&quot;stime&quot;&gt;04:11:58&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow queued&quot;&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-ring&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;4. сохраню сравнение в заметку&lt;/span&gt;&lt;span class=&quot;stime&quot;&gt;04:12:07&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;&lt;div class=&quot;m hm&quot;&gt;Нашёл три подходящих: XG271QM (29 990 ₽), 27G4S (28 490 ₽), VG27AQ3A (30 990 ₽). Сравниваю яркость и герцовку, сейчас сохраню сравнение в заметку.&lt;/div&gt;
+&lt;div class=&quot;m think done&quot;&gt;
+  &lt;div class=&quot;thd&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-think&quot;/&gt;&lt;/svg&gt;Подумал (18 сек)&lt;/div&gt;
+  &lt;div class=&quot;tx2&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m task done&quot;&gt;
+  &lt;div class=&quot;tkhd&quot;&gt;
+    &lt;span class=&quot;tkic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class=&quot;tktx&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-settings&quot;/&gt;&lt;/svg&gt;итог: 3 монитора, лучший — XG271QM 165Hz&lt;/span&gt;
+    &lt;span class=&quot;tkcaret&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-chevron&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;tksteps&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; value=&quot;добавь XG271QM в заметку и посчитай сумму&quot; autofocus autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph off&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить текущую задачу&quot; aria-label=&quot;Стоп задача&quot;&gt;
+  &lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;
+  &lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure></div>
+</section><section class="row" id="sec-journal" data-surface="journal">
+  <h2>Журнал уведомлений</h2>
+  <div class="pair"><figure class="cell" id="cell-journal-light" data-surface="journal" data-theme="light">
+  <div class="cap">светлая тема · непрочитанные звонки, «Прочитать всё»</div>
+  <iframe title="Журнал уведомлений — светлая тема" width="380" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Журнал уведомлений — light&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-settings&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&lt;path d=&quot;M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-play&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 4l14 8-14 8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-close&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;&lt;/defs&gt;&lt;/svg&gt;
+&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+  &lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;h1 id=&quot;ttl&quot;&gt;Купить монитор на Ozon&lt;/h1&gt;
+  &lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: ws://127.0.0.1:8791 — online&quot;&gt;&lt;/span&gt;
+  &lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot;&gt;2&lt;/span&gt;&lt;/button&gt;
+  &lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;&lt;div class=&quot;m sys&quot;&gt;чат от 26 октября · 03:41&lt;/div&gt;
+&lt;div class=&quot;m task done&quot;&gt;
+  &lt;div class=&quot;tkhd&quot;&gt;
+    &lt;span class=&quot;tkic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class=&quot;tktx&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-settings&quot;/&gt;&lt;/svg&gt;сохранил заметку с ценами&lt;/span&gt;
+    &lt;span class=&quot;tkcaret&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-chevron&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;tksteps&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&quot;m hm&quot;&gt;Готово: список цен в заметке «мониторы».&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;bellpanel&quot; role=&quot;dialog&quot; aria-label=&quot;Журнал уведомлений&quot;&gt;
+  &lt;div id=&quot;bellhead&quot;&gt;&lt;span&gt;Журнал&lt;/span&gt;&lt;button id=&quot;bellClose&quot; title=&quot;Закрыть&quot; aria-label=&quot;Закрыть журнал&quot; type=&quot;button&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-close&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;div id=&quot;bellrows&quot;&gt;
+    &lt;button class=&quot;brow k-done unread&quot; data-id=&quot;e04:12&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Задача готова: сравнение мониторов&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;открыть карточку в чате&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;04:12&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-perm unread&quot; data-id=&quot;e04:09&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Hermes просит: оплатить заказ&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;ozon.ru — кнопка «Купить в 1 клик»&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;04:09&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-failed&quot; data-id=&quot;e03:57&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-close&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Задача не выполнена: капча на ozon.ru&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;нужен ты&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;03:57&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot; data-id=&quot;e03:41&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Задача готова: заметка с ценами&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;сравни с прошлым списком&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;03:41&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot; data-id=&quot;e03:28&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Сравнил три карточки: 27G4S, XG271QM, VG27AQ3A&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;таблица в заметке «мониторы»&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;03:28&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot; data-id=&quot;e02:58&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Собрал 12 вкладок с ценами в группу&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;Sidekick · группа закрыта&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;02:58&lt;/span&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;bellfoot&quot;&gt;&lt;button id=&quot;bellReadAll&quot; type=&quot;button&quot;&gt;Прочитать всё&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; value=&quot;добавь XG271QM в заметку и посчитай сумму&quot; autofocus autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph off&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить текущую задачу&quot; aria-label=&quot;Стоп задача&quot;&gt;
+  &lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;
+  &lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure><figure class="cell" id="cell-journal-dark" data-surface="journal" data-theme="dark">
+  <div class="cap">тёмная тема · непрочитанные звонки, «Прочитать всё»</div>
+  <iframe title="Журнал уведомлений — тёмная тема" width="380" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Журнал уведомлений — dark&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-settings&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&lt;path d=&quot;M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-play&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 4l14 8-14 8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-close&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;&lt;/defs&gt;&lt;/svg&gt;
+&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+  &lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;h1 id=&quot;ttl&quot;&gt;Купить монитор на Ozon&lt;/h1&gt;
+  &lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: ws://127.0.0.1:8791 — online&quot;&gt;&lt;/span&gt;
+  &lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot;&gt;2&lt;/span&gt;&lt;/button&gt;
+  &lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;&lt;div class=&quot;m sys&quot;&gt;чат от 26 октября · 03:41&lt;/div&gt;
+&lt;div class=&quot;m task done&quot;&gt;
+  &lt;div class=&quot;tkhd&quot;&gt;
+    &lt;span class=&quot;tkic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+    &lt;span class=&quot;tktx&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-settings&quot;/&gt;&lt;/svg&gt;сохранил заметку с ценами&lt;/span&gt;
+    &lt;span class=&quot;tkcaret&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-chevron&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;tksteps&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;&lt;div class=&quot;m hm&quot;&gt;Готово: список цен в заметке «мониторы».&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;bellpanel&quot; role=&quot;dialog&quot; aria-label=&quot;Журнал уведомлений&quot;&gt;
+  &lt;div id=&quot;bellhead&quot;&gt;&lt;span&gt;Журнал&lt;/span&gt;&lt;button id=&quot;bellClose&quot; title=&quot;Закрыть&quot; aria-label=&quot;Закрыть журнал&quot; type=&quot;button&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-close&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;div id=&quot;bellrows&quot;&gt;
+    &lt;button class=&quot;brow k-done unread&quot; data-id=&quot;e04:12&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Задача готова: сравнение мониторов&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;открыть карточку в чате&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;04:12&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-perm unread&quot; data-id=&quot;e04:09&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Hermes просит: оплатить заказ&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;ozon.ru — кнопка «Купить в 1 клик»&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;04:09&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-failed&quot; data-id=&quot;e03:57&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-close&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Задача не выполнена: капча на ozon.ru&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;нужен ты&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;03:57&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot; data-id=&quot;e03:41&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Задача готова: заметка с ценами&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;сравни с прошлым списком&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;03:41&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot; data-id=&quot;e03:28&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Сравнил три карточки: 27G4S, XG271QM, VG27AQ3A&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;таблица в заметке «мониторы»&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;03:28&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot; data-id=&quot;e02:58&quot; type=&quot;button&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;btx&quot;&gt;&lt;span&gt;Собрал 12 вкладок с ценами в группу&lt;/span&gt;&lt;span class=&quot;bsub&quot;&gt;Sidekick · группа закрыта&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;02:58&lt;/span&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;bellfoot&quot;&gt;&lt;button id=&quot;bellReadAll&quot; type=&quot;button&quot;&gt;Прочитать всё&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; value=&quot;добавь XG271QM в заметку и посчитай сумму&quot; autofocus autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph off&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить текущую задачу&quot; aria-label=&quot;Стоп задача&quot;&gt;
+  &lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;
+  &lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure></div>
+</section><section class="row" id="sec-perm" data-surface="perm">
+  <h2>Карточка разрешения и hand-off</h2>
+  <div class="pair"><figure class="cell" id="cell-perm-light" data-surface="perm" data-theme="light">
+  <div class="cap">светлая тема · запрос на оплату, вердикт с причиной, «нужен ты»</div>
+  <iframe title="Карточка разрешения и hand-off — светлая тема" width="380" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Карточка разрешения и hand-off — light&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-settings&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&lt;path d=&quot;M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-play&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 4l14 8-14 8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;&lt;/defs&gt;&lt;/svg&gt;
+&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+  &lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;h1 id=&quot;ttl&quot;&gt;Купить монитор на Ozon&lt;/h1&gt;
+  &lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: ws://127.0.0.1:8791 — online&quot;&gt;&lt;/span&gt;
+  &lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot;&gt;1&lt;/span&gt;&lt;/button&gt;
+  &lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;&lt;div class=&quot;m me&quot;&gt;купи вот этот XG271QM, доставка — пункт выдачи на Красной&lt;/div&gt;&lt;div class=&quot;m hm&quot;&gt;Заведу в корзину и оформлю; на оплате попрошу разрешение.&lt;/div&gt;
+&lt;div class=&quot;m perm&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;Hermes просит: оплатить заказ&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;ozon.ru — Монитор XG271QM 27″ 165Hz 2K — клик по кнопке «Купить в 1 клик» — 29 990 ₽&lt;/div&gt;
+  &lt;img class=&quot;pshot&quot; src=&quot;data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;320&#x27; height=&#x27;120&#x27;&gt;&lt;rect width=&#x27;320&#x27; height=&#x27;120&#x27; fill=&#x27;%23ffffff&#x27;/&gt;&lt;rect width=&#x27;320&#x27; height=&#x27;16&#x27; fill=&#x27;%23eef2f7&#x27;/&gt;&lt;rect x=&#x27;6&#x27; y=&#x27;4&#x27; width=&#x27;52&#x27; height=&#x27;8&#x27; rx=&#x27;3&#x27; fill=&#x27;%23cfd9e4&#x27;/&gt;&lt;rect x=&#x27;64&#x27; y=&#x27;4&#x27; width=&#x27;44&#x27; height=&#x27;8&#x27; rx=&#x27;3&#x27; fill=&#x27;%23e3e8ee&#x27;/&gt;&lt;rect x=&#x27;8&#x27; y=&#x27;24&#x27; width=&#x27;112&#x27; height=&#x27;88&#x27; rx=&#x27;4&#x27; fill=&#x27;%23eef2f7&#x27;/&gt;&lt;rect x=&#x27;40&#x27; y=&#x27;50&#x27; width=&#x27;48&#x27; height=&#x27;36&#x27; rx=&#x27;3&#x27; fill=&#x27;%23d3dde7&#x27;/&gt;&lt;rect x=&#x27;130&#x27; y=&#x27;26&#x27; width=&#x27;178&#x27; height=&#x27;9&#x27; rx=&#x27;3&#x27; fill=&#x27;%23cfd9e4&#x27;/&gt;&lt;rect x=&#x27;130&#x27; y=&#x27;40&#x27; width=&#x27;132&#x27; height=&#x27;7&#x27; rx=&#x27;3&#x27; fill=&#x27;%23dde5ee&#x27;/&gt;&lt;text x=&#x27;130&#x27; y=&#x27;62&#x27; font-family=&#x27;system-ui&#x27; font-size=&#x27;11&#x27; font-weight=&#x27;700&#x27; fill=&#x27;%23c11c1c&#x27;&gt;29 990 ₽&lt;/text&gt;&lt;text x=&#x27;196&#x27; y=&#x27;62&#x27; font-family=&#x27;system-ui&#x27; font-size=&#x27;9&#x27; fill=&#x27;%235d6d85&#x27;&gt;-18% · в наличии&lt;/text&gt;&lt;rect x=&#x27;130&#x27; y=&#x27;70&#x27; width=&#x27;84&#x27; height=&#x27;18&#x27; rx=&#x27;9&#x27; fill=&#x27;%23533afd&#x27;/&gt;&lt;rect x=&#x27;142&#x27; y=&#x27;77&#x27; width=&#x27;60&#x27; height=&#x27;4&#x27; rx=&#x27;2&#x27; fill=&#x27;%23ffffff&#x27;/&gt;&lt;rect x=&#x27;222&#x27; y=&#x27;70&#x27; width=&#x27;84&#x27; height=&#x27;18&#x27; rx=&#x27;9&#x27; fill=&#x27;%23ffffff&#x27; stroke=&#x27;%23d3dde7&#x27;/&gt;&lt;rect x=&#x27;234&#x27; y=&#x27;77&#x27; width=&#x27;60&#x27; height=&#x27;4&#x27; rx=&#x27;2&#x27; fill=&#x27;%23cfd9e4&#x27;/&gt;&lt;rect x=&#x27;130&#x27; y=&#x27;96&#x27; width=&#x27;150&#x27; height=&#x27;6&#x27; rx=&#x27;3&#x27; fill=&#x27;%23e3e8ee&#x27;/&gt;&lt;text x=&#x27;8&#x27; y=&#x27;118&#x27; font-family=&#x27;system-ui&#x27; font-size=&#x27;9&#x27; fill=&#x27;%235d6d85&#x27;&gt;ozon.ru · кадр вкладки с моста (jpeg)&lt;/text&gt;&lt;/svg&gt;&quot; alt=&quot;кадр задачи&quot;&gt;
+  &lt;div class=&quot;btns&quot;&gt;
+    &lt;button class=&quot;ok&quot; type=&quot;button&quot;&gt;Разрешить разово&lt;/button&gt;
+    &lt;button class=&quot;alw&quot; type=&quot;button&quot;&gt;Разрешить для ozon.ru всегда&lt;/button&gt;
+    &lt;button class=&quot;no&quot; type=&quot;button&quot;&gt;Отклонить&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m perm done&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;Hermes просил: оформить доставку&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;ozon.ru — выбор пункта выдачи — ул. Красная, 178&lt;/div&gt;
+  &lt;div class=&quot;btns&quot;&gt;
+    &lt;span class=&quot;res&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-cross&quot;/&gt;&lt;/svg&gt;отклонено&lt;/span&gt;
+    &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;не туда жмёшь&lt;/button&gt;
+    &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;не то поле&lt;/button&gt;
+    &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;стоп задача&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m ho&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;Нужен ты · попытка 2&lt;/div&gt;
+  &lt;div class=&quot;tx2&quot;&gt;введи SMS-код подтверждения в поле банка — код приходят тебе, я его не вижу&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;https://bank.example.ru/pay — задача: купить монитор&lt;/div&gt;
+  &lt;div class=&quot;note&quot;&gt;«Готово» нажато, но мост не подтвердил цель: страница оплаты та же, код не принят&lt;/div&gt;
+  &lt;button type=&quot;button&quot;&gt;Готово, продолжай&lt;/button&gt;
+  &lt;div class=&quot;warn&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-alert&quot;/&gt;&lt;/svg&gt;после «Готово» агент продолжит автоматически&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; value=&quot;добавь XG271QM в заметку и посчитай сумму&quot; autofocus autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph off&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить текущую задачу&quot; aria-label=&quot;Стоп задача&quot;&gt;
+  &lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;
+  &lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure><figure class="cell" id="cell-perm-dark" data-surface="perm" data-theme="dark">
+  <div class="cap">тёмная тема · запрос на оплату, вердикт с причиной, «нужен ты»</div>
+  <iframe title="Карточка разрешения и hand-off — тёмная тема" width="380" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Карточка разрешения и hand-off — dark&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-settings&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&lt;path d=&quot;M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-play&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 4l14 8-14 8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;&lt;/defs&gt;&lt;/svg&gt;
+&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+  &lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;h1 id=&quot;ttl&quot;&gt;Купить монитор на Ozon&lt;/h1&gt;
+  &lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: ws://127.0.0.1:8791 — online&quot;&gt;&lt;/span&gt;
+  &lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot;&gt;1&lt;/span&gt;&lt;/button&gt;
+  &lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;&lt;div class=&quot;m me&quot;&gt;купи вот этот XG271QM, доставка — пункт выдачи на Красной&lt;/div&gt;&lt;div class=&quot;m hm&quot;&gt;Заведу в корзину и оформлю; на оплате попрошу разрешение.&lt;/div&gt;
+&lt;div class=&quot;m perm&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;Hermes просит: оплатить заказ&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;ozon.ru — Монитор XG271QM 27″ 165Hz 2K — клик по кнопке «Купить в 1 клик» — 29 990 ₽&lt;/div&gt;
+  &lt;img class=&quot;pshot&quot; src=&quot;data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;320&#x27; height=&#x27;120&#x27;&gt;&lt;rect width=&#x27;320&#x27; height=&#x27;120&#x27; fill=&#x27;%23ffffff&#x27;/&gt;&lt;rect width=&#x27;320&#x27; height=&#x27;16&#x27; fill=&#x27;%23eef2f7&#x27;/&gt;&lt;rect x=&#x27;6&#x27; y=&#x27;4&#x27; width=&#x27;52&#x27; height=&#x27;8&#x27; rx=&#x27;3&#x27; fill=&#x27;%23cfd9e4&#x27;/&gt;&lt;rect x=&#x27;64&#x27; y=&#x27;4&#x27; width=&#x27;44&#x27; height=&#x27;8&#x27; rx=&#x27;3&#x27; fill=&#x27;%23e3e8ee&#x27;/&gt;&lt;rect x=&#x27;8&#x27; y=&#x27;24&#x27; width=&#x27;112&#x27; height=&#x27;88&#x27; rx=&#x27;4&#x27; fill=&#x27;%23eef2f7&#x27;/&gt;&lt;rect x=&#x27;40&#x27; y=&#x27;50&#x27; width=&#x27;48&#x27; height=&#x27;36&#x27; rx=&#x27;3&#x27; fill=&#x27;%23d3dde7&#x27;/&gt;&lt;rect x=&#x27;130&#x27; y=&#x27;26&#x27; width=&#x27;178&#x27; height=&#x27;9&#x27; rx=&#x27;3&#x27; fill=&#x27;%23cfd9e4&#x27;/&gt;&lt;rect x=&#x27;130&#x27; y=&#x27;40&#x27; width=&#x27;132&#x27; height=&#x27;7&#x27; rx=&#x27;3&#x27; fill=&#x27;%23dde5ee&#x27;/&gt;&lt;text x=&#x27;130&#x27; y=&#x27;62&#x27; font-family=&#x27;system-ui&#x27; font-size=&#x27;11&#x27; font-weight=&#x27;700&#x27; fill=&#x27;%23c11c1c&#x27;&gt;29 990 ₽&lt;/text&gt;&lt;text x=&#x27;196&#x27; y=&#x27;62&#x27; font-family=&#x27;system-ui&#x27; font-size=&#x27;9&#x27; fill=&#x27;%235d6d85&#x27;&gt;-18% · в наличии&lt;/text&gt;&lt;rect x=&#x27;130&#x27; y=&#x27;70&#x27; width=&#x27;84&#x27; height=&#x27;18&#x27; rx=&#x27;9&#x27; fill=&#x27;%23533afd&#x27;/&gt;&lt;rect x=&#x27;142&#x27; y=&#x27;77&#x27; width=&#x27;60&#x27; height=&#x27;4&#x27; rx=&#x27;2&#x27; fill=&#x27;%23ffffff&#x27;/&gt;&lt;rect x=&#x27;222&#x27; y=&#x27;70&#x27; width=&#x27;84&#x27; height=&#x27;18&#x27; rx=&#x27;9&#x27; fill=&#x27;%23ffffff&#x27; stroke=&#x27;%23d3dde7&#x27;/&gt;&lt;rect x=&#x27;234&#x27; y=&#x27;77&#x27; width=&#x27;60&#x27; height=&#x27;4&#x27; rx=&#x27;2&#x27; fill=&#x27;%23cfd9e4&#x27;/&gt;&lt;rect x=&#x27;130&#x27; y=&#x27;96&#x27; width=&#x27;150&#x27; height=&#x27;6&#x27; rx=&#x27;3&#x27; fill=&#x27;%23e3e8ee&#x27;/&gt;&lt;text x=&#x27;8&#x27; y=&#x27;118&#x27; font-family=&#x27;system-ui&#x27; font-size=&#x27;9&#x27; fill=&#x27;%235d6d85&#x27;&gt;ozon.ru · кадр вкладки с моста (jpeg)&lt;/text&gt;&lt;/svg&gt;&quot; alt=&quot;кадр задачи&quot;&gt;
+  &lt;div class=&quot;btns&quot;&gt;
+    &lt;button class=&quot;ok&quot; type=&quot;button&quot;&gt;Разрешить разово&lt;/button&gt;
+    &lt;button class=&quot;alw&quot; type=&quot;button&quot;&gt;Разрешить для ozon.ru всегда&lt;/button&gt;
+    &lt;button class=&quot;no&quot; type=&quot;button&quot;&gt;Отклонить&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m perm done&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;Hermes просил: оформить доставку&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;ozon.ru — выбор пункта выдачи — ул. Красная, 178&lt;/div&gt;
+  &lt;div class=&quot;btns&quot;&gt;
+    &lt;span class=&quot;res&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-cross&quot;/&gt;&lt;/svg&gt;отклонено&lt;/span&gt;
+    &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;не туда жмёшь&lt;/button&gt;
+    &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;не то поле&lt;/button&gt;
+    &lt;button class=&quot;chip&quot; type=&quot;button&quot;&gt;стоп задача&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m ho&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;Нужен ты · попытка 2&lt;/div&gt;
+  &lt;div class=&quot;tx2&quot;&gt;введи SMS-код подтверждения в поле банка — код приходят тебе, я его не вижу&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;https://bank.example.ru/pay — задача: купить монитор&lt;/div&gt;
+  &lt;div class=&quot;note&quot;&gt;«Готово» нажато, но мост не подтвердил цель: страница оплаты та же, код не принят&lt;/div&gt;
+  &lt;button type=&quot;button&quot;&gt;Готово, продолжай&lt;/button&gt;
+  &lt;div class=&quot;warn&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-alert&quot;/&gt;&lt;/svg&gt;после «Готово» агент продолжит автоматически&lt;/div&gt;
+&lt;/div&gt;&lt;/div&gt;
+&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; value=&quot;добавь XG271QM в заметку и посчитай сумму&quot; autofocus autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph off&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить текущую задачу&quot; aria-label=&quot;Стоп задача&quot;&gt;
+  &lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;
+  &lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure></div>
+</section><section class="row" id="sec-composer" data-surface="composer">
+  <h2>Композер</h2>
+  <div class="pair"><figure class="cell" id="cell-composer-light" data-surface="composer" data-theme="light">
+  <div class="cap">светлая тема · поле в фокусе, пустое состояние, кнопка «стоп»</div>
+  <iframe title="Композер — светлая тема" width="380" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Композер — light&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;&lt;/defs&gt;&lt;/svg&gt;
+&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+  &lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;h1 id=&quot;ttl&quot;&gt;Купить монитор на Ozon&lt;/h1&gt;
+  &lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: ws://127.0.0.1:8791 — online&quot;&gt;&lt;/span&gt;
+  &lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot; hidden&gt;0&lt;/span&gt;&lt;/button&gt;
+  &lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;empty&quot;&gt;
+  &lt;svg id=&quot;embolt&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;div id=&quot;empttl&quot;&gt;Новый чат&lt;/div&gt;
+  &lt;div id=&quot;emsub&quot;&gt;Напиши, что сделать — Hermes выполнит в браузере и покажет шаги&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; value=&quot;добавь XG271QM в заметку и посчитай сумму&quot; autofocus autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph off&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить текущую задачу&quot; aria-label=&quot;Стоп задача&quot;&gt;
+  &lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;
+  &lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure><figure class="cell" id="cell-composer-dark" data-surface="composer" data-theme="dark">
+  <div class="cap">тёмная тема · поле в фокусе, пустое состояние, кнопка «стоп»</div>
+  <iframe title="Композер — тёмная тема" width="380" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Композер — dark&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;&lt;/defs&gt;&lt;/svg&gt;
+&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+  &lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;h1 id=&quot;ttl&quot;&gt;Купить монитор на Ozon&lt;/h1&gt;
+  &lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: ws://127.0.0.1:8791 — online&quot;&gt;&lt;/span&gt;
+  &lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot; hidden&gt;0&lt;/span&gt;&lt;/button&gt;
+  &lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+  &lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;empty&quot;&gt;
+  &lt;svg id=&quot;embolt&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+  &lt;div id=&quot;empttl&quot;&gt;Новый чат&lt;/div&gt;
+  &lt;div id=&quot;emsub&quot;&gt;Напиши, что сделать — Hermes выполнит в браузере и покажет шаги&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; value=&quot;добавь XG271QM в заметку и посчитай сумму&quot; autofocus autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph off&quot; aria-hidden=&quot;true&quot;&gt;&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить текущую задачу&quot; aria-label=&quot;Стоп задача&quot;&gt;
+  &lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;
+  &lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;
+&lt;/button&gt;&lt;/div&gt;
+&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure></div>
+</section><section class="row" id="sec-options" data-surface="options">
+  <h2>Страница настроек</h2>
+  <div class="pair"><figure class="cell wide" id="cell-options-light" data-surface="options" data-theme="light">
+  <div class="cap">светлая тема · карточки настроек</div>
+  <iframe title="Настройки — светлая тема" width="560" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Настройки — витрина&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/options.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;&lt;main&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;/defs&gt;&lt;/svg&gt;
+&lt;h1&gt;Hermes Sidekick&lt;/h1&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-tok&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-tok&quot;&gt;Токен&lt;/h2&gt;
+    &lt;span class=&quot;chip ok&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;токен задан&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;Токен сессии моста. Возьми содержимое файла &lt;code&gt;~/sidekick/bridge/hub/token&lt;/code&gt; на машине Hermes и вставь сюда. Хранится только локально в расширении.&lt;/p&gt;
+  &lt;div class=&quot;meta&quot;&gt;проверен 26.10.2026 в 04:12 · мост ws://127.0.0.1:8791&lt;/div&gt;
+  &lt;input type=&quot;password&quot; placeholder=&quot;вставь новый токен (hex из hub/token)&quot; aria-label=&quot;новый токен моста&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;button type=&quot;button&quot;&gt;Сохранить&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;sec&quot;&gt;Стереть&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;sec&quot;&gt;Проверить подключение&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;st ok&quot;&gt;сохранено · 26.10 04:12&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-srv&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-srv&quot;&gt;Сервер&lt;/h2&gt;
+    &lt;span class=&quot;chip warn&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;откат на туннель&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;WS-адрес моста Hermes. &lt;b&gt;Пусто = ws://127.0.0.1:8791&lt;/b&gt; — режим ssh-туннеля. Если указанный адрес недоступен, расширение само откатится на localhost.&lt;/p&gt;
+  &lt;p class=&quot;meta&quot;&gt;&lt;svg class=&quot;icn sm&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-alert&quot;/&gt;&lt;/svg&gt; ws:// передаёт токен открытым текстом — только доверенная домашняя сеть.&lt;/p&gt;
+  &lt;input type=&quot;text&quot; value=&quot;ws://192.168.0.50:8791&quot; aria-label=&quot;WS-адрес моста&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;button type=&quot;button&quot;&gt;Сохранить&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;sec&quot;&gt;На localhost (туннель)&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;st err&quot;&gt;рукопожатие ws://192.168.0.50:8791 не удалось — откат на туннель, ретраи 2–60 с&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-tabs&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-tabs&quot;&gt;Вкладки агента&lt;/h2&gt;&lt;/div&gt;
+  &lt;p&gt;Задачи агента живут в группе вкладок &lt;code&gt;Sidekick&lt;/code&gt;. Что делать с группой после завершения задачи:&lt;/p&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label class=&quot;selwrap&quot;&gt;&lt;select aria-label=&quot;поведение группы вкладок после задачи&quot;&gt;
+      &lt;option value=&quot;collapse&quot; selected&gt;свернуть группу (по умолчанию)&lt;/option&gt;
+      &lt;option value=&quot;ungroup&quot;&gt;разгруппировать (вкладки останутся открыты)&lt;/option&gt;
+      &lt;option value=&quot;none&quot;&gt;ничего (группа останется на виду)&lt;/option&gt;
+    &lt;/select&gt;&lt;span class=&quot;caret&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-chevdown&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/label&gt;
+    &lt;button type=&quot;button&quot; class=&quot;sec&quot;&gt;Применить&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;st&quot;&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;/main&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure><figure class="cell wide" id="cell-options-dark" data-surface="options" data-theme="dark">
+  <div class="cap">тёмная тема · карточки настроек</div>
+  <iframe title="Настройки — тёмная тема" width="560" height="740" srcdoc="&lt;!doctype html&gt;
+&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Настройки — витрина&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/options.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;stripe.css&quot;&gt;
+&lt;/head&gt;&lt;body&gt;&lt;main&gt;
+&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;/defs&gt;&lt;/svg&gt;
+&lt;h1&gt;Hermes Sidekick&lt;/h1&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-tok&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-tok&quot;&gt;Токен&lt;/h2&gt;
+    &lt;span class=&quot;chip ok&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;токен задан&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;Токен сессии моста. Возьми содержимое файла &lt;code&gt;~/sidekick/bridge/hub/token&lt;/code&gt; на машине Hermes и вставь сюда. Хранится только локально в расширении.&lt;/p&gt;
+  &lt;div class=&quot;meta&quot;&gt;проверен 26.10.2026 в 04:12 · мост ws://127.0.0.1:8791&lt;/div&gt;
+  &lt;input type=&quot;password&quot; placeholder=&quot;вставь новый токен (hex из hub/token)&quot; aria-label=&quot;новый токен моста&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;button type=&quot;button&quot;&gt;Сохранить&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;sec&quot;&gt;Стереть&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;sec&quot;&gt;Проверить подключение&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;st ok&quot;&gt;сохранено · 26.10 04:12&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-srv&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-srv&quot;&gt;Сервер&lt;/h2&gt;
+    &lt;span class=&quot;chip warn&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;откат на туннель&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;WS-адрес моста Hermes. &lt;b&gt;Пусто = ws://127.0.0.1:8791&lt;/b&gt; — режим ssh-туннеля. Если указанный адрес недоступен, расширение само откатится на localhost.&lt;/p&gt;
+  &lt;p class=&quot;meta&quot;&gt;&lt;svg class=&quot;icn sm&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-alert&quot;/&gt;&lt;/svg&gt; ws:// передаёт токен открытым текстом — только доверенная домашняя сеть.&lt;/p&gt;
+  &lt;input type=&quot;text&quot; value=&quot;ws://192.168.0.50:8791&quot; aria-label=&quot;WS-адрес моста&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;button type=&quot;button&quot;&gt;Сохранить&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;sec&quot;&gt;На localhost (туннель)&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;st err&quot;&gt;рукопожатие ws://192.168.0.50:8791 не удалось — откат на туннель, ретраи 2–60 с&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-tabs&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-tabs&quot;&gt;Вкладки агента&lt;/h2&gt;&lt;/div&gt;
+  &lt;p&gt;Задачи агента живут в группе вкладок &lt;code&gt;Sidekick&lt;/code&gt;. Что делать с группой после завершения задачи:&lt;/p&gt;
+  &lt;div class=&quot;row&quot;&gt;
+    &lt;label class=&quot;selwrap&quot;&gt;&lt;select aria-label=&quot;поведение группы вкладок после задачи&quot;&gt;
+      &lt;option value=&quot;collapse&quot; selected&gt;свернуть группу (по умолчанию)&lt;/option&gt;
+      &lt;option value=&quot;ungroup&quot;&gt;разгруппировать (вкладки останутся открыты)&lt;/option&gt;
+      &lt;option value=&quot;none&quot;&gt;ничего (группа останется на виду)&lt;/option&gt;
+    &lt;/select&gt;&lt;span class=&quot;caret&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-chevdown&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/label&gt;
+    &lt;button type=&quot;button&quot; class=&quot;sec&quot;&gt;Применить&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class=&quot;st&quot;&gt;&lt;/div&gt;
+&lt;/section&gt;
+&lt;/main&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+</figure></div>
+</section>
+  <footer>
+    Моки демонстрационные: подписи и разметка взяты из живого сайдбара
+    (sidebar.html, feed.js, sidebar.js, options.html), картинка «кадр вкладки» —
+    заглушка. Спецификация токенов и аудит контраста:
+    <code>~/.hermes/cache/variants/stripe/spec.md</code>. Шрифт витрины — Inter как
+    замена проприетарной Söhne; в расширении — локальный стек без удалённых шрифтов.
+  </footer>
+</main>
+</body></html>

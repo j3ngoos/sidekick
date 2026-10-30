@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><title>SK-39 приёмка</title>
+<style>
+  body{font:15px system-ui;margin:40px;background:#fafafa}
+  /* оранжевая тема: ripple обязан взять акцент отсюда, а не фиолет оверлея */
+  #btn{color:#ff6600;background:#fff3e0;border:2px solid #ff6600;padding:14px 34px;
+       font:600 17px system-ui;border-radius:10px;cursor:pointer}
+  #inp{margin-left:24px;padding:10px 14px;font:15px system-ui;border:2px solid #bbb;border-radius:8px;width:220px}
+  #log{margin-top:22px;font:13px ui-monospace,monospace;color:#333}
+</style></head><body>
+<h3>SK-39: выразительное движение</h3>
+<p><button id="btn">Кнопка</button><input id="inp" placeholder="поле ввода"></p>
+<div id="log">clicks=<span id="c">0</span></div>
+<script>
+window.__clicks = 0; window.__t0 = 0; window.__rpSeen = -1;
+const btn = document.getElementById("btn");
+btn.addEventListener("click", () => {
+  window.__clicks++; window.__rpSeen = -1;
+  document.getElementById("c").textContent = window.__clicks;
+  window.__t0 = performance.now();
+  // первый .rp после клика: визуал — ОТЧЁТ после исполнения, не гейт
+  const poll = () => {
+    const h = document.getElementById("hermes-sidekick-host");
+    const n = h && h.shadowRoot ? h.shadowRoot.querySelectorAll(".rp").length : 0;
+    if (n > 0) { window.__rpSeen = performance.now() - window.__t0; return; }
+    if (performance.now() - window.__t0 < 1500) requestAnimationFrame(poll);
+  };
+  requestAnimationFrame(poll);
+});
+// rAF-счётчик кадров для fps-замера (не блокирующий: start/read двумя вызовами)
+window.__fn = 0; window.__f0 = 0;
+window.__fpsStart = () => { window.__f0 = performance.now(); window.__fn = 0;
+  const loop = () => { window.__fn++; requestAnimationFrame(loop); }; requestAnimationFrame(loop); };
+</script>
+</body></html>

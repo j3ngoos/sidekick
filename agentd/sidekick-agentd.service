@@ -1,0 +1,20 @@
+[Unit]
+Description=Hermes Sidekick agentd — живой агент сайдбара на Hermes API (SK-21)
+Documentation=file://%REPO%/agentd/sidekick_agentd.py
+After=network.target sidekick-bridge.service
+Wants=sidekick-bridge.service
+
+[Service]
+ExecStart=@PYTHON@ %REPO%/agentd/sidekick_agentd.py
+WorkingDirectory=%HOME%
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+# потомки (hermes -p sidekick) живут в cgroup юнита: рестарт демона забирает их с собой
+KillMode=control-group
+TimeoutStopSec=10
+StandardOutput=append:%HUB%/agentd.log
+StandardError=append:%HUB%/agentd.log
+
+[Install]
+WantedBy=default.target

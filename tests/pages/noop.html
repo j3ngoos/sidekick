@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- SK-48 (аудит №2 22.10, проблема 11): Ozon-подобный silent-noop — пиксельный чекбокс
+     с label, клик по label перехвачен JS с preventDefault: «executed:true, а галочки
+     нет». Рядом — рабочие тумблеры для контраста (нативный чекбокс, aria-switch) и
+     обычная кнопка. Состояния — в document.title («sk48: {json}») через page.text. -->
+<html><head><meta charset="utf-8"><title>sk48: {}</title></head>
+<body style="font:14px sans-serif">
+<h4>Корзина</h4>
+<p><label for="realcb">Товар обычный</label>
+   <input type="checkbox" id="realcb"></p>
+<div id="ozon" style="position:relative">
+  <input type="checkbox" id="noopcb"
+         style="width:1px;height:1px;padding:0;opacity:0;position:absolute">
+  <label for="noopcb" id="nooplbl">Выбрать все</label>
+</div>
+<p><button id="sw" role="switch" aria-checked="false" aria-label="Тумблер доставки">доставка</button></p>
+<p><button id="sw-noop" role="switch" aria-checked="false" aria-label="Тумблер-заглушка">заглушка</button></p>
+<p><button id="plain" aria-label="Просто кнопка">ок</button></p>
+<script>
+const $ = (id) => document.getElementById(id);
+const noopcb = $("noopcb");
+// Ozon-ловушка: обработчик label съедает default — чекбокс не меняется вовсе
+$("nooplbl").addEventListener("click", (e) => { e.preventDefault(); });
+$("sw").addEventListener("click", () => {
+  const b = $("sw");
+  b.setAttribute("aria-checked", b.getAttribute("aria-checked") === "true" ? "false" : "true");
+});
+$("sw-noop").addEventListener("click", () => { /* «обработчик есть, состояния нет» */ });
+function rep() {
+  document.title = "sk48: " + JSON.stringify({
+    real: $("realcb").checked, noop: noopcb.checked,
+    sw: $("sw").getAttribute("aria-checked"),
+    swn: $("sw-noop").getAttribute("aria-checked"),
+  });
+}
+document.addEventListener("click", () => setTimeout(rep, 30));
+rep();
+</script>
+</body></html>

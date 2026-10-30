@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>frame-router</title>
+<body style="font:11px system-ui;margin:2px">iframe-роутер
+<script>
+// Детектор фильтра frameId: этот iframe бесконечно пуш-стейтит СОБСТВЕННЫЙ URL.
+// webNavigation шлёт его с frameId>0 — свидетель обязан игнорить. Фильтр сломан ->
+// эталон вкладки уедет на /frame-route-N и вне окна навигации даст ложный tab_moved.
+var n = 0;
+setInterval(function () {
+  n++;
+  try { history.pushState({}, "", "/frame-route-" + n); document.title = "frame:" + n; } catch (e) {}
+}, 1500);
+</script>

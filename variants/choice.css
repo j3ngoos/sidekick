@@ -1,0 +1,367 @@
+/* SK-58 «choice» — направление «Steel Terminal». Переопределение слоя theme.css
+   (+ компонентных правил sidebar.css / options.css), подключается ПОСЛЕ них.
+   Полная спека: ~/.hermes/cache/variants/choice/spec.md (там же таблицы контрастов WCAG).
+   Референсы: taste-skill data-terminal (library/app.json — «каждое выделение = 1px
+   акцентная линия на ближайшем ребре», pitch 28px, табличные цифры); binance
+   DESIGN.md (лестница плоских поверхностей, hairlines, зелёный/красный только как
+   текст, no glassmorphism); warp DESIGN.md (off-white CTA, «hairlines + surface
+   contrast carry elevation»); raycast (hover строки = шаг поверхности).
+
+   Анти-slop (спека §8/§9): многоцветных градиентов 0, glassmorphism 0, тени на
+   покоящемся 0, фиолетового/индиго 0. Функция linear-gradient остаётся РОВНО в
+   трёх токенах (--grad-hot, --grad-hot-hi, --bg-grad): значения — одноцветные,
+   две одинаковые остановки. Причина: токеныConsumed в `background: var(--grad-hot)`
+   и в шортханде `background: var(--bg-grad) var(--surface-1)` theme.css, где нужен
+   слой фона; градиент из двух идентичных стоп = плоский solid (это не декор). */
+
+/* ---- общая шкала (одинакова в обеих темах) ---------------------------------- */
+:root {
+  /* шрифты: только системные стеки (MV3 офлайн, web-шрифты запрещены; спека §5):
+     macOS: SF Pro / SF Mono, Ubuntu-dev: DejaVu */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto,
+               "Helvetica Neue", "DejaVu Sans", Ubuntu, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas,
+               "Liberation Mono", "DejaVu Sans Mono", monospace;
+  /* плотность: компактные контролы Binance (спека §5); --hd-h НЕ трогаем (меню-портал) */
+  --ctl-h: 30px;
+  --ctl-h-sm: 26px;
+  /* радиусы: лестница Binance 4/6/8 → controls 6, blocks 8; pill = radius.control */
+  --r1: 6px;
+  --r2: 8px;
+  --rp: 99px;
+  /* glass убивается: блюр 0 (Binance don'ts: «no glassmorphism — depth comes from
+     color-block contrast»); непрозрачные --glass-* ниже по темам */
+  --glass-blur: 0px;
+  /* движение без overshoot: терминальный UI не отпружинивает (сдержанность warp) */
+  --spring: cubic-bezier(.3, 0, .2, 1);
+  /* единственная тень — всплывающие слои (меню, bellpanel), задаётся по темам;
+     на покоящемся — 0 (warp: «hairlines + surface contrast carry elevation») */
+}
+
+/* ---- light: base (зеркало базового :root theme.css) ------------------------- */
+:root {
+  --surface-1: #ffffff;
+  --surface-2: #f5f5f5;
+  --surface-3: #eef0f2;
+  --text: #181a20;
+  --text-dim: #575f6a;
+  --line: #d9dde2;
+  --line-soft: #e9ecef;
+  --accent: #1d6fc2;
+  --accent-soft: #e3edf8;
+  --ok: #077a4d;
+  --ok-soft: #d9f2e6;
+  --warn: #8a6110;
+  --warn-soft: #fbf0d4;
+  --err: #d3273f;
+  --err-soft: #fff0f3; /* AA: --err text on the chip/belln pill = 4.57:1 (пересчёт; spec §4 had #fde8ec = 4.34 — fail) */
+  --info: #1d6fc2;
+  --info-soft: #e3edf8;
+  --idle: #575f6a;
+  --idle-soft: #eef0f2;
+  --bg-grad: linear-gradient(#ffffff, #ffffff); /* плоский solid (шапка комментария) */
+  --glass-bg: #ffffff;
+  --glass-bg-2: #f5f5f5;
+  --glass-border: #d9dde2;
+  --glass-border-hi: #c9ced6;
+  --glass-shadow: none;
+  --glass-hover: #eef0f2;
+  --pop-shadow: 0 2px 8px rgba(24, 26, 32, 0.10);
+  --btn-accent: #1d6fc2;
+  --btn-ok: #077a4d;
+  --btn-ok-hot: #066841;
+  --btn-stop: #d3273f;
+  --btn-stop-hot: #b81f34;
+  --ink-on-solid: #ffffff;
+  --grad-hot: linear-gradient(#1d6fc2, #1d6fc2);
+  --grad-hot-hi: linear-gradient(#1a63ae, #1a63ae);
+  --bolt-a: #1d6fc2;
+  --bolt-b: #1d6fc2;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --surface-1: #ffffff;
+    --surface-2: #f5f5f5;
+    --surface-3: #eef0f2;
+    --text: #181a20;
+    --text-dim: #575f6a;
+    --line: #d9dde2;
+    --line-soft: #e9ecef;
+    --accent: #1d6fc2;
+    --accent-soft: #e3edf8;
+    --ok: #077a4d;
+    --ok-soft: #d9f2e6;
+    --warn: #8a6110;
+    --warn-soft: #fbf0d4;
+    --err: #d3273f;
+    --err-soft: #fff0f3; /* AA: --err text on the chip/belln pill = 4.60:1 */
+    --info: #1d6fc2;
+    --info-soft: #e3edf8;
+    --idle: #575f6a;
+    --idle-soft: #eef0f2;
+    --bg-grad: linear-gradient(#ffffff, #ffffff);
+    --glass-bg: #ffffff;
+    --glass-bg-2: #f5f5f5;
+    --glass-border: #d9dde2;
+    --glass-border-hi: #c9ced6;
+    --glass-shadow: none;
+    --glass-hover: #eef0f2;
+    --pop-shadow: 0 2px 8px rgba(24, 26, 32, 0.10);
+    --btn-accent: #1d6fc2;
+    --btn-ok: #077a4d;
+    --btn-ok-hot: #066841;
+    --btn-stop: #d3273f;
+    --btn-stop-hot: #b81f34;
+    --ink-on-solid: #ffffff;
+    --grad-hot: linear-gradient(#1d6fc2, #1d6fc2);
+    --grad-hot-hi: linear-gradient(#1a63ae, #1a63ae);
+    --bolt-a: #1d6fc2;
+    --bolt-b: #1d6fc2;
+  }
+}
+
+/* ---- dark: основной режим (спека §3; «whole screen sits in one continuous
+   dark mode» — raycast) -------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-1: #171719;
+    --surface-2: #212023;
+    --surface-3: #2a292d;
+    --text: #f2f2f3;
+    --text-dim: #919399;
+    --line: #333236;
+    --line-soft: #242327;
+    --accent: #4a8ad6;
+    --accent-soft: #1b2633;
+    --ok: #0ecb81;
+    --ok-soft: #16291f;
+    --warn: #d9a441;
+    --warn-soft: #2a2416;
+    --err: #e5566f;
+    --err-soft: #2c1a20;
+    --info: #4a8ad6;
+    --info-soft: #1b2633;
+    --idle: #919399;
+    --idle-soft: #212023;
+    --bg-grad: linear-gradient(#171719, #171719);
+    --glass-bg: #171719;
+    --glass-bg-2: #212023;
+    --glass-border: #333236;
+    --glass-border-hi: #3f3e43;
+    --glass-shadow: none;
+    --glass-hover: #212023;
+    --pop-shadow: 0 2px 8px rgba(0, 0, 0, 0.30);
+    --btn-accent: #e9e9ec;
+    --btn-ok: #0ecb81;
+    --btn-ok-hot: #0bb472;
+    --btn-stop: #f6465d;
+    --btn-stop-hot: #ff5f74;
+    --ink-on-solid: #171719;
+    --grad-hot: linear-gradient(#e9e9ec, #e9e9ec);
+    --grad-hot-hi: linear-gradient(#f7f7f9, #f7f7f9);
+    --bolt-a: #4a8ad6;
+    --bolt-b: #4a8ad6;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-1: #ffffff;
+  --surface-2: #f5f5f5;
+  --surface-3: #eef0f2;
+  --text: #181a20;
+  --text-dim: #575f6a;
+  --line: #d9dde2;
+  --line-soft: #e9ecef;
+  --accent: #1d6fc2;
+  --accent-soft: #e3edf8;
+  --ok: #077a4d;
+  --ok-soft: #d9f2e6;
+  --warn: #8a6110;
+  --warn-soft: #fbf0d4;
+  --err: #d3273f;
+  --err-soft: #fff0f3; /* AA: --err text on the chip/belln pill = 4.57:1 (пересчёт; spec §4 had #fde8ec = 4.34 — fail) */
+  --info: #1d6fc2;
+  --info-soft: #e3edf8;
+  --idle: #575f6a;
+  --idle-soft: #eef0f2;
+  --bg-grad: linear-gradient(#ffffff, #ffffff);
+  --glass-bg: #ffffff;
+  --glass-bg-2: #f5f5f5;
+  --glass-border: #d9dde2;
+  --glass-border-hi: #c9ced6;
+  --glass-shadow: none;
+  --glass-hover: #eef0f2;
+  --pop-shadow: 0 2px 8px rgba(24, 26, 32, 0.10);
+  --btn-accent: #1d6fc2;
+  --btn-ok: #077a4d;
+  --btn-ok-hot: #066841;
+  --btn-stop: #d3273f;
+  --btn-stop-hot: #b81f34;
+  --ink-on-solid: #ffffff;
+  --grad-hot: linear-gradient(#1d6fc2, #1d6fc2);
+  --grad-hot-hi: linear-gradient(#1a63ae, #1a63ae);
+  --bolt-a: #1d6fc2;
+  --bolt-b: #1d6fc2;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #171719;
+  --surface-2: #212023;
+  --surface-3: #2a292d;
+  --text: #f2f2f3;
+  --text-dim: #919399;
+  --line: #333236;
+  --line-soft: #242327;
+  --accent: #4a8ad6;
+  --accent-soft: #1b2633;
+  --ok: #0ecb81;
+  --ok-soft: #16291f;
+  --warn: #d9a441;
+  --warn-soft: #2a2416;
+  --err: #e5566f;
+  --err-soft: #2c1a20;
+  --info: #4a8ad6;
+  --info-soft: #1b2633;
+  --idle: #919399;
+  --idle-soft: #212023;
+  --bg-grad: linear-gradient(#171719, #171719);
+  --glass-bg: #171719;
+  --glass-bg-2: #212023;
+  --glass-border: #333236;
+  --glass-border-hi: #3f3e43;
+  --glass-shadow: none;
+  --glass-hover: #212023;
+  --pop-shadow: 0 2px 8px rgba(0, 0, 0, 0.30);
+  --btn-accent: #e9e9ec;
+  --btn-ok: #0ecb81;
+  --btn-ok-hot: #0bb472;
+  --btn-stop: #f6465d;
+  --btn-stop-hot: #ff5f74;
+  --ink-on-solid: #171719;
+  --grad-hot: linear-gradient(#e9e9ec, #e9e9ec);
+  --grad-hot-hi: linear-gradient(#f7f7f9, #f7f7f9);
+  --bolt-a: #4a8ad6;
+  --bolt-b: #4a8ad6;
+}
+
+/* ---- компонентные замены (спека §10): подключаются ПОСЛЕ sidebar.css -------- */
+
+body { font: 13px var(--font-sans); }
+
+/* шапка: без блюра (glass мёртв), без акцентной полосы — статичный hairline;
+   он-лайн точка без кольца-свечения; счётчик журнала = taste negative pill
+   (#2c1a20 + #e5566f = 4.62:1), а не красная плашка (спека §7б) */
+#hd { -webkit-backdrop-filter: none; backdrop-filter: none; }
+#hd::after { display: none; }
+#st[data-s="online"] { box-shadow: none; }
+#belln { background: var(--err-soft); color: var(--err); }
+#bellhead { font: 600 10px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+
+/* журнал: непрозрачный слой, единственная тень всплывающего; непрочитанная
+   строка = 1px стали-синяя линия на левом ребре (подпись data-terminal),
+   timestamp — mono табличный (колонка stack-ится как order book, Binance) */
+#bellpanel { -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: var(--pop-shadow); }
+#bellhead { font: 600 12.5px/1.2 var(--font-ui); text-transform: none; letter-spacing: 0; } /* micro-caps label -> sentence case (house rule) */
+.brow { min-height: 28px; }
+.brow .btime { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.brow.unread { background: transparent; box-shadow: inset 2px 0 0 var(--accent); }
+
+/* меню «⋯»: единственная тень; активный пункт — линия + шаг поверхности,
+   акцентным текстом красим только иконку (AA: --accent на surface-2 = 4.53) */
+#menu { -webkit-backdrop-filter: none; backdrop-filter: none; box-shadow: var(--pop-shadow); }
+.mi.on { background: var(--glass-hover); box-shadow: inset 2px 0 0 var(--accent); color: var(--text); }
+.mi.on .icn { color: var(--accent); }
+
+/* карточка задачи: рейка списка, pitch 28px, hairline между шагами,
+   время — mono tabular по правому краю (Binance markets-row);
+   активный шаг: градиентная заливка УБРАНА → 1px линия на ребре;
+   статус читается яркостью текста (done = dim, active = ink), не подсветкой */
+.m.task .tksteps { border-left: 1px solid var(--line-soft); padding-left: var(--sp3); }
+.tksteps .srow { min-height: 28px; border-top: 1px solid var(--line-soft); }
+.tksteps .srow:first-child { border-top: none; }
+.stime { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.srow.done .tx { color: var(--text-dim); }
+.srow.queued { opacity: 1; color: var(--text-dim); }
+.srow.active { background: transparent; box-shadow: inset 2px 0 0 var(--accent); }
+.sraw { border-radius: var(--r1); font-family: var(--font-mono); }
+
+/* пузыри: своя реплика — шаг поверхности (surface-3 + 1px line), НЕ градиент и
+   не цветная тень: «user vs agent» читается формой колонки (аватар + отступ),
+   а не пигментом (data-terminal: signs instead of colour) */
+.m.me {
+  background: var(--surface-3); border: var(--line-w) solid var(--line);
+  color: var(--text); box-shadow: none; border-radius: var(--r1);
+  border-bottom-right-radius: 3px;
+}
+.av.ag { background: var(--surface-3); border: var(--line-w) solid var(--line); color: var(--info); box-shadow: none; }
+.av.hu { background: var(--surface-2); border: var(--line-w) solid var(--line-soft); }
+
+/* карточка пермисса и hand-off: карточка на surface-2, семантика — плоская
+   2px полоса на левом ребре (warn / info), форма одинаковая: глаз выучивает
+   за один раз (спека §7в); кнопки: Allow solid ok, «Always» — шаг поверхности,
+   Deny — outline с текстом ink (зелёный/красный — текст/ребро, не площадь) */
+.perm { background: var(--surface-2); border-color: var(--line); }
+.perm::before { background: var(--warn); width: 2px; }
+.perm .chip { color: var(--warn); }
+.perm .alw { background: var(--surface-3); border-color: var(--glass-border-hi); color: var(--text); }
+.perm .alw:hover { background: var(--glass-border-hi); }
+.perm .no { border-color: var(--line); color: var(--text); }
+.perm .no:hover { background: var(--glass-hover); }
+#bellpanel { box-shadow: var(--pop-shadow); }
+.ho { background: var(--surface-2); border-color: var(--line); }
+.ho::before { background: var(--info); width: 2px; }
+
+/* «/»-меню навыков: hover = шаг поверхности (raycast), клавиатурная подсветка
+   = линия акцента (тот же маркер выделения, что везде) */
+#sklist .sk:hover { background: var(--glass-hover); }
+#sklist .sk.hl { background: var(--glass-hover); box-shadow: inset 2px 0 0 var(--accent); }
+
+/* композер: плоская полоса (blur мёртв), поле на ступень выше фона,
+   CTA — плоский off-white (warp primary / raycast white pill) пилюлей,
+   стоп-стейт solid trading-red; цветных теней 0 (спека §7г) */
+#bar { -webkit-backdrop-filter: none; backdrop-filter: none; border-top-color: var(--line); }
+#in { background: var(--surface-3); border-color: var(--line); font-family: var(--font-sans); }
+#in:focus { border-color: var(--accent); box-shadow: none; outline: 2px solid var(--accent); outline-offset: 2px; }
+#go { border-radius: var(--rp); box-shadow: none; }
+#go.running { box-shadow: none; }
+
+/* история чатов: текущий чат — линия + шаг поверхности, дата mono */
+.hrow.cur { background: var(--glass-hover); box-shadow: inset 2px 0 0 var(--accent); }
+.hrow .hdate { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+/* аудит-лента: время и домен mono tabular — лог читается колонками */
+.arow .at { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.arow .adm { font-family: var(--font-mono); }
+#audraw { font-family: var(--font-mono); }
+
+/* кольцо фокуса: 2px акцент, offset 2 (binance focus ring; спека §6) —
+   перекрываем список селекторов sidebar.css (та же specificity, побеждает порядок) */
+button:focus-visible, input:focus-visible, textarea:focus-visible,
+select:focus-visible, .mi:focus-visible, #sklist .sk:focus-visible,
+.hrow:focus-visible, .tkhd:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* ---- options page (спека §7д) ------------------------------------------------
+   карточка = surface-2 + hairline без тени (raycast feature-card-dark);
+   под заголовком — 1px акцентная линия шириной ровно с подпись (data-terminal);
+   primary-кнопка плоская solid (градиент сплющен токеном), без цветной тени */
+main { font-family: var(--font-sans); }
+main h1::before {
+  content: "SIDEKICK SETTINGS"; display: block;
+  font: 600 10px var(--font-mono); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: var(--sp2);
+}
+main h1::after { width: 40px; height: 1px; border-radius: 0; background: var(--accent); }
+.card { background: var(--surface-2); border-color: var(--line); box-shadow: none; }
+.card code { font-family: var(--font-mono); }
+main input, main select { background: var(--surface-3); }
+main select { font-family: var(--font-sans); }
+main input:focus, main select:focus { box-shadow: none; outline: 2px solid var(--accent); outline-offset: 2px; }
+main button { box-shadow: none; background: var(--btn-accent); color: var(--ink-on-solid); }
+main button:hover { background: var(--btn-accent-hot); } /* solid hot, не grad-hot: no gradients (house rule) */
+main button.sec { background: var(--surface-3); }
+main button.sec:hover { background: var(--glass-border-hi); }

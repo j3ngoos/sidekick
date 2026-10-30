@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>sk44-boot</title>
+<style>
+  /* Реплика YouTube-хрома (аудит №2, инцидент B): тёмный, вкладки-поверх-шапки.
+     Роутер — history.pushState: документ НЕ перезагружается, tabs.onUpdated
+     таких навигаций не видит вовсе. */
+  body { margin: 0; font: 14px/1.4 Roboto, system-ui, sans-serif; background: #0f0f0f; color: #f1f1f1; }
+  header { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid #272727; }
+  .logo { font-weight: 700; font-size: 18px; color: #ff0033; letter-spacing: -1px; margin-right: 8px; }
+  #tabs { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  #tabs button { background: #272727; color: #f1f1f1; border: 0; border-radius: 8px;
+                 padding: 8px 14px; font: inherit; cursor: pointer; }
+  #tabs button.on { background: #f1f1f1; color: #0f0f0f; }
+  main { padding: 24px 16px; }
+  #state-mirror { position: fixed; left: 16px; bottom: 8px; color: #6b6b6b; font-size: 11px; }
+  iframe { position: fixed; right: 8px; bottom: 8px; width: 120px; height: 40px; border: 0; opacity: .6; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">Сидюб</span>
+  <nav id="tabs" aria-label="Разделы">
+    <button id="tab-home" data-path="/">Главное</button>
+    <button id="tab-shorts" data-path="/shorts">Shorts</button>
+    <button id="tab-subs" data-path="/feed/subscriptions">Подписки</button>
+    <button id="tab-history" data-path="/history">История</button>
+    <button id="late-full" data-path="/late">Поздняя-загрузка</button>
+    <!-- «человеческие» кнопки: агент по ним НЕ кликает. Клик человека (XTEST) по
+         «Помощи» = SPA-уход от задачи (S3a); клик по «Корневой» = возврат ровно на
+         эталонный URL задачи (S3b tab_returned). -->
+    <button id="tab-help" data-path="/help">Помощь</button>
+    <button id="tab-root">Корневая</button>
+  </nav>
+</header>
+<main>
+  <!-- sk44: магента-маркер 8×8 ровно в (0,0) вьюпорта — харнесс калибрует по нему
+       экранное начало страницы (mozInnerScreen* на этом билде врёт, а промах клика
+       XTEST = табы в полоску вкладок). pointer-events:none — кликам не мешает. -->
+  <div id="sk44mark" style="position:fixed;left:0;top:0;width:8px;height:8px;background:#ff00fe;z-index:2147483647;pointer-events:none"></div>
+  <h2 id="h">Лента</h2>
+  <p id="p">Роутер меняет URL через pushState — как YouTube. Клик агента по вкладке
+     обязан оставаться «агентской навигацией» и через 4, и через 10 секунд.</p>
+</main>
+<div id="state-mirror">state: <span id="mirror">—</span></div>
+<iframe id="fr" src="/spa-frame.html" title="bg-router"></iframe>
+<script>
+(function () {
+  // Состояние дублируется в заголовок («sk44:{json}») — харнесс читает его через
+  // page.text без vision (тот же канал, что primitives.html/youtube.html SK-43).
+  var S = { path: location.pathname, clicks: [], deep: false };
+  var INIT = location.pathname + location.search; // эталонный URL задачи для S3b
+  function mirror() {
+    document.title = "sk44:" + JSON.stringify(S);
+    document.getElementById("mirror").textContent = JSON.stringify(S.clicks.slice(-5));
+  }
+  function paint(path) {
+    document.querySelectorAll("#tabs button").forEach(function (b) {
+      b.classList.toggle("on", b.getAttribute("data-path") === path);
+    });
+  }
+  function go(path) {
+    history.pushState({ path: path }, "", path);
+    S.path = path; S.clicks.push(path); paint(path); mirror();
+  }
+  document.querySelectorAll("#tabs button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var p = b.id === "tab-root" ? INIT : b.getAttribute("data-path");
+      if (b.id === "late-full") {
+        // Класс инцидента: ПОЛНАЯ навигация приходит позже старой фиксированной
+        // grace-четырёхсекундки — onUpdated/onLocationChange докладывают о ней на 5-й
+        // секунде, и старый свидетель записывал её уходом человека.
+        S.clicks.push("late-full"); mirror();
+        setTimeout(function () { location.href = "/spa-late.html"; }, 4500);
+        return;
+      }
+      go(p);
+      if (b.id === "tab-history") {
+        // Тайминг инцидента B: SPA-роутер достраивает маршрут после загрузки данных —
+        // второй pushState через 4.5 с после клика (старый фиксированный grace — 4 с).
+        setTimeout(function () {
+          history.pushState({}, "", "/history/watch");
+          S.path = "/history/watch"; S.deep = true; S.clicks.push("/history/watch"); mirror();
+        }, 4500);
+      }
+    });
+  });
+  paint(S.path);
+  mirror();
+})();
+</script>
+</body>
+</html>

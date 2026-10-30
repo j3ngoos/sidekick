@@ -1,0 +1,41 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "bounce-easing",
+        "value": "cubic-bezier(.34, 1.56, .64, 1)",
+        "createdAt": "2026-10-24T05:15:00.529Z",
+        "reason": "SK-40 brief: 'анимации с характером (spring)'; мягкий back-out только на микро-взаимодействиях (go-morph, caret, button press), entrances — ease-out"
+      },
+      {
+        "rule": "ai-color-palette",
+        "value": "*",
+        "files": [
+          "extension/*"
+        ],
+        "createdAt": "2026-10-24T05:15:12.393Z",
+        "reason": "SK-40 brief пользователя: 'Ярче и живее: градиенты' + фиолетовый акцент бренда был до SK-40 (#7c3aed); градиенты — только поверхности действия"
+      },
+      {
+        "rule": "ai-color-palette",
+        "value": "*",
+        "files": [
+          "extension/theme.css"
+        ],
+        "createdAt": "2026-10-26T13:00:11.139Z",
+        "reason": "SK-57 реворк раунд2: в variants/firefox.css и preview-firefox.html фиолетовых литералов нет (все серые нейтрализованы R=G=B; акцент Photon blue 05/40). Детект на превью считает литералы импортируемого extension/theme.css (бренд-вайолет SK-40 #7c3aed/#a78bfa/#e879f9 + фиолетовые тени) — theme.css вне юрисдикции SK-57 (общий файл, не вход SK-40). Тот же прецедент, что ignoreValue extension/* от SK-40."
+      },
+      {
+        "rule": "ai-color-palette",
+        "value": "*",
+        "files": [
+          "variants/preview-firefox.html"
+        ],
+        "createdAt": "2026-10-26T14:38:30.891Z",
+        "reason": "SK-57 реворк: в preview-firefox.html и firefox.css фиолетовых литералов нет (все серые Photon нейтрализованы R=G=B; акцент Photon blue 05/40). Детект разворачивает @import extension/theme.css и приписывает его бренд-вайолет (SK-40 #7c3aed/#a78bfa/#e879f9) превью; theme.css — общий нативный слой вне реворка, как и в SK-40 (preview-apple.html несёт такой же ignoreValue)."
+      }
+    ]
+  }
+}

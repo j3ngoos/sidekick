@@ -1,0 +1,280 @@
+/* SK-55: дизайн-вариант «Stripe». Подключается ПОСЛЕ theme.css + sidebar.css/options.css.
+   Специфичность селекторов равна theme.css/sidebar.css — побеждает порядок подключения.
+   Анти-референс: SK-40 «neon violet» (градиенты 7c3aed→c026d3, пастельный wash,
+   стеклянный blur, glow-тени, градиентные «прожекторы» строк) — всё нейтрализовано.
+   Полная спецификация и аудит контраста (30 пар, AA): ~/.hermes/cache/variants/stripe/spec.md
+   Фирменные ходы Stripe: navy-грунт dark, solid indigo #533afd как единственное залитое
+   действие, hairline #e3e8ee, синие тени rgba(0,55,112,α) (L1/L2), пилюли CTA, tabular-nums,
+   negative tracking на крупном, negative-tracking Söhne-стек. Единственный градиент —
+   логотип-молния url(#g-bolt), стопы --bolt-a/b того же hue (это брендмарк, не декор). */
+
+/* ---- структурные токены (одинаковы в обеих темах) ------------------------------ */
+:root {
+  /* радиусы: Stripe rounded-md для контролов, lg остаётся для блоков */
+  --r1: 8px;
+  /* SK-30 glass отменён: поверхности непрозрачные, hairline вместо blur */
+  --glass-blur: 0px;
+  /* движение: без overshoot-пружины (bounce — impeccable-антипаттерн), фирменный expo-out */
+  --spring: cubic-bezier(0.2, 0.8, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  /* «вкус» SK-40 нейтрализован: градиент действия становится SOLID-заливкой.
+     Ни одного linear-gradient в токенах варианта; белый ink 6.19:1 (spec §3). */
+  --grad-hot: #533afd;
+  --grad-hot-hi: #4434d4;
+  --bg-grad: none; /* плоский грунт: итог фона = var(--surface-1) */
+  /* логотип-молния: брендмарк, 2 стопы одного hue (единственный градиент варианта) */
+  --bolt-a: #533afd;
+  --bolt-b: #4434d4;
+  /* solid-кнопки: Stripe primary ровно; ok/stop — семантика проекта, уже AA.
+     stop = фирменный Stripe Red #d40022 (бренд-красный для деструктивных), не неон SK-40 */
+  --btn-accent: #533afd;
+  --btn-ok: #047857;
+  --btn-stop: #d40022;
+  --btn-stop-hot: #b1001d;
+  --btn-ok-hot: #036348;
+  --ink-on-solid: #ffffff;
+  /* типографика — «фирменная крупная»: шаг hero/ttl 1.375 (у SK-40 было 1.13) */
+  --fs-hero: 22px;
+  --fs-ttl: 16px;
+  --fs-hd: 13px;
+
+  /* ---- LIGHT (дефолт; значения spec §2.3) ---- */
+  --surface-1: #ffffff;
+  --surface-2: #f6f9fc;   /* canvas-soft Stripe */
+  --surface-3: #e9eef5;
+  --text: #0d253d;        /* Stripe ink (15.57:1 на surface-1) */
+  --text-dim: #5d6d85;    /* Stripe #64748d, мин. корректировка ради AA 4.98:1 на surface-2 */
+  --line: #d3dde7;
+  --line-soft: #e3e8ee;   /* Stripe hairline ровно */
+  --accent: #533afd;
+  --accent-soft: rgba(83, 58, 253, 0.10);
+  --ok: #067647;
+  --ok-soft: rgba(6, 118, 71, 0.12);
+  --warn: #a04a05;
+  --warn-soft: rgba(160, 74, 5, 0.12);
+  --err: #c11c1c;
+  --err-soft: rgba(193, 28, 28, 0.10);
+  --info: #1d5fd6;
+  --info-soft: rgba(29, 95, 214, 0.10);
+  --idle: #5b6472;
+  --idle-soft: rgba(91, 100, 114, 0.14);
+  /* «стекло» = непрозрачная поверхность + hairline; внутренний блик запрещён */
+  --glass-bg: #ffffff;
+  --glass-bg-2: #ffffff;
+  --glass-border: #e3e8ee;
+  --glass-border-hi: transparent;
+  /* Stripe Level-2 с синим тинтом (shadow-blue #003770) */
+  --glass-shadow: 0 8px 24px rgba(0, 55, 112, 0.08), 0 2px 6px rgba(0, 55, 112, 0.04); /* taste-skill-ignore: shadow — только реальные overlay: #menu, #bellpanel */
+  --glass-hover: #f0f4f9; /* hover = шаг тона, хром без акцентного тинта */
+}
+
+/* ---- светлая тема: те же селекторы, что theme.css (побеждает порядок) ---------- */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --surface-1: #ffffff;
+    --surface-2: #f6f9fc;
+    --surface-3: #e9eef5;
+    --text: #0d253d;
+    --text-dim: #5d6d85;
+    --line: #d3dde7;
+    --line-soft: #e3e8ee;
+    --accent: #533afd;
+    --accent-soft: rgba(83, 58, 253, 0.10);
+    --ok: #067647;
+    --ok-soft: rgba(6, 118, 71, 0.12);
+    --warn: #a04a05;
+    --warn-soft: rgba(160, 74, 5, 0.12);
+    --err: #c11c1c;
+    --err-soft: rgba(193, 28, 28, 0.10);
+    --info: #1d5fd6;
+    --info-soft: rgba(29, 95, 214, 0.10);
+    --idle: #5b6472;
+    --idle-soft: rgba(91, 100, 114, 0.14);
+    --bg-grad: none;
+    --glass-bg: #ffffff;
+    --glass-bg-2: #ffffff;
+    --glass-border: #e3e8ee;
+    --glass-border-hi: transparent;
+    --glass-shadow: 0 8px 24px rgba(0, 55, 112, 0.08), 0 2px 6px rgba(0, 55, 112, 0.04); /* taste-skill-ignore: shadow — overlay-поверхности */
+    --glass-hover: #f0f4f9;
+    --grad-hot-hi: #4434d4;
+  }
+}
+
+/* ---- тёмная тема: navy-шелл Stripe (dashboard-трек бренда, spec §6.1) ---------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-1: #0e1e33;
+    --surface-2: #16283e;
+    --surface-3: #213653;
+    --text: #eef3f9;
+    --text-dim: #a4b4c8;
+    --line: #2c415c;
+    --line-soft: #24384f;
+    --accent: #9a94ff;   /* primary-soft: 6.43:1 на navy */
+    --accent-soft: rgba(154, 148, 255, 0.16);
+    --ok: #4ade80;
+    --ok-soft: rgba(74, 222, 128, 0.14);
+    --warn: #fbbf24;
+    --warn-soft: rgba(251, 191, 36, 0.14);
+    --err: #f87171;
+    --err-soft: rgba(248, 113, 113, 0.13);
+    --info: #7ea6ff;
+    --info-soft: rgba(126, 166, 255, 0.14);
+    --idle: #a3adbd;
+    --idle-soft: rgba(163, 173, 189, 0.16);
+    --bg-grad: none;
+    --glass-bg: #16283e;
+    --glass-bg-2: #1a2e46;
+    --glass-border: #2c415c;
+    --glass-border-hi: transparent;
+    --glass-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.30); /* taste-skill-ignore: shadow — overlay-поверхности */
+    --glass-hover: #1d3450;
+    --grad-hot: #9a94ff;   /* полоса h1::after на navy: 6.43:1 (AA-аудит) */
+    --grad-hot-hi: #665efd;
+    --btn-stop: #ff5630; --btn-stop-hot: #e0411c; /* Stripe Red для dark-грунта: белый ink 3.15:1 graphic */
+    --bolt-a: #9a94ff;
+    --bolt-b: #533afd;
+  }
+}
+
+/* ---- ручной оверрайд темы (как в theme.css: после media-блоков) ---------------- */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-1: #ffffff;
+  --surface-2: #f6f9fc;
+  --surface-3: #e9eef5;
+  --text: #0d253d;
+  --text-dim: #5d6d85;
+  --line: #d3dde7;
+  --line-soft: #e3e8ee;
+  --accent: #533afd;
+  --accent-soft: rgba(83, 58, 253, 0.10);
+  --ok: #067647;
+  --ok-soft: rgba(6, 118, 71, 0.12);
+  --warn: #a04a05;
+  --warn-soft: rgba(160, 74, 5, 0.12);
+  --err: #c11c1c;
+  --err-soft: rgba(193, 28, 28, 0.10);
+  --info: #1d5fd6;
+  --info-soft: rgba(29, 95, 214, 0.10);
+  --idle: #5b6472;
+  --idle-soft: rgba(91, 100, 114, 0.14);
+  --bg-grad: none;
+  --glass-bg: #ffffff;
+  --glass-bg-2: #ffffff;
+  --glass-border: #e3e8ee;
+  --glass-border-hi: transparent;
+  --glass-shadow: 0 8px 24px rgba(0, 55, 112, 0.08), 0 2px 6px rgba(0, 55, 112, 0.04); /* taste-skill-ignore: shadow — только реальные overlay: #menu, #bellpanel */
+  --glass-hover: #f0f4f9;
+  --grad-hot-hi: #4434d4;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #0e1e33;
+  --surface-2: #16283e;
+  --surface-3: #213653;
+  --text: #eef3f9;
+  --text-dim: #a4b4c8;
+  --line: #2c415c;
+  --line-soft: #24384f;
+  --accent: #9a94ff;
+  --accent-soft: rgba(154, 148, 255, 0.16);
+  --ok: #4ade80;
+  --ok-soft: rgba(74, 222, 128, 0.14);
+  --warn: #fbbf24;
+  --warn-soft: rgba(251, 191, 36, 0.14);
+  --err: #f87171;
+  --err-soft: rgba(248, 113, 113, 0.13);
+  --info: #7ea6ff;
+  --info-soft: rgba(126, 166, 255, 0.14);
+  --idle: #a3adbd;
+  --idle-soft: rgba(163, 173, 189, 0.16);
+  --bg-grad: none;
+  --glass-bg: #16283e;
+  --glass-bg-2: #1a2e46;
+  --glass-border: #2c415c;
+  --glass-border-hi: transparent;
+  --glass-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 2px 6px rgba(0, 0, 0, 0.30); /* taste-skill-ignore: shadow — overlay-поверхности */
+  --glass-hover: #1d3450;
+  --grad-hot: #9a94ff;   /* полоса h1::after на navy: 6.43:1 (AA-аудит) */
+  --grad-hot-hi: #665efd;
+  --btn-stop: #ff5630; --btn-stop-hot: #e0411c; /* Stripe Red для dark-грунта: белый ink 3.15:1 graphic */
+  --bolt-a: #9a94ff;
+  --bolt-b: #533afd;
+}
+
+/* ---- шрифт: Söhne проприетарен; локальный стек, CSP-safe (spec §2.5) ------------ */
+body {
+  font-family: 'Söhne', 'Inter', 'SF Pro Display', 'Segoe UI Variable Text',
+    system-ui, 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+/* ==================== точечные оверрайды поверхностей ========================= */
+
+/* — 1. Лента чата с шагами задачи — */
+/* своя реплика: solid-заливка действия; цветная glow-тень SK-40 снята.
+   В dark --grad-hot = #9a94ff (кольцо/полоса) — для заливки под белым ink не годится
+   (2.76:1), поэтому бабл явно = solid #533afd: белый ink 6.19:1 в обеих темах */
+.me { background: var(--btn-accent); box-shadow: none; } /* taste-skill-ignore: shadow — снимаем glow, значение none */
+/* аватар агента: solid-круг, glow снят (человек остаётся нейтральным surface-3) */
+.av.ag { box-shadow: none; } /* taste-skill-ignore: shadow — снимаем glow брендмарка, значение none */
+/* активный шаг: плоская плашка --info-soft вместо градиентного «прожектора» */
+.srow.active { background: var(--info-soft); }
+/* «подсветка» под шапкой (SK-40 accent-градиент) убрана: у шапки уже есть hairline */
+#hd::after { background: transparent; }
+/* пустое состояние: глиф solid-акцентом (url(#g-bolt) — исключение для брендмарка
+   в шапке #hdic; в пустом состоянии градиента нет), «парение» SK-40 снято */
+#embolt { fill: var(--accent); stroke: var(--accent); animation: none; }
+#empttl { font-weight: 700; }
+
+/* — 2. Журнал уведомлений — */
+/* непрочитанный ряд: «приподнятая» плитка surface-1 + hairline-кольцо (без reflow)
+   вместо градиентного tint; цвет остаётся на иконках статуса */
+.brow.unread { background: var(--surface-1); box-shadow: 0 0 0 var(--line-w) var(--line); } /* taste-skill-ignore: shadow — ring = hairline-обводка состояния (0-распл.) */
+/* hover-«подаётся навстречу» убран (SK-40-характер): hover = шаг тона */
+.brow:hover, .mi:hover, .arow:hover, .hrow:hover { transform: none; }
+/* «звон» колокольчика на hover снят (характер вместо состояния) */
+#bellBtn:hover .icn { animation: none; }
+/* uppercase-tracked заголовок запрещён app-правилом */
+#bellhead {
+  font: 700 12px system-ui;
+  text-transform: none; letter-spacing: 0; color: var(--text-dim);
+}
+/* подсветка активного второго вида: плоская плашка вместо градиента */
+.mi.on { background: var(--accent-soft); }
+#sklist .sk:hover, #sklist .sk.hl { background: var(--accent-soft); }
+.hrow.cur { background: var(--accent-soft); }
+
+/* — 3. Карточка разрешения — */
+/* solid-корешок 2px вместо градиентного (карточка требует решения прямо сейчас) */
+.perm::before { background: var(--warn); width: 2px; border-radius: 0 2px 2px 0; }
+.ho::before { background: var(--info); width: 2px; border-radius: 0 2px 2px 0; }
+/* кнопки-пилюли Stripe: «короткие, решительные, транзакционные» */
+.perm button { border-radius: 99px; padding: 4px 14px; }
+
+/* — 4. Композер — */
+/* blur снят: поверхности непрозрачные (--glass-bg токены) + hairline */
+#hd, #bar, #menu { backdrop-filter: none; -webkit-backdrop-filter: none; } /* taste-skill-ignore: glass — отключаем базовый blur (= none) */
+/* поле: белое на белой панели отличает hairline; фокус-кольцо — акцент (Stripe ring) */
+#in { background: var(--surface-1); border-color: var(--line); }
+/* CTA: 32px-круг solid #533afd, цветная glow заменена Stripe Level-1 */
+#go { border-radius: 99px; box-shadow: 0 1px 3px rgba(0, 55, 112, 0.08); } /* taste-skill-ignore: shadow — Stripe L1 (pin-мир бренда, spec §2.4) */
+#go.running { box-shadow: 0 1px 3px rgba(0, 55, 112, 0.10); } /* taste-skill-ignore: shadow — Stripe L1, pin-мир */
+
+/* — 5. Страница настроек — */
+/* h1 22px/700; h1::after красится var(--grad-hot) → solid-полоска #533afd автоматически */
+h1 { font-size: 22px; font-weight: 700; }
+/* карточка: Stripe Level-1 lift (тень ИЛИ граница — hairline + почти невидимый подъём,
+   норма Stripe cards); inset-блик гасится --glass-border-hi: transparent */
+.card { box-shadow: 0 1px 3px rgba(0, 55, 112, 0.08); } /* taste-skill-ignore: shadow — Stripe L1 card (DESIGN.md elevation), pin-мир */
+/* primary — solid-пилюля, glow снята */
+button { border-radius: 99px; box-shadow: 0 1px 3px rgba(0, 55, 112, 0.08); } /* taste-skill-ignore: shadow — Stripe L1 primary, pin-мир */
+
+/* — 6. Браузерные поверхности, которых касаются руки — */
+/* выделение, каретка, скроллбар: базовые файлы их не темизируют, вариант закрывает
+   «ничейную» зону дефолтов браузера (craft-floor: browser surfaces) */
+::selection { background: var(--accent-soft); color: var(--text); }
+#in, .perm textarea { caret-color: var(--accent); }
+html { scrollbar-width: thin; scrollbar-color: var(--idle) transparent; }

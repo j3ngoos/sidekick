@@ -1,0 +1,85 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Hermes Sidekick — настройки</title>
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="options.css">
+</head><body><main>
+<!-- SK-30: тот же язык, что и в сайдбаре: inline-SVG спрайт (alert/chevron),
+     liquid glass карточки поверх градиента, единые состояния кнопок. -->
+<svg id="spr" aria-hidden="true"><defs>
+<symbol id="ic-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+<symbol id="ic-chevdown" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+</defs></svg>
+<h1>Hermes Sidekick</h1>
+
+<section class="card" aria-labelledby="h-tok">
+  <div class="chead"><h2 id="h-tok">Токен</h2>
+    <span class="chip" id="tokState"><i></i><span id="tokStateTxt">…</span></span></div>
+  <p>Токен сессии моста. Возьми содержимое файла <code>~/sidekick/bridge/hub/token</code>
+     на машине Hermes (одна строка, без переноса) и вставь сюда. Хранится только локально
+     в расширении; значение на странице не показывается.</p>
+  <div class="meta" id="tokMeta"></div>
+  <input id="tok" type="password" placeholder="вставь новый токен (hex из hub/token)"
+         autocomplete="off" spellcheck="false" aria-label="новый токен моста">
+  <div class="row">
+    <button id="save">Сохранить</button>
+    <button id="clear" class="sec">Стереть</button>
+    <button id="check" class="sec">Проверить подключение</button>
+  </div>
+  <div class="st" id="st"></div>
+</section>
+
+<section class="card" aria-labelledby="h-bell">
+  <div class="chead"><h2 id="h-bell">Звонок</h2></div>
+  <p>«Проверить звонок» выпускает <b>живое</b> системное уведомление со звуком — тем же
+     путём, что колокольчик агента (валидная иконка из <code>icons/</code>, без
+     <code>data:</code>). Звук даёт операционная система: у WebExtensions API звука
+     нет. На macOS — <b>Системные настройки → Уведомления → Firefox → «Позволить
+     уведомления» и «Звуки»</b>. Всплывашка завершения задачи выходит только когда
+     окно Firefox не в фокусе; пермиссы зовут всегда.</p>
+  <div class="row">
+    <button id="bellTest" class="sec">Проверить звонок</button>
+  </div>
+  <div class="st" id="bellSt"></div>
+  <ul class="meta" id="bellHint" hidden>
+    <li>Firefox: <code>about:preferences#privacy</code> → Уведомления — расширение не должно быть в «Блокировать».</li>
+    <li>macOS: Системные настройки → Уведомления → Firefox → «Позволить уведомления».</li>
+    <li>macOS: там же включить «Звуки» — звук даёт macOS, у расширения его нет.</li>
+    <li>Ничего не видишь при фокусе окна — так и задумано для задач: бейдж-колокольчик и журнал. «Проверить звонок» вызывает всплывашку принудительно.</li>
+  </ul>
+</section>
+
+<section class="card" aria-labelledby="h-srv">
+  <div class="chead"><h2 id="h-srv">Сервер</h2>
+    <span class="chip" id="srvState"><i></i><span id="srvStateTxt">…</span></span></div>
+  <p>WS-адрес моста Hermes. <b>Пусто = ws://127.0.0.1:8791</b> — режим ssh-туннеля,
+     как раньше. Чтобы подключиться <b>без ssh по локальной сети</b>, укажи адрес машины
+     с мостом, например <code>ws://host-a.local:8791</code>; на мосту при этом должен
+     стоять <code>SIDEKICK_BIND=0.0.0.0</code> (systemd-юнит моста). Если указанный адрес
+     недоступен, расширение само откатится на localhost (туннель), а ретраи пойдут
+     экспоненциалом от 2 до 60 секунд.</p>
+  <p class="meta"><svg class="icn sm" aria-hidden="true"><use href="#ic-alert"/></svg> ws:// передаёт токен по сети открытым текстом — только доверенная
+     домашняя сеть; для всего остального оставь туннель (пустое поле).</p>
+  <input id="srv" type="text" placeholder="ws://host-a.local:8791"
+         autocomplete="off" spellcheck="false" aria-label="WS-адрес моста">
+  <div class="row">
+    <button id="srvSave">Сохранить</button>
+    <button id="srvClear" class="sec">На localhost (туннель)</button>
+  </div>
+  <div class="st" id="srvSt"></div>
+</section>
+
+<section class="card" aria-labelledby="h-tabs">
+  <div class="chead"><h2 id="h-tabs">Вкладки агента</h2></div>
+  <p>Задачи агента живут в группе вкладок <code>Sidekick</code> (синяя).
+     Что делать с группой после завершения задачи:</p>
+  <div class="row">
+    <label class="selwrap"><select id="after" aria-label="поведение группы вкладок после задачи">
+      <option value="collapse">свернуть группу (по умолчанию)</option>
+      <option value="ungroup">разгруппировать (вкладки останутся открыты)</option>
+      <option value="none">ничего (группа останется на виду)</option>
+    </select><span class="caret" aria-hidden="true"><svg class="icn"><use href="#ic-chevdown"/></svg></span></label>
+    <button id="afterSave" class="sec">Применить</button>
+  </div>
+  <div class="st" id="afterSt"></div>
+</section>
+</main><script src="options.js"></script></body></html>

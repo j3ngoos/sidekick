@@ -1,0 +1,486 @@
+<!doctype html>
+<!-- SK-57: витрина варианта «нативный Firefox» — статичные моки всех 5 поверхностей
+     (чат с шагами задачи, журнал уведомлений, карточка пермисса, композер, options).
+     Грузит ../extension/theme.css + firefox.css; layout-стили моков воспроизводят
+     геометрию sidebar.css (компонентные точечные правила firefox.css срабатывают на
+     настоящих селекторах). JS минимальный: параметры ?view=&theme= для скрин-сета;
+     без скрипта — все поверхности списком в системной теме.
+     Темы: data-theme на <html> (нативный механизм) или scope .fx-light/.fx-dark. -->
+<html lang="ru"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SK-57 · нативный Firefox — витрина варианта</title>
+<link rel="stylesheet" href="../extension/theme.css">
+<link rel="stylesheet" href="firefox.css">
+<style>
+/* ---------- layout моков (геометрия sidebar.css; цвета — только токены) ---------- */
+[hidden] { display: none !important; }
+#spr { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icn {
+  width: var(--ic); height: var(--ic); flex: none; box-sizing: border-box;
+  fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px;
+}
+.icn.sm { width: 14px; height: 14px; vertical-align: -2px; }
+html { background: var(--surface-1); }
+body { margin: 0; font: 13px system-ui; color: var(--text); display: flex; justify-content: center; }
+main.page { padding: 20px 16px; width: 100%; max-width: 1440px; box-sizing: border-box;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 380px));
+  justify-content: center; align-items: start; gap: 30px 26px; }
+.cell { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.switch, .page > footer.cap { grid-column: 1 / -1; }
+.cap { font-size: 13px; color: var(--text-dim); margin: 0; }
+.cap:first-child { margin-top: 0; }
+.panel {
+  background: var(--surface-1); color: var(--text);
+  border: var(--line-w) solid var(--line); border-radius: var(--r2);
+  box-sizing: border-box; display: flex; flex-direction: column;
+}
+/* порталы в витрине — статичные блоки (в проде position: fixed) */
+.panel #bellpanel, .panel #menu { position: static; max-width: none; max-height: none;
+  margin: var(--sp2); box-shadow: none; } /* витрина: порталы в потоке — тень у них только на floating-fixed в проде */
+
+/* ---- шапка ---- */
+#hd { flex: none; display: flex; flex-direction: column; gap: var(--sp1);
+  padding: var(--sp2) var(--sp3); border-bottom: var(--line-w) solid var(--glass-border);
+  background: var(--glass-bg); }
+#hdrow { display: flex; align-items: center; gap: var(--sp2); min-height: 24px; }
+#hdic { flex: none; color: var(--accent); fill: currentColor; stroke: currentColor; }
+#ttl { margin: 0; font-weight: 750; font-size: var(--fs-ttl); letter-spacing: -.015em;
+  flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#st { flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--idle); }
+#st[data-s="online"] { background: var(--ok); }
+#menuBtn, #bellBtn, #collapseBtn {
+  flex: none; width: 24px; height: 24px; box-sizing: border-box; position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--r1); cursor: pointer; padding: 0;
+  border: var(--line-w) solid transparent; background: transparent; color: inherit; }
+#belln { position: absolute; top: -5px; right: -6px; min-width: 15px; height: 15px;
+  box-sizing: border-box; padding: 0 3px; border-radius: 8px;
+  background: var(--btn-stop); color: var(--ink-on-solid);
+  font: 700 11px/15px system-ui; text-align: center; }
+
+/* ---- лента ---- */
+#log { flex: 1; padding: var(--sp3); display: flex; flex-direction: column; gap: var(--sp2); }
+.m { max-width: 88%; padding: var(--sp2) var(--sp3); border-radius: var(--r2);
+  line-height: 1.45; white-space: pre-wrap; word-break: break-word; position: relative; flex: none; }
+.me { align-self: flex-end; background: var(--grad-hot); color: var(--ink-on-solid);
+  padding-right: calc(var(--av) + var(--sp3) + var(--sp2)); }
+.hm { align-self: flex-start; background: var(--surface-2);
+  border: var(--line-w) solid var(--line-soft);
+  padding-left: calc(var(--av) + var(--sp3) + var(--sp2)); }
+.sys { align-self: center; font-size: 13px; color: var(--text-dim); }
+.av { position: absolute; top: var(--sp2); width: var(--av); height: var(--av);
+  display: inline-flex; align-items: center; justify-content: center; }
+.av .icn { width: 12px; height: 12px; }
+.av.ag { left: var(--sp2); background: transparent; color: var(--accent); }
+.av.hu { right: var(--sp2); background: transparent; color: var(--text-dim); }
+.m.think { align-self: flex-start; max-width: 92%; background: transparent;
+  color: var(--text-dim); padding: var(--sp2) var(--sp3); }
+.m.think .thd { font-size: 13px; color: var(--text-dim); cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: var(--sp1); }
+.m.think .thd .icn { width: 12px; height: 12px; }
+.m.think .tx2 { font-size: 13px; line-height: 1.4; font-style: italic;
+  white-space: pre-wrap; word-break: break-word; margin-top: var(--sp1); }
+
+/* ---- карточка задачи ---- */
+.m.task { align-self: stretch; max-width: 100%; padding: 0; overflow: hidden;
+  background: var(--surface-2); border: var(--line-w) solid var(--line); border-radius: var(--r2); }
+.tkhd { display: flex; align-items: center; gap: var(--sp2);
+  padding: var(--sp2) var(--sp3); cursor: pointer; user-select: none;
+  font-size: 13px; font-weight: 700; letter-spacing: -.01em; }
+.tkic { flex: none; width: 14px; display: inline-flex; align-items: center; justify-content: center; }
+.tkic .icn { width: 13px; height: 13px; }
+.tkic.spin { width: 11px; height: 11px; border-radius: 50%; box-sizing: border-box;
+  border: 2px solid color-mix(in srgb, var(--info) 25%, transparent);
+  border-top-color: var(--info); animation: tkspin 1s linear infinite; }
+@keyframes tkspin { to { transform: rotate(1turn); } }
+.tktx { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  display: flex; align-items: center; gap: var(--sp1); }
+.tktab { flex: none; max-width: 42%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  display: inline-flex; align-items: center; gap: var(--sp1);
+  font-size: 13px; font-weight: 400; border: var(--line-w) solid var(--line);
+  border-radius: var(--r1); padding: 0 6px; cursor: pointer; }
+.tktab .icn { width: 11px; height: 11px; }
+.tkcaret { flex: none; color: var(--text-dim); display: inline-flex; }
+.tkcaret .icn { width: 12px; height: 12px; }
+.tksteps { display: flex; flex-direction: column; gap: 1px;
+  border-top: var(--line-w) solid var(--line-soft); padding: var(--sp1) var(--sp2) var(--sp2); }
+.stime { flex: none; font-family: monospace; font-size: 13px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+.srow { display: flex; align-items: baseline; gap: var(--sp2); font-size: 13px;
+  padding: var(--sp1); border-radius: var(--r1); line-height: 1.4; }
+.srow .ic { width: 14px; flex: none; display: inline-flex; align-items: center; justify-content: center; }
+.srow .ic .icn { width: 13px; height: 13px; }
+.srow.done .ic { color: var(--ok); }
+.srow.failed .ic { color: var(--err); }
+.srow.active .ic { color: var(--info); }
+.srow .tx { flex: 1; word-break: break-word; }
+.srow.queued { color: var(--text-dim); }
+
+/* ---- карточка пермисса / hand-off ---- */
+.perm { align-self: stretch; max-width: 100%; position: relative;
+  background: var(--warn-soft); border: var(--line-w) solid color-mix(in srgb, var(--warn) 38%, transparent);
+  border-radius: var(--r2);
+  /* longhand-литералы == var(--sp2) var(--sp3) var(--sp2) calc(var(--sp3) + 3px)
+     (8/12/8/15px): шортхенд с calc(var()) статические CSS-парсеры роняют в 0 */
+  padding-top: 8px; padding-right: 12px; padding-bottom: 8px; padding-left: 15px; }
+.perm::before, .ho::before { content: ""; position: absolute; left: 0; top: 10px; bottom: 10px;
+  width: 3px; border-radius: 0 3px 3px 0; }
+.perm .hd { font-weight: 750; font-size: var(--fs-hd); margin-bottom: 2px; letter-spacing: -.01em; }
+.perm .sub { font-size: 13px; color: var(--text-dim); margin-bottom: var(--sp2); overflow-wrap: anywhere; }
+.perm .btns { display: flex; gap: var(--sp1); flex-wrap: wrap; }
+.perm button { min-height: var(--ctl-h-sm); padding: var(--sp1) var(--sp3); border-radius: var(--r1);
+  border: var(--line-w) solid var(--line); background: transparent; color: inherit;
+  font: 600 13px system-ui; cursor: pointer; }
+.perm .chip { min-height: 0; padding: 2px var(--sp2); border-radius: var(--rp);
+  font-size: 13px; font-weight: 500; border: var(--line-w) solid transparent; }
+.perm .res { font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: var(--sp1); }
+.perm .res .icn { width: 13px; height: 13px; }
+.perm .frame { height: 74px; display: flex; align-items: center; justify-content: center;
+  background: var(--surface-1); border: var(--line-w) solid var(--line);
+  border-radius: var(--r1); margin-bottom: var(--sp2); color: var(--text-dim); font-size: 13px; }
+.ho { align-self: stretch; max-width: 100%; background: var(--info-soft); position: relative;
+  border: var(--line-w) solid color-mix(in srgb, var(--info) 38%, transparent);
+  border-radius: var(--r2);
+  padding-top: 8px; padding-right: 12px; padding-bottom: 8px; padding-left: 15px; }
+.ho .hd { font-weight: 750; font-size: 14px; margin-bottom: var(--sp1); display: flex;
+  align-items: center; gap: var(--sp1); letter-spacing: -.01em; }
+.ho .hd .icn { width: 14px; height: 14px; }
+.ho .tx2 { font-size: 13px; line-height: 1.45; margin-bottom: var(--sp2); }
+.ho button { min-height: var(--ctl-h-sm); padding: var(--sp2) var(--sp3); border: none;
+  border-radius: var(--r1); background: var(--btn-ok); color: var(--ink-on-solid);
+  font: 700 13px system-ui; cursor: pointer; }
+
+/* ---- журнал ---- */
+#bellpanel { z-index: 1; min-width: 240px; display: flex; flex-direction: column; gap: 2px;
+  padding: var(--sp1); border-radius: var(--r2);
+  border: var(--line-w) solid var(--glass-border); background: var(--glass-bg-2);
+  box-shadow: var(--glass-shadow); }
+#bellhead { display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--sp1) var(--sp1); font: 700 12px system-ui; color: var(--text-dim);
+  text-transform: uppercase; letter-spacing: .04em; }
+#bellClose { width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;
+  border: none; border-radius: var(--r1); background: transparent; color: var(--text-dim); cursor: pointer; }
+#bellrows { display: flex; flex-direction: column; gap: 2px; }
+.brow { display: flex; align-items: flex-start; gap: var(--sp2); min-height: var(--ctl-h);
+  padding: var(--sp1) var(--sp2); border: none; border-radius: var(--r1);
+  background: transparent; color: var(--text); font: 600 13px system-ui;
+  text-align: left; cursor: pointer; }
+.brow .bic { flex: none; width: 16px; display: inline-flex; justify-content: center; padding-top: 1px; color: var(--text-dim); }
+.brow.k-done .bic { color: var(--ok); }
+.brow.k-failed .bic { color: var(--err); }
+.brow.k-perm .bic { color: var(--warn); }
+.brow .btx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.brow.unread .btx::first-line { font-weight: 700; }
+.brow .bsub { font: 400 13px system-ui; color: var(--text-dim); }
+.brow .btime { flex: none; font: 400 13px system-ui; color: var(--text-dim); padding-top: 2px; }
+#bellfoot { display: flex; justify-content: flex-end; padding: var(--sp1) var(--sp1) 0;
+  border-top: var(--line-w) solid var(--glass-border); margin-top: var(--sp1); }
+#bellReadAll { border: none; border-radius: var(--r1); background: transparent;
+  color: var(--accent); font: 600 13px system-ui; padding: 4px var(--sp1); cursor: pointer; }
+
+/* ---- композер + меню ---- */
+#bar { display: flex; gap: var(--sp1); padding: var(--sp2);
+  border-top: var(--line-w) solid var(--glass-border); background: var(--glass-bg); }
+#inwrap { flex: 1; min-width: 0; position: relative; display: flex; }
+#in { flex: 1; min-width: 0; height: var(--ctl-h); box-sizing: border-box;
+  padding: 0 var(--sp3); border-radius: var(--r1);
+  border: var(--line-w) solid var(--glass-border); background: var(--surface-2);
+  color: inherit; font: 13px system-ui; }
+#in::placeholder { color: var(--text-dim); opacity: 1; }
+#go { flex: none; width: var(--ctl-h); height: var(--ctl-h); box-sizing: border-box;
+  position: relative; border: none; border-radius: var(--r1); cursor: pointer; padding: 0;
+  background: transparent; color: var(--accent); }
+#go:hover { color: var(--grad-hot-hi); }
+#go .icn { position: absolute; inset: 0; margin: auto; }
+#go .ic-stop { opacity: 0; }
+#go.running { background: transparent; color: var(--btn-stop); }
+#go.running .ic-send { opacity: 0; }
+#go.running .ic-stop { opacity: 1; }
+#go:disabled { background: transparent; color: var(--text-dim); }
+#menu { z-index: 1; min-width: 220px; display: flex; flex-direction: column; gap: 2px;
+  padding: var(--sp1); border-radius: var(--r2);
+  border: var(--line-w) solid var(--glass-border); background: var(--glass-bg-2);
+  box-shadow: var(--glass-shadow); }
+.mi { display: flex; align-items: center; gap: var(--sp2); min-height: var(--ctl-h);
+  padding: var(--sp1) var(--sp2); border: none; border-radius: var(--r1);
+  background: transparent; color: var(--text); font: 600 13px system-ui;
+  text-align: left; cursor: pointer; }
+.mi:disabled { color: var(--text-dim); cursor: default; }
+.mi.danger { color: var(--err); }
+.msep { height: var(--line-w); background: var(--glass-border); margin: var(--sp1); }
+
+/* ---- options (about:preferences) ---- */
+.opts main { max-width: 560px; padding: var(--sp3); width: 100%; box-sizing: border-box; }
+.opts h1 { font-size: 20px; font-weight: 800; letter-spacing: -.02em; margin: var(--sp1) 0 var(--sp2); }
+.card { background: var(--surface-2); border: var(--line-w) solid var(--line);
+  border-radius: var(--r2); padding: var(--sp3); margin-top: var(--sp3); }
+.chead { display: flex; align-items: center; justify-content: space-between; gap: var(--sp2); }
+.opts h2 { font-size: 14px; font-weight: 700; letter-spacing: -.01em; margin: 0; }
+.opts p { line-height: 1.5; color: var(--text-dim); margin: var(--sp2) 0; }
+.opts code { background: var(--surface-3); border-radius: var(--r1); padding: 1px var(--sp1);
+  font: 13px ui-monospace, monospace; }
+.chip { display: inline-flex; align-items: center; gap: var(--sp1); padding: 2px var(--sp2);
+  border-radius: var(--rp); font-size: 13px; font-weight: 600; line-height: 1.4;
+  border: var(--line-w) solid transparent; flex: none; }
+.chip i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.chip.ok { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+.chip.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+.meta { font-size: 13px; color: var(--text-dim); margin-top: var(--sp2); line-height: 1.4; }
+.opts input, .opts select { width: 100%; box-sizing: border-box; padding: var(--sp2) var(--sp3);
+  border-radius: var(--r1); border: var(--line-w) solid var(--line);
+  background: var(--surface-1); color: var(--text); font: 13px ui-monospace, monospace; }
+.opts input::placeholder { color: var(--text-dim); }
+.selwrap { position: relative; display: block; flex: 1; min-width: 0; }
+.opts select { appearance: none; font: 13px system-ui; padding-right: var(--sp3); }
+.caret { position: absolute; right: var(--sp3); top: 50%; transform: translateY(-50%);
+  color: var(--text-dim); pointer-events: none; font-size: 13px; }
+.opts .row { display: flex; gap: var(--sp2); margin-top: var(--sp2); flex-wrap: wrap; align-items: center; }
+.opts button { min-height: var(--ctl-h); display: inline-flex; align-items: center; gap: var(--sp1);
+  padding: var(--sp2) var(--sp3); font: inherit; font-weight: 600;
+  border: var(--line-w) solid transparent; border-radius: var(--r1);
+  background: var(--grad-hot); color: var(--ink-on-solid); cursor: pointer; white-space: nowrap; }
+.opts button.sec { background: transparent; color: var(--text); border-color: var(--line); }
+.opts .st { margin-top: var(--sp2); min-height: 16px; font-size: 13px; color: var(--text-dim); line-height: 1.4; }
+.opts .st.ok { color: var(--ok); }
+
+/* ---- переключатель витрины: вид/тема ---- */
+.switch { display: flex; gap: var(--sp1); flex-wrap: wrap; margin: 10px 2px; }
+.switch a { color: var(--text-dim); text-decoration: none; border: var(--line-w) solid var(--line);
+  border-radius: var(--r1); padding: 3px 8px; font-size: 13px; }
+html[data-view] .cell { display: none; }
+html[data-view="chat"] .cell-chat, html[data-view="journal"] .cell-journal,
+html[data-view="perm"] .cell-perm, html[data-view="composer"] .cell-composer,
+html[data-view="options"] .cell-options { display: flex; }
+.surf-perm.panel { display: flex; flex-direction: column; gap: var(--sp2); padding: var(--sp3); }
+.surf-options.panel { display: block; padding: 0; }
+html[data-view="chat"] .surf-chat.panel { display: flex; }
+html[data-view="journal"] .surf-journal.panel { display: flex; }
+html[data-view="perm"] .surf-perm.panel { display: flex; }
+html[data-view="composer"] .surf-composer.panel { display: flex; }
+html[data-view="options"] .surf-options.panel { display: block; }
+html[data-view] .cap { display: none; }
+html[data-view] .switch { display: none; }
+</style>
+</head><body>
+<svg id="spr" aria-hidden="true"><defs>
+<symbol id="ic-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
+<symbol id="ic-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+<symbol id="ic-history" viewBox="0 0 24 24"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></symbol>
+<symbol id="ic-audit" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+<symbol id="ic-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></symbol>
+<symbol id="ic-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+<symbol id="ic-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></symbol>
+<symbol id="ic-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="ic-menu" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></symbol>
+<symbol id="ic-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+<symbol id="ic-collapse" viewBox="0 0 24 24"><path d="M11 17l-5-5 5-5"/><path d="M18 17l-5-5 5-5"/></symbol>
+<symbol id="ic-theme" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
+<symbol id="ic-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="ic-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></symbol>
+<symbol id="ic-transfer" viewBox="0 0 24 24"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4 4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+<symbol id="ic-hand" viewBox="0 0 24 24"><path d="M6 11V7.5a1.5 1.5 0 0 1 3 0V11"/><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11"/><path d="M12 11V6a1.5 1.5 0 0 1 3 0v5"/><path d="M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15"/></symbol>
+<symbol id="ic-think" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></symbol>
+<symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></symbol>
+<symbol id="ic-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="ic-cross" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+<symbol id="ic-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"/></symbol>
+<symbol id="ic-chevron" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+<symbol id="ic-chevdown" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="ic-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+<symbol id="ic-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+<symbol id="ic-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+</defs></svg>
+
+<main class="page">
+<div class="switch" aria-label="Переключатель витрины">
+  <a href="?view=chat&theme=dark">чат · тёмная</a>
+  <a href="?view=chat&theme=light">чат · светлая</a>
+  <a href="?view=journal&theme=dark">журнал · тёмная</a>
+  <a href="?view=journal&theme=light">журнал · светлая</a>
+  <a href="?view=perm&theme=dark">пермисс · тёмная</a>
+  <a href="?view=perm&theme=light">пермисс · светлая</a>
+  <a href="?view=composer&theme=dark">композер · тёмная</a>
+  <a href="?view=composer&theme=light">композер · светлая</a>
+  <a href="?view=options&theme=dark">options · тёмная</a>
+  <a href="?view=options&theme=light">options · светлая</a>
+</div>
+
+<!-- ================= 1. ЧАТ С ШАГАМИ ЗАДАЧИ ================= -->
+<section class="cell cell-chat">
+<div class="cap">1 · Чат: шапка-тулбар, лента, карточка задачи с шагами, think-блок</div>
+<div class="surf surf-chat panel">
+  <div id="hd">
+    <div id="hdrow">
+      <svg id="hdic" class="icn" aria-hidden="true"><use href="#ic-bolt"/></svg>
+      <h1 id="ttl">Корзина Ozon: итог</h1>
+      <span id="st" data-s="online" title="bridge: online"></span>
+      <button id="bellBtn2" aria-label="Журнал уведомлений"><svg class="icn" aria-hidden="true"><use href="#ic-bell"/></svg></button>
+      <button id="collapseBtn2" aria-label="Свернуть панель"><svg class="icn" aria-hidden="true"><use href="#ic-collapse"/></svg></button>
+      <button id="menuBtn2" aria-label="Меню" aria-haspopup="menu"><svg class="icn" aria-hidden="true"><use href="#ic-menu"/></svg></button>
+    </div>
+  </div>
+  <div id="log">
+    <div class="m me">Проверь корзину Ozon и скажи итоговую сумму<span class="av hu" aria-hidden="true"><svg class="icn"><use href="#ic-user"/></svg></span></div>
+    <div class="m task">
+      <div class="tkhd"><span class="tkic spin" aria-hidden="true"></span>
+        <span class="tktx">Считаю позиции в корзине
+          <span class="tktab"><svg class="icn" aria-hidden="true"><use href="#ic-globe"/></svg>Ozon</span></span>
+        <span class="tkcaret" aria-hidden="true"><svg class="icn"><use href="#ic-chevron"/></svg></span>
+      </div>
+      <div class="tksteps">
+        <div class="srow done"><span class="stime">12:02</span><span class="ic"><svg class="icn"><use href="#ic-check"/></svg></span><span class="tx">Открыл ozon.ru/cart</span></div>
+        <div class="srow active"><span class="stime">12:03</span><span class="ic"><svg class="icn"><use href="#ic-dot"/></svg></span><span class="tx">Считаю позиции (7 из 9)</span></div>
+        <div class="srow failed"><span class="stime">12:03</span><span class="ic"><svg class="icn"><use href="#ic-cross"/></svg></span><span class="tx">Скриншот не снят: окно не активно</span></div>
+        <div class="srow queued"><span class="stime">—</span><span class="ic"><svg class="icn"><use href="#ic-dot"/></svg></span><span class="tx">Сравню с прошлой неделей</span></div>
+      </div>
+    </div>
+    <div class="m think">
+      <div class="thd"><svg class="icn" aria-hidden="true"><use href="#ic-think"/></svg>Думает… (14 сек)</div>
+      <div class="tx2">Позиции считаются со страницы; кэш цен прошлой недели лежит в feed — сопоставлю после подсчёта.</div>
+    </div>
+    <div class="m hm">Итог: 24 310 ₽ за 7 позиций; две подорожали за неделю (кофе +8%, монеты +120 ₽). Готовую смету положил в чат.<span class="av ag" aria-hidden="true"><svg class="icn"><use href="#ic-bolt"/></svg></span></div>
+    <div class="sys">сессия · 12:01</div>
+  </div>
+  <div id="bar"><div id="inwrap"><input id="in" placeholder="спроси что угодно" autocomplete="off"></div>
+    <button id="go" aria-label="Отправить"><svg class="icn ic-send" aria-hidden="true"><use href="#ic-send"/></svg><svg class="icn ic-stop" aria-hidden="true"><use href="#ic-stop"/></svg></button>
+  </div>
+</div>
+
+</section>
+<!-- ================= 2. ЖУРНАЛ УВЕДОМЛЕНИЙ ================= -->
+<section class="cell cell-journal">
+<div class="cap">2 · Журнал «позови человека»: выпадающее меню тулбара, счётчик, подвал</div>
+<div class="surf surf-journal panel">
+  <div id="hd3"><div id="hdrow3" style="display:flex;align-items:center;gap:8px;min-height:24px;padding:8px 12px;border-bottom:1px solid var(--glass-border);background:var(--glass-bg)">
+    <svg class="icn" aria-hidden="true" style="color:var(--accent)" viewBox="0 0 24 24"><use href="#ic-bolt"/></svg>
+    <span style="font-weight:750;font-size:var(--fs-ttl);flex:1">Корзина Ozon: итог</span>
+    <button id="bellBtn" aria-label="Журнал уведомлений" aria-expanded="true"><svg class="icn" aria-hidden="true"><use href="#ic-bell"/></svg><span id="belln">2</span></button>
+  </div></div>
+  <div id="bellpanel" role="dialog" aria-label="Журнал уведомлений">
+    <div id="bellhead"><span>Журнал</span><button id="bellClose" aria-label="Закрыть журнал"><svg class="icn" aria-hidden="true"><use href="#ic-close"/></svg></button></div>
+    <div id="bellrows">
+      <button class="brow k-perm unread"><span class="bic"><svg class="icn"><use href="#ic-bell"/></svg></span>
+        <span class="btx">Нужен допуск: открыть ozon.ru/cart<span class="bsub">действие вне текущей задачи</span></span>
+        <span class="btime">сейчас</span></button>
+      <button class="brow k-done unread"><span class="bic"><svg class="icn"><use href="#ic-hand"/></svg></span>
+        <span class="btx">Задача завершена: «собрать вакансии со hh»<span class="bsub">42 строки, файл отчёта готов</span></span>
+        <span class="btime">12:04</span></button>
+      <button class="brow k-failed"><span class="bic"><svg class="icn"><use href="#ic-cross"/></svg></span>
+        <span class="btx">Задача упала: таймаут моста<span class="bsub">переподключение через 4 с</span></span>
+        <span class="btime">11:58</span></button>
+    </div>
+    <div id="bellfoot"><button id="bellReadAll" type="button">Прочитать всё</button></div>
+  </div>
+</div>
+
+</section>
+<!-- ================= 3. КАРТОЧКА ПЕРМИССА ================= -->
+<section class="cell cell-perm">
+<div class="cap">3 · Пермисс: notice-карточка (не модаль), кнопки диалогов, hand-off баннер</div>
+<div class="surf surf-perm panel">
+  <div class="perm">
+    <div class="hd">Разрешить агенту открыть корзину?</div>
+    <div class="sub">https://www.ozon.ru/cart/ — действие вне текущей задачи</div>
+    <div class="frame">кадр страницы агента (миниатюра)</div>
+    <div class="btns">
+      <button class="ok">Разрешить</button>
+      <button class="alw">Всегда для ozon.ru</button>
+      <button class="no">Запретить</button>
+    </div>
+    <div class="btns" style="margin-top:var(--sp2)">
+      <button class="chip">только этот раз</button>
+      <button class="chip">только этот сайт</button>
+      <button class="chip">подробнее позже</button>
+    </div>
+  </div>
+  <div class="perm done">
+    <div class="hd">Разрешить агенту снять скриншот?</div>
+    <div class="res"><svg class="icn" aria-hidden="true"><use href="#ic-check"/></svg>Разрешено · 12:04 · «только этот раз»</div>
+  </div>
+  <div class="ho">
+    <div class="hd"><svg class="icn" aria-hidden="true"><use href="#ic-hand"/></svg>Нужен ты: капча на ozon.ru</div>
+    <div class="tx2">Открой вкладку Sidekick и введи код — дальше продолжу сам.</div>
+    <button>Готово, продолжай</button>
+  </div>
+</div>
+
+</section>
+<!-- ================= 4. КОМПОЗЕР + МЕНЮ ================= -->
+<section class="cell cell-composer">
+<div class="cap">4 · Композер: поле + морф-кнопка (отправка/стоп), меню шапки</div>
+<div class="surf surf-composer panel">
+  <div id="menu" role="menu" aria-label="Меню Hermes">
+    <button class="mi" role="menuitem"><svg class="icn" aria-hidden="true"><use href="#ic-plus"/></svg><span>Новый чат</span></button>
+    <button class="mi" role="menuitem"><svg class="icn" aria-hidden="true"><use href="#ic-history"/></svg><span>История чатов</span></button>
+    <button class="mi" role="menuitem"><svg class="icn" aria-hidden="true"><use href="#ic-audit"/></svg><span>Журнал агента</span></button>
+    <div class="msep" role="separator"></div>
+    <button class="mi" role="menuitem"><svg class="icn" aria-hidden="true"><use href="#ic-theme"/></svg><span>Тема: как в системе</span></button>
+    <button class="mi" role="menuitem"><svg class="icn" aria-hidden="true"><use href="#ic-settings"/></svg><span>Настройки</span></button>
+    <button class="mi danger" role="menuitem" disabled><svg class="icn" aria-hidden="true"><use href="#ic-stop"/></svg><span>Стоп задача</span></button>
+  </div>
+  <div id="bar"><div id="inwrap"><input id="in" placeholder="спроси что угодно" autocomplete="off"></div>
+    <button id="go" aria-label="Отправить"><svg class="icn ic-send" aria-hidden="true"><use href="#ic-send"/></svg><svg class="icn ic-stop" aria-hidden="true"><use href="#ic-stop"/></svg></button>
+  </div>
+  <div id="bar2" style="display:flex;gap:var(--sp1);padding:var(--sp2);border-top:var(--line-w) solid var(--glass-border);background:var(--glass-bg)">
+    <div style="flex:1;min-width:0"><input id="in2" placeholder="задача идёт — можно остановить" autocomplete="off" style="width:100%;height:var(--ctl-h);box-sizing:border-box;padding:0 var(--sp3);border-radius:var(--r1);border:var(--line-w) solid var(--glass-border);background:var(--surface-2);color:inherit;font:13px system-ui"></div>
+    <button id="go2" class="running" aria-label="Остановить задачу" style="flex:none;width:var(--ctl-h);height:var(--ctl-h);border:none;border-radius:var(--r1);cursor:pointer;background:transparent;color:var(--btn-stop);display:inline-flex;align-items:center;justify-content:center"><svg class="icn" aria-hidden="true"><use href="#ic-stop"/></svg></button>
+    <button id="go3" aria-label="Отправить" disabled style="flex:none;width:var(--ctl-h);height:var(--ctl-h);border:none;border-radius:var(--r1);background:transparent;color:var(--text-dim);display:inline-flex;align-items:center;justify-content:center"><svg class="icn" aria-hidden="true"><use href="#ic-send"/></svg></button>
+  </div>
+</div>
+
+</section>
+<!-- ================= 5. OPTIONS (about:preferences) ================= -->
+<section class="cell cell-options">
+<div class="cap">5 · Options: карточки-секции как about:preferences, menulist, чипы статуса</div>
+<div class="surf surf-options opts panel">
+<main>
+  <h1>Hermes Sidekick</h1>
+  <section class="card" aria-labelledby="h-tok">
+    <div class="chead"><h2 id="h-tok">Токен</h2>
+      <span class="chip ok"><i></i><span>подключено</span></span></div>
+    <p>Токен сессии моста. Возьми содержимое файла <code>~/sidekick/bridge/hub/token</code> и вставь сюда. Хранится только локально в расширении.</p>
+    <input type="password" placeholder="вставь новый токен (hex из hub/token)" aria-label="новый токен моста">
+    <div class="row"><button>Сохранить</button><button class="sec">Стереть</button><button class="sec">Проверить подключение</button></div>
+    <div class="st ok">Сохранено · мост отвечает за 41 мс</div>
+  </section>
+  <section class="card" aria-labelledby="h-srv">
+    <div class="chead"><h2 id="h-srv">Сервер</h2>
+      <span class="chip warn"><i></i><span>туннель</span></span></div>
+    <p>WS-адрес моста Hermes. <b>Пусто = ws://127.0.0.1:8791</b> — режим ssh-туннеля. Для подключения по локальной сети укажи адрес машины с мостом.</p>
+    <div class="meta"><svg class="icn sm" aria-hidden="true"><use href="#ic-alert"/></svg> ws:// передаёт токен открытым текстом — только доверенная сеть.</div>
+    <input type="text" placeholder="ws://192.168.0.50:8791" aria-label="WS-адрес моста">
+    <div class="row"><button>Сохранить</button><button class="sec">На localhost (туннель)</button></div>
+  </section>
+  <section class="card" aria-labelledby="h-tabs">
+    <div class="chead"><h2 id="h-tabs">Вкладки агента</h2></div>
+    <p>Задачи агента живут в группе вкладок <code>Sidekick</code>. Что делать с группой после завершения задачи:</p>
+    <div class="row">
+      <label class="selwrap"><select aria-label="поведение группы вкладок после задачи" style="width:auto;max-width:100%">
+        <option>свернуть группу</option>
+        <option>разгруппировать вкладки</option>
+        <option>оставить группу на виду</option>
+      </select><span class="caret" aria-hidden="true"><svg class="icn"><use href="#ic-chevdown"/></svg></span></label>
+      <button class="sec">Применить</button>
+    </div>
+  </section>
+</main>
+</div>
+
+</section>
+<footer class="cap" style="margin-top:16px">
+  SK-57 · вариант «нативный Firefox» · значения токенов — Proton/Photon
+  (common-shared.css ESR115, browser-shared.css, Nova design-system tokens, photon-colors.json) ·
+  контрасты посчитаны (см. spec.md) · моки контента — образцы для приёмки.
+</footer>
+</main>
+<script>
+/* витрина: ?view=...&theme=dark|light (для скрин-сета). Без JS страница читается целиком. */
+(function () {
+  var q = new URLSearchParams(location.search);
+  var v = q.get('view'), t = q.get('theme');
+  if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
+  if (v) document.documentElement.setAttribute('data-view', v);
+})();
+</script>
+</body></html>

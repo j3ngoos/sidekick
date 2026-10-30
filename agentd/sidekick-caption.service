@@ -1,0 +1,21 @@
+[Unit]
+Description=Hermes Sidekick caption — малая CPU-модель подписей шагов ленты (SK-36)
+Documentation=file://%REPO%/agentd/sidekick_agentd.py
+After=network.target
+
+[Service]
+# Только CPU (CUDA_VISIBLE_DEVICES пуст): подпись шага не имеет права отъедать
+# GPU у основной модели. Nice=10 — фоновый приоритет: агент-исполнитель важнее.
+# Модель: Qwen2.5-1.5B-Instruct Q4_K_M (0.5B не годится — пародирует примеры
+# вместо русских фраз, задокументировано в SK-36). Порт 8087, loopback.
+ExecStart=@LLAMA@ -m %MODEL% -c 1024 -t 8 -ngl 0 --host 127.0.0.1 --port 8087 --alias sidekick-caption
+WorkingDirectory=%HOME%
+Restart=always
+RestartSec=3
+Environment=CUDA_VISIBLE_DEVICES=
+Nice=10
+StandardOutput=append:%HUB%/caption.log
+StandardError=append:%HUB%/caption.log
+
+[Install]
+WantedBy=default.target

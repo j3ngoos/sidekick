@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- SK-48 (аудит №2 22.10, проблема 10): страница-плеер для приёмки page.media и
+     handoff expect {kind:"video_playing"}. Состояние дублируется в document.title
+     («sk48: {json}») — harness читает его через page.text (state-канал предшественников).
+     #paused — старт на паузе; #auto — muted autoplay (эмуляция «человек починил»). -->
+<html><head><meta charset="utf-8"><title>sk48: {"ready":false}</title></head>
+<body style="margin:0;background:#123;color:#eee;font:14px sans-serif">
+<video id="v" src="clip.webm" width="320" height="240" loop playsinline
+       preload="auto" aria-label="тестовый плеер"></video>
+<div style="padding:8px">
+  <button id="play">Play</button>
+  <button id="pause">Pause</button>
+  <button id="mute">Mute</button>
+</div>
+<script>
+const v = document.getElementById("v");
+function rep() {
+  document.title = "sk48: " + JSON.stringify({
+    ready: true, paused: v.paused, t: Math.round(v.currentTime * 10) / 10,
+    rs: v.readyState, muted: v.muted, ...(window.__perr ? { err: window.__perr } : {}),
+    ...(window.__clicks ? { clicks: window.__clicks } : {}),
+  });
+}
+// журнал всех click-событий (кепчер): синтетика экзекьютора обязана долетать до целей
+document.addEventListener("click", (e) => {
+  const a = (window.__clicks = window.__clicks || []);
+  a.push((e.target.id || e.target.tagName) + (e.isTrusted ? "" : "!"));
+  if (a.length > 6) a.shift();
+  rep();
+}, true);
+window.__tryPlay = () => v.play().then(rep, (e) => { window.__perr = e.name; rep(); });
+["loadeddata", "loadedmetadata", "play", "pause", "timeupdate", "volumechange"]
+  .forEach((e) => v.addEventListener(e, rep));
+v.addEventListener("loadeddata", () => {
+  if (location.hash === "#auto") { v.muted = true; v.play().catch(() => {}); }
+});
+document.getElementById("play").onclick = () => window.__tryPlay();
+document.getElementById("pause").onclick = () => v.pause();
+document.getElementById("mute").onclick = () => { v.muted = !v.muted; };
+rep();
+</script>
+</body></html>

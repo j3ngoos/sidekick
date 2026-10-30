@@ -1,0 +1,132 @@
+/* SK-15: options page — карточный layout поверх токенов SK-13. Ни одного hex,
+   все отступы/радиусы со шкалы theme.css; light/dark — через prefers-color-scheme.
+   Чипы статуса — outline (текст+рамка семантическим цветом, фон прозрачный):
+   tinted-фон на surface-2 съедал бы контраст ниже 4.5:1 (урок SK-13).
+   SK-53: «Steel Terminal» (спека §7д) — карточка = surface-2 + hairline без
+   тени и без стекла (raycast feature-card-dark: elevation = шаг тона);
+   под заголовком — 1px акцентная линия шириной ровно с подпись + eyebrow
+   mono uppercase (подпись стиля data-terminal «accent line exactly as wide as
+   its label»); primary-кнопка — плоский solid --btn-accent без градиента и
+   цветной тени; focus — 2px --accent offset 2. Кнопки — высота со шкалы (30px). */
+
+[hidden] { display: none !important; }
+
+/* SK-30: inline-SVG спрайт (alert/chevron) — тот же класс, что в сайдбаре */
+#spr { position: absolute; width: 0; height: 0; overflow: hidden; }
+.icn {
+  width: var(--ic); height: var(--ic); flex: none; box-sizing: border-box;
+  fill: none; stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round; vertical-align: -3px;
+}
+.icn.sm { width: 14px; height: 14px; vertical-align: -2px; }
+
+body {
+  margin: 0;
+  font: 13px var(--font-sans);
+  display: flex;
+  justify-content: center;
+}
+main { max-width: 560px; padding: var(--sp3); width: 100%; box-sizing: border-box; }
+/* SK-40: крупная типографика — h1 20px/800 (шаг h1/body 1.54, flat-type-hierarchy
+   из impeccable detect закрыт); h2 14px/700.
+   SK-53 (спека §7д): градиентная пилюля заменена на 1px линию --accent шириной
+   40px под заголовком — подпись стиля буквально («accent line exactly as wide as
+   its label»); eyebrow «SIDEKICK SETTINGS» — mono 10px uppercase --text-dim
+   (закреплён принятым брифом варианта SK-58, прецедент spec §7д). */
+h1 { font-size: 20px; font-weight: 800; letter-spacing: -.02em; margin: var(--sp1) 0 var(--sp2); }
+h1::before { content: "SIDEKICK SETTINGS"; display: block;
+  font: 600 10px var(--font-mono); letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: var(--sp2); }
+h1::after { content: ""; display: block; width: 40px; height: 1px; border-radius: 0;
+  background: var(--accent); margin-top: var(--sp2); }
+
+/* карточка-секция: SK-53 — surface-2 + hairline, elevation = шаг тона,
+   без тени и без стекла (raycast feature-card-dark) */
+.card {
+  background: var(--surface-2);
+  border: var(--line-w) solid var(--line);
+  border-radius: var(--r2);
+  padding: var(--sp3);
+  margin-top: var(--sp3);
+  box-shadow: none;
+}
+.chead { display: flex; align-items: center; justify-content: space-between; gap: var(--sp2); }
+h2 { font-size: 14px; font-weight: 700; letter-spacing: -.01em; margin: 0; }
+p { line-height: 1.5; color: var(--text-dim); margin: var(--sp2) 0; }
+code {
+  background: var(--surface-3);
+  border-radius: var(--r1);
+  padding: 1px var(--sp1);
+  font: 12px var(--font-mono);
+}
+
+/* чип состояния токена: pill как в сайдбаре, точка — currentColor */
+.chip {
+  display: inline-flex; align-items: center; gap: var(--sp1);
+  padding: 2px var(--sp2); border-radius: var(--rp);
+  font-size: 11.5px; font-weight: 600; line-height: 1.4;
+  border: var(--line-w) solid transparent;
+  flex: none;
+}
+.chip i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.chip.ok { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+.chip.warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, transparent); }
+
+.meta { font-size: 12px; color: var(--text-dim); margin-top: var(--sp2); min-height: 16px; line-height: 1.4; }
+
+input, select {
+  width: 100%; box-sizing: border-box;
+  padding: var(--sp2) var(--sp3); border-radius: var(--r1);
+  border: var(--line-w) solid var(--line);
+  background: var(--surface-3); color: var(--text);
+  font: 12px var(--font-mono); outline: none;
+}
+input::placeholder { color: var(--text-dim); }
+/* SK-53: плоский focus — 2px --accent offset 2 (binance focus ring), без glow */
+input:focus, select:focus { border-color: var(--accent); box-shadow: none;
+  outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* select по-человечески: нативную галку сдираем, стрелка — текстовая (data-URI
+   с hex сюда нельзя — hygiene-контракт «ноль hex в компонентах») */
+.selwrap { position: relative; display: block; flex: 1; min-width: 0; }
+select { appearance: none; font: 13px var(--font-sans); padding-right: var(--sp3); }
+.caret {
+  position: absolute; right: var(--sp3); top: 50%; transform: translateY(-50%);
+  color: var(--text-dim); pointer-events: none; font-size: 12px;
+}
+
+.row { display: flex; gap: var(--sp2); margin-top: var(--sp2); flex-wrap: wrap; }
+/* SK-40: wrap — на узких окнах три кнопки в строку обрезались по правому краю */
+button {
+  min-height: var(--ctl-h); display: inline-flex; align-items: center; gap: var(--sp1);
+  padding: var(--sp2) var(--sp3);
+  font: inherit; /* SK-40: без этого кнопка тянула UA-Arial — третий шрифт на странице */
+  border: var(--line-w) solid transparent; border-radius: var(--r1);
+  /* SK-53: primary — плоский solid --btn-accent (dark off-white CTA / light
+     steel), без градиента и без цветной тени (спека §7д) */
+  background: var(--btn-accent); color: var(--ink-on-solid);
+  box-shadow: none;
+  font-weight: 600; cursor: pointer; white-space: nowrap;
+  transition: background 150ms ease, transform 150ms var(--spring), box-shadow 150ms ease;
+}
+button:hover { background: var(--btn-accent-hot); }
+button:active { transform: translateY(1px) scale(.98); }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.sec { background: var(--surface-3); color: var(--text); border-color: var(--line); }
+button.sec:hover { background: var(--glass-border-hi); }
+/* SK-13 урок: disabled через opacity роняет контраст — глушим цвет сам
+   (только у outline-кнопок: на accent-фоне --text-dim читаться не будет).
+   SK-30 п.4: то же для solid — surface-3 + dim ink. */
+button:disabled { cursor: default; transform: none; }
+button:not(.sec):disabled { background: var(--surface-3); color: var(--text-dim); box-shadow: none; }
+button.sec:disabled { color: var(--text-dim); border-color: var(--line-soft); }
+
+.st { margin-top: var(--sp2); min-height: 16px; font-size: 12px; color: var(--text-dim); line-height: 1.4; word-break: break-word; }
+.st.ok { color: var(--ok); }
+.st.err { color: var(--err); }
+
+/* SK-53 (спека §9, политика SK-40): prefers-reduced-motion — «мгновенно», не
+   «никогда»: переходы кнопок/чипов выключены, состояние видно сразу. */
+@media (prefers-reduced-motion: reduce) {
+  button, .chip, input, .card { transition: none !important; }
+}

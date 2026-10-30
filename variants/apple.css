@@ -1,0 +1,450 @@
+/* SK-56 вариант «Apple»: системный Apple HIG (grouped background, label/secondaryLabel,
+   hairline-сепараторы, systemBlue c AA-коррекцией), светлый + тёмный.
+   Перекрывает токены theme.css; sidebar.css/options.css продолжают жить через var().
+   СПЕКА + проверенные AA-пары (53, скрипт WCAG): ~/.hermes/cache/variants/apple/spec.md.
+   Правила: градиентов = 0 (solid-заливки), стекло/blur = 0, тени на покоящемся = 0
+   (одна мягкая тень только на float: #menu, bellpanel), hover = тон-шаг без сдвигов,
+   active = scale(.97), focus-visible обязателен, tabular figures на цифрах.
+   Механизм тем повторяет theme.css: базовый :root = light, медиа-блоки, затем
+   ручные data-theme оверрайды (спецификитет (0,2,0), идут ПОСЛЕ media). */
+
+:root {
+  /* шрифт: на macOS резолвится в SF Pro; Inter — fallback для Linux/headless (в
+     превью грузится с Google Fonts). Текст — только grotesk; mono остаётся у цифр. */
+  --fa: -apple-system, "SF Pro Text", "SF Pro Display", "Inter", system-ui, sans-serif;
+  /* control-бордеры (разрешённые app-правилами) и поля ввода */
+  --ctl-border: #d1d1d6;
+  --field: #f2f2f7;
+  --field-border: #d1d1d6;
+  /* hover второй ступени: поверх surface-3/plain-залив */
+  --hover-2: #d8d8dc;
+
+  /* воздух: сетка сохраняется, ряды options — 40-44px (Apple Settings) */
+  --sp1: 4px;
+  --sp2: 8px;
+  --sp3: 12px;
+  --r1: 10px;          /* контролы 28-32px */
+  --r2: 14px;          /* карточки, пузыри, меню — continuous corner */
+  --rp: 99px;          /* капсулы (композер Messages-стиля, чипы) */
+  --line-w: 1px;
+  --glass-blur: 0px;   /* стекло убиваем полностью */
+  --ic: 16px;
+  --ctl-h: 32px;
+  --ctl-h-sm: 28px;
+  --hd-h: 44px;        /* шапка 41→44 (Apple-ряд); портал #menu привязан к ней */
+
+  /* градиентная семья SK-40 → ОДИН сплошной AA-цвет (solid, hex) */
+  --grad-hot: #0040dd;
+  --grad-hot-hi: #0037b3;
+  --spring: cubic-bezier(.32, .72, 0, 1);   /* iOS standard curve, отскока (.34,1.56) нет */
+  --ease-out: cubic-bezier(0, 0, .2, 1);    /* Apple ease-out */
+  --av: 22px;
+  --fs-hero: 17px;
+  --fs-ttl: 15px;
+  --fs-hd: 13.5px;
+  /* логотип-молния: a==b → спрайтовый «градиент» становится сплошным accent */
+  --bolt-a: #0040dd;
+  --bolt-b: #0040dd;
+
+  /* solid-кнопки: белый ink проверен AA (7.56 / 6.16 / 5.65, спека §2 #4/#26/#27) */
+  --btn-accent: #0040dd;
+  --btn-ok: #1b7030;
+  --btn-ok-hot: #16602a;
+  --btn-stop: #c42b24;
+  --btn-stop-hot: #a61f1a;
+  --ink-on-solid: #ffffff;
+}
+
+/* ---- light (базовый :root + media light + ручной оверрайд) ---------------------- */
+:root {
+  --surface-1: #f2f2f7;   /* systemGroupedBackground */
+  --surface-2: #ffffff;   /* карточки/вторичная: тон-шаг, бордер карточкам не нужен */
+  --surface-3: #e9e9eb;   /* tertiary: hover/active тон-шаг */
+  --text: #1c1c1e;        /* label (15.25:1 на surface-1) */
+  --text-dim: #636366;    /* secondaryLabel AA (5.37/5.99/4.94) */
+  --line: #c6c6c8;        /* Apple separator */
+  --line-soft: #e9e9eb;
+  --accent: #0040dd;      /* systemBlue AA-коррекция (#007AFF = 4.02 — запрещён) */
+  --accent-soft: #dfe9f8;
+  --accent-on-soft: #0040dd;  /* текст на accent-soft (чипы menu/bell/aud) */
+  --focus-ring: rgba(0, 64, 221, 0.30);  /* кольцо фокуса (без color-mix — старые Chromium) */
+  --ok: #1b7030;          /* text AA (systemGreen #34c759 = 2.22 как текст убит) */
+  --ok-soft: #e7f3e8;
+  --warn: #9a5a00;
+  --warn-soft: #fbead4;
+  --err: #c42b24;
+  --err-soft: #fbe5e3;
+  --info: #0040dd;
+  --info-soft: #dfe9f8;
+  --idle: #636366;
+  --idle-soft: #e9e9eb;
+  /* «стекло» → сплошные поверхности: шапка/композер = surface-2, попапы = surface-2,
+     hairline = separator, внутренние подсветки и тени — удалены */
+  --bg-grad: none;
+  --glass-bg: #ffffff;
+  --glass-bg-2: #ffffff;
+  --glass-border: #c6c6c8;
+  --glass-border-hi: transparent;
+  --glass-shadow: none;
+  --glass-hover: #e9e9eb;
+  --float-shadow: 0 8px 24px rgba(0, 0, 0, .14);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --surface-1: #f2f2f7;
+    --surface-2: #ffffff;
+    --surface-3: #e9e9eb;
+    --text: #1c1c1e;
+    --text-dim: #636366;
+    --line: #c6c6c8;
+    --line-soft: #e9e9eb;
+    --accent: #0040dd;
+    --accent-soft: #dfe9f8;
+    --accent-on-soft: #0040dd;
+    --ok: #1b7030;
+    --ok-soft: #e7f3e8;
+    --warn: #9a5a00;
+    --warn-soft: #fbead4;
+    --err: #c42b24;
+    --err-soft: #fbe5e3;
+    --info: #0040dd;
+    --info-soft: #dfe9f8;
+    --idle: #636366;
+    --idle-soft: #e9e9eb;
+    --bg-grad: none;
+    --glass-bg: #ffffff;
+    --glass-bg-2: #ffffff;
+    --glass-border: #c6c6c8;
+    --glass-border-hi: transparent;
+    --glass-shadow: none;
+    --glass-hover: #e9e9eb;
+    --ctl-border: #d1d1d6;
+    --field: #f2f2f7;
+    --field-border: #d1d1d6;
+    --hover-2: #d8d8dc;
+    --grad-hot: #0040dd;
+    --grad-hot-hi: #0037b3;
+    --btn-accent: #0040dd;
+    --bolt-a: #0040dd;
+    --bolt-b: #0040dd;
+    --float-shadow: 0 8px 24px rgba(0, 0, 0, .14);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-1: #000000;   /* base */
+    --surface-2: #1c1c1e;   /* secondarySystemGrouped */
+    --surface-3: #2c2c2e;   /* tertiary */
+    --text: #ffffff;
+    --text-dim: #98989d;    /* AA (7.31/5.93/4.85) */
+    --line: #38383a;
+    --line-soft: #2c2c2e;
+    --accent: #0a84ff;      /* dark systemBlue проходит AA (5.76/4.66) */
+    --accent-soft: #14243d;
+    --accent-on-soft: #5fa8f5;  /* на #14243d = 6.3:1 */
+    --focus-ring: rgba(10, 132, 255, 0.34);
+    --ok: #30d158;
+    --ok-soft: #172a1d;
+    --warn: #ff9f0a;
+    --warn-soft: #2b2417;
+    --err: #ff453a;         /* как ТЕКСТ ок; solid-заливкой запрещён (ink 3.41) → fill #c42b24 */
+    --err-soft: #2c1a19;
+    --info: #4da2ff;        /* 6.42 на surface-2; на tertiary dark — 4.85 (низ) → text-dim */
+    --info-soft: #14243d;
+    --idle: #98989d;
+    --idle-soft: #2c2c2e;
+    --bg-grad: none;
+    --glass-bg: #1c1c1e;
+    --glass-bg-2: #2c2c2e;
+    --glass-border: #38383a;
+    --glass-border-hi: transparent;
+    --glass-shadow: none;
+    --glass-hover: #2c2c2e;
+    --ctl-border: #48484a;
+    --field: #2c2c2e;
+    --field-border: #48484a;
+    --hover-2: #48484a;
+    --grad-hot: #0055d4;
+    --grad-hot-hi: #1a6be0;
+    --btn-accent: #0055d4;  /* белый ink 6.46 */
+    --bolt-a: #0a84ff;
+    --bolt-b: #0a84ff;
+    --float-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+  }
+}
+
+/* ручные оверрайды темы (идут ПОСЛЕ media — как в theme.css) */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-1: #f2f2f7;
+  --surface-2: #ffffff;
+  --surface-3: #e9e9eb;
+  --text: #1c1c1e;
+  --text-dim: #636366;
+  --line: #c6c6c8;
+  --line-soft: #e9e9eb;
+  --accent: #0040dd;
+  --accent-soft: #dfe9f8;
+  --ok: #1b7030;
+  --ok-soft: #e7f3e8;
+  --warn: #9a5a00;
+  --warn-soft: #fbead4;
+  --err: #c42b24;
+  --err-soft: #fbe5e3;
+  --info: #0040dd;
+  --info-soft: #dfe9f8;
+  --idle: #636366;
+  --idle-soft: #e9e9eb;
+  --bg-grad: none;
+  --glass-bg: #ffffff;
+  --glass-bg-2: #ffffff;
+  --glass-border: #c6c6c8;
+  --glass-border-hi: transparent;
+  --glass-shadow: none;
+  --glass-hover: #e9e9eb;
+  --ctl-border: #d1d1d6;
+  --field: #f2f2f7;
+  --field-border: #d1d1d6;
+  --hover-2: #d8d8dc;
+  --grad-hot: #0040dd;
+  --grad-hot-hi: #0037b3;
+  --btn-accent: #0040dd;
+  --bolt-a: #0040dd;
+  --bolt-b: #0040dd;
+  --float-shadow: 0 8px 24px rgba(0, 0, 0, .14);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #000000;
+  --surface-2: #1c1c1e;
+  --surface-3: #2c2c2e;
+  --text: #ffffff;
+  --text-dim: #98989d;
+  --line: #38383a;
+  --line-soft: #2c2c2e;
+  --accent: #0a84ff;
+  --accent-soft: #14243d;
+  --ok: #30d158;
+  --ok-soft: #172a1d;
+  --warn: #ff9f0a;
+  --warn-soft: #2b2417;
+  --err: #ff453a;
+  --err-soft: #2c1a19;
+  --info: #4da2ff;
+  --info-soft: #14243d;
+  --idle: #98989d;
+  --idle-soft: #2c2c2e;
+  --bg-grad: none;
+  --glass-bg: #1c1c1e;
+  --glass-bg-2: #2c2c2e;
+  --glass-border: #38383a;
+  --glass-border-hi: transparent;
+  --glass-shadow: none;
+  --glass-hover: #2c2c2e;
+  --ctl-border: #48484a;
+  --field: #2c2c2e;
+  --field-border: #48484a;
+  --hover-2: #48484a;
+  --grad-hot: #0055d4;
+  --grad-hot-hi: #1a6be0;
+  --btn-accent: #0055d4;
+  --bolt-a: #0a84ff;
+  --bolt-b: #0a84ff;
+  --float-shadow: 0 8px 24px rgba(0, 0, 0, .5);
+}
+
+/* base: плоский фон (theme.css: background: var(--bg-grad) var(--surface-1)) */
+body {
+  background: var(--surface-1);
+  color: var(--text);
+  font-family: var(--fa);
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================================
+   Компонентные перекрытия sidebar.css — все «слоп»-места из спеки §5
+   (градиенты, glow-тени, сдвиги hover, капслок-метки) → плоские Apple-значения.
+   ========================================================================= */
+
+/* шапка: accent-полоса::after удалена, низ = hairline; сплошная surface */
+#hd::after { content: none; }
+#hd { padding: 9.5px var(--sp3); }
+#ttl { font-weight: 600; letter-spacing: -.02em; }
+#hdic { color: var(--accent); }
+
+/* статус-кольцо online: сплошное (без «пульса-свечения») */
+#st[data-s="online"] { box-shadow: 0 0 0 3px var(--ok-soft); }
+
+/* журнал: капслок-заголовок → sentence case 12px; счётчик ≥11px tabular */
+#bellhead {
+  font: 600 12px/1.4 var(--fa);
+  text-transform: none; letter-spacing: 0;
+}
+#belln {
+  min-width: 15px; height: 14px; padding: 0 4px; border-radius: 8px;
+  font: 600 11px/14px var(--fa); font-variant-numeric: tabular-nums;
+}
+#bellpanel { box-shadow: var(--float-shadow); }
+#bellReadAll { font-size: 13px; }
+
+/* .brow: hover без translate; unread — синяя Mail-точка вместо градиента ряда */
+.brow { position: relative; transition: background 120ms ease; }
+.brow:hover { background: var(--glass-hover); transform: none; }
+.brow.unread { background: transparent; }
+.brow.unread::before {
+  content: ""; position: absolute; left: 6px; top: 50%; transform: translateY(-50%);
+  width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+}
+.brow.unread { padding-left: 22px; }
+.brow .bsub { font-size: 12px; }
+.brow .btime {
+  font-size: 11px; font-variant-numeric: tabular-nums;
+  font-family: ui-monospace, "SF Mono", monospace;
+}
+
+/* карточка задачи: grouped list, полужирный 600, время mono tabular */
+.m.task .tkhd { font-weight: 600; letter-spacing: -.01em; }
+.tktab { font-size: 11px; }
+.stime { font-family: ui-monospace, "SF Mono", monospace; font-variant-numeric: tabular-nums; }
+.srow.active { background: var(--info-soft); }
+.srow.open .smore { text-decoration: none; font-weight: 600; }
+.m.task .srow { border-radius: var(--r1); }
+
+/* ленты: своя реплика — сплошной accent без свечения; аватар без glow */
+.me { box-shadow: none; }
+.av.ag { box-shadow: none; }
+.m.think { border-style: solid; border-color: var(--line); }
+.m.think .tx2 { font-style: normal; }
+
+/* карточка пермиса = Apple alert inline: surface-2 + hairline, плоский корешок,
+   иерархия кнопок: Allow solid / Always plain / Deny outline-red */
+.perm { background: var(--surface-2); border-color: var(--line); }
+.perm::before { background: var(--warn); }
+.perm .hd { font-weight: 600; }
+.perm button { transition: background 120ms ease, transform 120ms ease; }
+.perm button:active { transform: scale(.97); }
+.perm .ok { background: var(--btn-accent); border-color: var(--btn-accent); color: var(--ink-on-solid); }
+.perm .ok:hover { background: var(--grad-hot-hi); }
+.perm .alw { background: var(--surface-3); border-color: transparent; color: var(--text); }
+.perm .alw:hover { background: var(--hover-2); }
+.perm .no { background: transparent; border-color: var(--err); color: var(--err); }
+.perm .no:hover { background: var(--err-soft); }
+.perm .chip { background: var(--warn-soft); border-color: transparent; color: var(--warn); }
+.perm .chip:hover { color: var(--warn); border-color: var(--warn); }
+
+/* баннер hand-off: плоская info-полоса */
+.ho::before { background: var(--info); }
+.ho .hd { font-weight: 600; }
+.ho button { box-shadow: none; transition: background 120ms ease, transform 120ms ease; }
+.ho button:active { transform: scale(.97); }
+
+/* вторые виды: hover без translate, .cur — сплошной тон-шаг (без градиента+бордера) */
+#sklist .sk:hover, #sklist .sk.hl { background: var(--glass-hover); }
+.arow:hover { background: var(--surface-3); transform: none; }
+.arow { transition: background 120ms ease; }
+.arow .at, .hrow .hdate { font-variant-numeric: tabular-nums; }
+.hrow:hover { background: var(--surface-3); transform: none; }
+.hrow { transition: background 120ms ease; }
+.hrow .ht { font-weight: 600; }
+.hrow.cur { background: var(--surface-3); border-color: transparent; }
+
+/* композер: поле capsule Messages-стиля (solid, control-бордер), focus-ring без glow;
+   #go — круг 28px solid accent без свечения, running = solid красный */
+#in {
+  border-radius: var(--rp);
+  background: var(--field);
+  border-color: var(--field-border);
+  font-family: var(--fa);
+}
+#in:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+#in::placeholder { color: var(--text-dim); }
+.ph { font-family: var(--fa); }
+#bar { border-top-color: var(--line); }
+#go {
+  width: var(--ctl-h-sm); height: var(--ctl-h-sm);
+  border-radius: 50%; box-shadow: none;
+  align-self: center;
+  transition: background 150ms ease, transform 120ms ease;
+}
+#go:hover { background: var(--grad-hot-hi); box-shadow: none; }
+#go:active { transform: scale(.97); }
+#go.running { box-shadow: none; }
+#go.running:hover { box-shadow: none; }
+
+/* меню-попап (float): сплошной tertiary + единственная мягкая тень; .on — тон-шаг */
+#menu { box-shadow: var(--float-shadow); }
+.mi { transition: background 120ms ease; }
+.mi:hover { background: var(--glass-hover); transform: none; }
+.mi:hover .icn { color: var(--accent); }
+.mi:active { transform: none; }
+.mi.on { background: var(--surface-3); color: var(--accent); }
+
+/* пустое состояние: без «парения» глифа; вес 600 */
+#embolt { animation: none; }
+#empttl { font-weight: 600; letter-spacing: -.02em; }
+#histttl { font-weight: 600; }
+#sklist .sk .nm { font-weight: 600; }
+#skio textarea { font-family: ui-monospace, "SF Mono", monospace; }
+#audraw { font-family: ui-monospace, "SF Mono", monospace; }
+
+/* колокольчик не «звенит» (motion = только обратная связь, app-контракт) */
+#bellBtn:hover .icn { animation: none; }
+/* активные чипы: текст на accent-soft — разбелённый accent (dark AA 6.3:1) */
+#menuBtn[aria-expanded="true"], #bellBtn[aria-expanded="true"],
+#audbar button.on { color: var(--accent-on-soft); }
+
+/* вход ленты: без пружинного overshoot — ease стандартная кривая (токен) */
+#log .m { animation: msgin 260ms var(--ease-out) backwards; }
+
+/* =========================================================================
+   options.css — Apple Settings (grouped inset): тон-шаг без бордеров и теней,
+   h2 13px text-dim (вне карточки) / 15px text (в .chead), поля 36px с
+   control-бордером, primary = solid AA без glow.
+   ========================================================================= */
+body { font-family: var(--fa); }
+main { padding: var(--sp3) 16px 32px; }
+h1 { font-weight: 600; letter-spacing: -.02em; }
+h1::after { content: none; }
+h2 { font-size: 13px; font-weight: 600; color: var(--text-dim); }
+.chead h2 { font-size: 15px; color: var(--text); }
+.card {
+  background: var(--surface-2);
+  border-color: transparent;
+  box-shadow: none;
+  padding: var(--sp3) 16px;
+  margin-top: 16px;
+}
+p { color: var(--text); }        /* беглый текст options — полный ink (AA 15:1) */
+p .meta, .meta { color: var(--text-dim); }
+code { background: var(--surface-3); color: var(--text); font-family: ui-monospace, "SF Mono", monospace; }
+input, select {
+  background: var(--field);
+  border-color: var(--field-border);
+  color: var(--text);
+  font-family: var(--fa);
+}
+input::placeholder { color: var(--text-dim); }
+input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--focus-ring); }
+button {
+  font-family: var(--fa);
+  box-shadow: none;
+  background: var(--grad-hot);
+  color: var(--ink-on-solid);
+  transition: background 150ms ease, transform 120ms ease;
+}
+button:hover { background: var(--grad-hot-hi); }
+button:active { transform: scale(.97); }
+button.sec { background: var(--surface-3); color: var(--text); border-color: transparent; }
+button.sec:hover { background: var(--hover-2); }
+button:not(.sec):disabled { background: var(--surface-3); color: var(--text-dim); }
+button.sec:disabled { background: var(--surface-3); color: var(--text-dim); }
+.chip { font-size: 12px; }
+.chip.ok, .chip.warn { background: transparent; }
+.st { color: var(--text-dim); }
+.caret { font-size: 11px; }

@@ -1,0 +1,28 @@
+# SK-62: HTTP-демон MCP-адаптера (Streamable HTTP /mcp, bearer).
+# Ключ — ТОЛЬКО в env drop-in (файл 0600, в git не попадает):
+#   mkdir -p ~/.config/systemd/user/sidekick-mcp-http.service.d
+#   printf 'SIDEKICK_MCP_KEY=%s\n' "$(openssl rand -hex 32)" \
+#     > ~/.config/systemd/user/sidekick-mcp-http.service.d/mcp-key.env
+#   chmod 600 ~/.config/systemd/user/sidekick-mcp-http.service.d/mcp-key.env
+#   systemctl --user daemon-reload && systemctl --user start sidekick-mcp-http
+# Стабильность — прецедент юнит-дроп-ина моста SK-46 (AGENTS п.8):
+# OOMPolicy=continue, Restart=on-failure, backoff 5..30.
+[Unit]
+Description=Sidekick MCP HTTP adapter (hub RPC consumer, spec docs/mcp-spec.md)
+StartLimitIntervalSec=0
+
+[Service]
+ExecStart=/usr/bin/python3 %h/sidekick/mcp/sidekick_mcp.py --http --port 8796
+WorkingDirectory=%h/sidekick
+Environment=SIDEKICK_HOME=%h/sidekick/bridge/hub
+# Environment=SIDEKICK_MCP_BIND=127.0.0.1     # дефолт жёстко localhost (MCP-спека локального режима)
+# Environment=SIDEKICK_MCP_PUBLIC=1           # публичный surface через туннель: rate-limit 10/мин
+# Environment=SIDEKICK_MCP_ORIGINS=https://mcp.example.com,https://chatgpt.com,http://127.0.0.1:8796,http://localhost:8796
+EnvironmentFile=%h/.config/systemd/user/sidekick-mcp-http.service.d/mcp-key.env
+OOMPolicy=continue
+Restart=on-failure
+RestartSec=5
+RestartMaxDelaySec=30
+
+[Install]
+WantedBy=default.target

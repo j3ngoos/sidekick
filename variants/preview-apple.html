@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidekick v0.7 — облик «Apple» (мокап)</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../extension/theme.css">
+<link rel="stylesheet" href="apple.css">
+<style>
+.wrap { max-width: 1340px; margin: 0 auto; padding: 40px 24px 72px; }
+body { font-size: 15px; line-height: 1.5; }
+h1 { font-size: 24px; font-weight: 600; letter-spacing: -.02em; margin: 0 0 8px; }
+.sub { font-size: 15px; color: var(--text-dim); margin: 0 0 8px; max-width: 72ch; line-height: 1.5; }
+section { margin-top: 48px; }
+h2 { font-size: 16px; font-weight: 600; letter-spacing: -.01em; margin: 0 0 4px; color: var(--text); }
+.meta { font-size: 13px; color: var(--text-dim); margin: 0 0 16px; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+figure { margin: 0; }
+iframe { width: 100%; height: 780px; border: 1px solid var(--line); border-radius: var(--r2); display: block; background: var(--surface-1); }
+iframe.opt { height: 760px; }
+figcaption { font-size: 13px; color: var(--text-dim); margin-top: 8px; }
+@media (max-width: 700px) { .grid { grid-template-columns: 1fr; } iframe { height: 740px; } }
+</style></head>
+<body><div class="wrap">
+<h1>Облик «Apple» — витрина пяти поверхностей</h1>
+<p class="sub">Системный Apple HIG для сайдбар-агента: grouped-фоны, hairline-сепараторы, systemBlue с AA-коррекцией, сплошные поверхности вместо стекла и градиентов. Мокап грузит штатный theme.css и перекрытие variants/apple.css; каждый экран — изолированный документ со своей темой.</p>
+<section>
+<h2>Чат с шагами задачи</h2><p class="meta">карточка задачи — grouped list: заголовок, время шагов моно-табулой, активный шаг сплошной подложкой</p>
+<div class="grid"><figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+&lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+&lt;h1 id=&quot;ttl&quot;&gt;Выгрузка WB — дубликаты&lt;/h1&gt;&lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: online&quot;&gt;&lt;/span&gt;
+&lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot;&gt;2&lt;/span&gt;&lt;/button&gt;
+&lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;
+&lt;div class=&quot;m hm&quot;&gt;&lt;span class=&quot;av ag&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Понял. Открою вкладку с выгрузкой, соберу дубли по колонке SKU и уберу лишние строки. Копию файла сделаю заранее.&lt;/div&gt;
+&lt;div class=&quot;m task open&quot;&gt;
+  &lt;div class=&quot;tkhd&quot;&gt;&lt;span class=&quot;tkic spin&quot; role=&quot;img&quot; aria-label=&quot;выполняется&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;tktx&quot;&gt;Собрать дубли и убрать лишние строки
+      &lt;span class=&quot;tktab&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-globe&quot;/&gt;&lt;/svg&gt;Выгрузка WB — таблица&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;tkcaret&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-chevdown&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;tksteps&quot;&gt;
+    &lt;div class=&quot;srow done&quot;&gt;&lt;span class=&quot;stime&quot;&gt;0:12&lt;/span&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;Открыть вкладку с выгрузкой&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow done&quot;&gt;&lt;span class=&quot;stime&quot;&gt;0:41&lt;/span&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;Собрать дубли по колонке SKU&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow active&quot;&gt;&lt;span class=&quot;stime&quot;&gt;1:03&lt;/span&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-ring&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;Удалить 14 строк-дублей&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow queued&quot;&gt;&lt;span class=&quot;stime&quot;&gt;—&lt;/span&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-ring&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;Сохранить копию файла&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m me&quot;&gt;&lt;span class=&quot;av hu&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-user&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Спасибо, копию положи рядом с оригиналом&lt;/div&gt;
+&lt;div class=&quot;m hm&quot;&gt;&lt;span class=&quot;av ag&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Так и сделаю: «выгрузка_июль_копия.xlsx» рядом с оригиналом. После удаления строк сверю количество SKU и отпишусь.&lt;/div&gt;
+&lt;/div&gt;&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; placeholder=&quot;спроси что угодно&quot; autocomplete=&quot;off&quot;&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить задачу&quot; aria-label=&quot;Остановить задачу&quot;&gt;&lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;&lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" title="Светлая тема — лента: карточка задачи с шагами, активный шаг, композер со «стоп»" loading="eager"></iframe><figcaption>Светлая тема — лента: карточка задачи с шагами, активный шаг, композер со «стоп»</figcaption></figure>
+<figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+&lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+&lt;h1 id=&quot;ttl&quot;&gt;Выгрузка WB — дубликаты&lt;/h1&gt;&lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: online&quot;&gt;&lt;/span&gt;
+&lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot;&gt;2&lt;/span&gt;&lt;/button&gt;
+&lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;
+&lt;div class=&quot;m hm&quot;&gt;&lt;span class=&quot;av ag&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Понял. Открою вкладку с выгрузкой, соберу дубли по колонке SKU и уберу лишние строки. Копию файла сделаю заранее.&lt;/div&gt;
+&lt;div class=&quot;m task open&quot;&gt;
+  &lt;div class=&quot;tkhd&quot;&gt;&lt;span class=&quot;tkic spin&quot; role=&quot;img&quot; aria-label=&quot;выполняется&quot;&gt;&lt;/span&gt;
+    &lt;span class=&quot;tktx&quot;&gt;Собрать дубли и убрать лишние строки
+      &lt;span class=&quot;tktab&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-globe&quot;/&gt;&lt;/svg&gt;Выгрузка WB — таблица&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;tkcaret&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-chevdown&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;div class=&quot;tksteps&quot;&gt;
+    &lt;div class=&quot;srow done&quot;&gt;&lt;span class=&quot;stime&quot;&gt;0:12&lt;/span&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;Открыть вкладку с выгрузкой&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow done&quot;&gt;&lt;span class=&quot;stime&quot;&gt;0:41&lt;/span&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;Собрать дубли по колонке SKU&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow active&quot;&gt;&lt;span class=&quot;stime&quot;&gt;1:03&lt;/span&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-ring&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;Удалить 14 строк-дублей&lt;/span&gt;&lt;/div&gt;
+    &lt;div class=&quot;srow queued&quot;&gt;&lt;span class=&quot;stime&quot;&gt;—&lt;/span&gt;&lt;span class=&quot;ic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-ring&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;&lt;span class=&quot;tx&quot;&gt;Сохранить копию файла&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m me&quot;&gt;&lt;span class=&quot;av hu&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-user&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Спасибо, копию положи рядом с оригиналом&lt;/div&gt;
+&lt;div class=&quot;m hm&quot;&gt;&lt;span class=&quot;av ag&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Так и сделаю: «выгрузка_июль_копия.xlsx» рядом с оригиналом. После удаления строк сверю количество SKU и отпишусь.&lt;/div&gt;
+&lt;/div&gt;&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; placeholder=&quot;спроси что угодно&quot; autocomplete=&quot;off&quot;&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot; class=&quot;running&quot; title=&quot;Остановить задачу&quot; aria-label=&quot;Остановить задачу&quot;&gt;&lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;&lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" title="Тёмная тема — тот же экран в тёмной теме" loading="eager"></iframe><figcaption>Тёмная тема — тот же экран в тёмной теме</figcaption></figure></div>
+</section>
+<section>
+<h2>Журнал уведомлений</h2><p class="meta">непрочитанное — синяя Mail-точка вместо градиента ряда; hover — тон-шаг без сдвигов</p>
+<div class="grid"><figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+&lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+&lt;h1 id=&quot;ttl&quot;&gt;Выгрузка WB — дубликаты&lt;/h1&gt;&lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: online&quot;&gt;&lt;/span&gt;
+&lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot;&gt;2&lt;/span&gt;&lt;/button&gt;
+&lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;
+&lt;div class=&quot;m hm&quot;&gt;&lt;span class=&quot;av ag&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Задача встала в очередь. Держи журнал — сообщу, когда понадобится решение.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;bellpanel&quot; role=&quot;dialog&quot; aria-label=&quot;Журнал уведомлений&quot;&gt;
+  &lt;div id=&quot;bellhead&quot;&gt;&lt;span&gt;Журнал&lt;/span&gt;&lt;button id=&quot;bellClose&quot; title=&quot;Закрыть&quot; aria-label=&quot;Закрыть журнал&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-cross&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;div id=&quot;bellrows&quot;&gt;
+    &lt;button class=&quot;brow k-perm unread&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Нужно разрешение: экспорт файла&lt;span class=&quot;bsub&quot;&gt;wb-upload · Разрешить или отклонить&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;06:41&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-perm&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Нужен ты: введи код капчи&lt;span class=&quot;bsub&quot;&gt;ekopcha.ru · форма входа&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;05:58&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Задача выполнена&lt;span class=&quot;bsub&quot;&gt;Дубликаты убраны — минус 14 строк&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;05:12&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-failed&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-cross&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Задача упала&lt;span class=&quot;bsub&quot;&gt;Заполнить форму — таймаут клика&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;04:03&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Напоминание создано&lt;span class=&quot;bsub&quot;&gt;Календарь · встреча 18:30&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;вчера&lt;/span&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;bellfoot&quot;&gt;&lt;button id=&quot;bellReadAll&quot; type=&quot;button&quot;&gt;Прочитать всё&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" title="Светлая тема — колокольчик: непрочитанное — синяя точка, статус только на иконке" loading="eager"></iframe><figcaption>Светлая тема — колокольчик: непрочитанное — синяя точка, статус только на иконке</figcaption></figure>
+<figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+&lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+&lt;h1 id=&quot;ttl&quot;&gt;Выгрузка WB — дубликаты&lt;/h1&gt;&lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: online&quot;&gt;&lt;/span&gt;
+&lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;span id=&quot;belln&quot;&gt;2&lt;/span&gt;&lt;/button&gt;
+&lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;
+&lt;div class=&quot;m hm&quot;&gt;&lt;span class=&quot;av ag&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Задача встала в очередь. Держи журнал — сообщу, когда понадобится решение.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&quot;bellpanel&quot; role=&quot;dialog&quot; aria-label=&quot;Журнал уведомлений&quot;&gt;
+  &lt;div id=&quot;bellhead&quot;&gt;&lt;span&gt;Журнал&lt;/span&gt;&lt;button id=&quot;bellClose&quot; title=&quot;Закрыть&quot; aria-label=&quot;Закрыть журнал&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-cross&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+  &lt;div id=&quot;bellrows&quot;&gt;
+    &lt;button class=&quot;brow k-perm unread&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Нужно разрешение: экспорт файла&lt;span class=&quot;bsub&quot;&gt;wb-upload · Разрешить или отклонить&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;06:41&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-perm&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Нужен ты: введи код капчи&lt;span class=&quot;bsub&quot;&gt;ekopcha.ru · форма входа&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;05:58&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Задача выполнена&lt;span class=&quot;bsub&quot;&gt;Дубликаты убраны — минус 14 строк&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;05:12&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-failed&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-cross&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Задача упала&lt;span class=&quot;bsub&quot;&gt;Заполнить форму — таймаут клика&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;04:03&lt;/span&gt;&lt;/button&gt;
+    &lt;button class=&quot;brow k-done&quot;&gt;&lt;span class=&quot;bic&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;
+      &lt;span class=&quot;btx&quot;&gt;Напоминание создано&lt;span class=&quot;bsub&quot;&gt;Календарь · встреча 18:30&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;btime&quot;&gt;вчера&lt;/span&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;bellfoot&quot;&gt;&lt;button id=&quot;bellReadAll&quot; type=&quot;button&quot;&gt;Прочитать всё&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" title="Тёмная тема — журнал в тёмной теме" loading="eager"></iframe><figcaption>Тёмная тема — журнал в тёмной теме</figcaption></figure></div>
+</section>
+<section>
+<h2>Карточка пермиса</h2><p class="meta">иерархия Apple alert: Allow solid AA, «Всегда» plain, «Отклонить» outline-red; баннер hand-off</p>
+<div class="grid"><figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+&lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+&lt;h1 id=&quot;ttl&quot;&gt;Выгрузка WB — дубликаты&lt;/h1&gt;&lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: online&quot;&gt;&lt;/span&gt;
+&lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;
+&lt;div class=&quot;m me&quot;&gt;&lt;span class=&quot;av hu&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-user&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Экспортируй отчёт по SKU в xlsx&lt;/div&gt;
+&lt;div class=&quot;m perm&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;Нужно разрешение&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;wb-upload · экспорт · файл «выгрузка_июль.xlsx» · скачивание во вкладке агента&lt;/div&gt;
+  &lt;div class=&quot;btns&quot;&gt;
+    &lt;button class=&quot;ok&quot;&gt;Разрешить&lt;/button&gt;
+    &lt;button class=&quot;alw&quot;&gt;Всегда&lt;/button&gt;
+    &lt;button class=&quot;no&quot;&gt;Отклонить&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m perm done&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;Нужно разрешение&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;wb-upload · экспорт · файл «выгрузка_июль.xlsx»&lt;/div&gt;
+  &lt;span class=&quot;res&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;Разрешено · 06:42&lt;/span&gt;
+  &lt;div class=&quot;btns&quot;&gt;&lt;button class=&quot;chip&quot;&gt;только сейчас&lt;/button&gt;&lt;button class=&quot;chip&quot;&gt;для этого домена&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m ho&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;Нужен ты&lt;/div&gt;
+  &lt;div class=&quot;tx2&quot;&gt;Открой капчу и впиши код с картинки — дальше поведу сам.&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;ekopcha.ru · форма входа · поле «код»&lt;/div&gt;
+  &lt;button&gt;Готово, продолжай&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; placeholder=&quot;спроси что угодно&quot; autocomplete=&quot;off&quot;&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot;  title=&quot;Отправить&quot; aria-label=&quot;Отправить&quot;&gt;&lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;&lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" title="Светлая тема — alert inline: solid / plain / outline-red + баннер «нужен ты»" loading="eager"></iframe><figcaption>Светлая тема — alert inline: solid / plain / outline-red + баннер «нужен ты»</figcaption></figure>
+<figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+&lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+&lt;h1 id=&quot;ttl&quot;&gt;Выгрузка WB — дубликаты&lt;/h1&gt;&lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: online&quot;&gt;&lt;/span&gt;
+&lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;
+&lt;div class=&quot;m me&quot;&gt;&lt;span class=&quot;av hu&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-user&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Экспортируй отчёт по SKU в xlsx&lt;/div&gt;
+&lt;div class=&quot;m perm&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;Нужно разрешение&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;wb-upload · экспорт · файл «выгрузка_июль.xlsx» · скачивание во вкладке агента&lt;/div&gt;
+  &lt;div class=&quot;btns&quot;&gt;
+    &lt;button class=&quot;ok&quot;&gt;Разрешить&lt;/button&gt;
+    &lt;button class=&quot;alw&quot;&gt;Всегда&lt;/button&gt;
+    &lt;button class=&quot;no&quot;&gt;Отклонить&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m perm done&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;Нужно разрешение&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;wb-upload · экспорт · файл «выгрузка_июль.xlsx»&lt;/div&gt;
+  &lt;span class=&quot;res&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-check&quot;/&gt;&lt;/svg&gt;Разрешено · 06:42&lt;/span&gt;
+  &lt;div class=&quot;btns&quot;&gt;&lt;button class=&quot;chip&quot;&gt;только сейчас&lt;/button&gt;&lt;button class=&quot;chip&quot;&gt;для этого домена&lt;/button&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;m ho&quot;&gt;
+  &lt;div class=&quot;hd&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-hand&quot;/&gt;&lt;/svg&gt;Нужен ты&lt;/div&gt;
+  &lt;div class=&quot;tx2&quot;&gt;Открой капчу и впиши код с картинки — дальше поведу сам.&lt;/div&gt;
+  &lt;div class=&quot;sub&quot;&gt;ekopcha.ru · форма входа · поле «код»&lt;/div&gt;
+  &lt;button&gt;Готово, продолжай&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; placeholder=&quot;спроси что угодно&quot; autocomplete=&quot;off&quot;&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot;  title=&quot;Отправить&quot; aria-label=&quot;Отправить&quot;&gt;&lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;&lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" title="Тёмная тема — пермис и hand-off в тёмной теме" loading="eager"></iframe><figcaption>Тёмная тема — пермис и hand-off в тёмной теме</figcaption></figure></div>
+</section>
+<section>
+<h2>Композер</h2><p class="meta">поле capsule Messages-стиля, focus-ring без glow, кнопка — круг solid accent</p>
+<div class="grid"><figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+&lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+&lt;h1 id=&quot;ttl&quot;&gt;Сколько SKU останется&lt;/h1&gt;&lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: online&quot;&gt;&lt;/span&gt;
+&lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;
+&lt;div class=&quot;m me&quot;&gt;&lt;span class=&quot;av hu&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-user&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Посчитай, сколько SKU осталось после чистки&lt;/div&gt;
+&lt;div class=&quot;m think&quot;&gt;&lt;div class=&quot;thd&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-think&quot;/&gt;&lt;/svg&gt;Думает…&lt;/div&gt;
+&lt;div class=&quot;tx2&quot;&gt;Считаю уникальные SKU по колонке: 96 строк, 82 уникальных, 14 повторов. Проверяю, что дубли идут подряд — перед удалением сделаю копию.&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;m hm&quot;&gt;&lt;span class=&quot;av ag&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Останется 82 SKU: 96 строк минус 14 повторов. Считаю по колонке SKU, строки-дубли подряд.&lt;/div&gt;
+&lt;/div&gt;&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; placeholder=&quot;&quot; autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph&quot; aria-hidden=&quot;true&quot;&gt;напиши, что сделать, или «/» — навыки&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot;  title=&quot;Отправить&quot; aria-label=&quot;Отправить&quot;&gt;&lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;&lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;script&gt;document.getElementById(&quot;in&quot;).focus();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" title="Светлая тема — поле-capsule с фокус-кольцом, живой плейсхолдер, круглая кнопка" loading="eager"></iframe><figcaption>Светлая тема — поле-capsule с фокус-кольцом, живой плейсхолдер, круглая кнопка</figcaption></figure>
+<figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/sidebar.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;div id=&quot;hd&quot;&gt;&lt;div id=&quot;hdrow&quot;&gt;
+&lt;svg id=&quot;hdic&quot; class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;
+&lt;h1 id=&quot;ttl&quot;&gt;Сколько SKU останется&lt;/h1&gt;&lt;span id=&quot;st&quot; data-s=&quot;online&quot; title=&quot;bridge: online&quot;&gt;&lt;/span&gt;
+&lt;button id=&quot;bellBtn&quot; title=&quot;Журнал: позвать человека&quot; aria-label=&quot;Журнал уведомлений&quot; aria-haspopup=&quot;true&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-bell&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;collapseBtn&quot; title=&quot;Свернуть панель&quot; aria-label=&quot;Свернуть панель&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-collapse&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;button id=&quot;menuBtn&quot; title=&quot;Меню&quot; aria-label=&quot;Меню&quot; aria-haspopup=&quot;menu&quot; aria-expanded=&quot;false&quot;&gt;&lt;svg class=&quot;icn&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-menu&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div id=&quot;log&quot;&gt;
+&lt;div class=&quot;m me&quot;&gt;&lt;span class=&quot;av hu&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-user&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Посчитай, сколько SKU осталось после чистки&lt;/div&gt;
+&lt;div class=&quot;m think&quot;&gt;&lt;div class=&quot;thd&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-think&quot;/&gt;&lt;/svg&gt;Думает…&lt;/div&gt;
+&lt;div class=&quot;tx2&quot;&gt;Считаю уникальные SKU по колонке: 96 строк, 82 уникальных, 14 повторов. Проверяю, что дубли идут подряд — перед удалением сделаю копию.&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;m hm&quot;&gt;&lt;span class=&quot;av ag&quot; aria-hidden=&quot;true&quot;&gt;&lt;svg class=&quot;icn&quot;&gt;&lt;use href=&quot;#ic-bolt&quot;/&gt;&lt;/svg&gt;&lt;/span&gt;Останется 82 SKU: 96 строк минус 14 повторов. Считаю по колонке SKU, строки-дубли подряд.&lt;/div&gt;
+&lt;/div&gt;&lt;div id=&quot;bar&quot;&gt;&lt;div id=&quot;inwrap&quot;&gt;&lt;input id=&quot;in&quot; placeholder=&quot;&quot; autocomplete=&quot;off&quot;&gt;&lt;span id=&quot;phin&quot; class=&quot;ph&quot; aria-hidden=&quot;true&quot;&gt;напиши, что сделать, или «/» — навыки&lt;/span&gt;&lt;/div&gt;
+&lt;button id=&quot;go&quot;  title=&quot;Отправить&quot; aria-label=&quot;Отправить&quot;&gt;&lt;svg class=&quot;icn ic-send&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-send&quot;/&gt;&lt;/svg&gt;&lt;svg class=&quot;icn ic-stop&quot; aria-hidden=&quot;true&quot;&gt;&lt;use href=&quot;#ic-stop&quot;/&gt;&lt;/svg&gt;&lt;/button&gt;&lt;/div&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;script&gt;document.getElementById(&quot;in&quot;).focus();&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;" title="Тёмная тема — композер в тёмной теме" loading="eager"></iframe><figcaption>Тёмная тема — композер в тёмной теме</figcaption></figure></div>
+</section>
+<section>
+<h2>Настройки</h2><p class="meta">grouped inset: surface-2 карточки на grouped-фоне, hairline-ряды, primary solid без свечения</p>
+<div class="grid"><figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;light&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/options.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;main&gt;
+&lt;h1&gt;Hermes Sidekick&lt;/h1&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-srv&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-srv&quot;&gt;Сервер&lt;/h2&gt;&lt;span class=&quot;chip ok&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;онлайн&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;WS-адрес моста Hermes. Пусто = ws://127.0.0.1:8791 — режим ssh-туннеля. Для подключения без ssh по локальной сети укажи адрес машины с мостом, например ws://192.168.0.50:8791.&lt;/p&gt;
+  &lt;div class=&quot;meta&quot;&gt;ws://127.0.0.1:8791 · 1 вкладка · кадр v1&lt;/div&gt;
+  &lt;input id=&quot;srv&quot; placeholder=&quot;ws://192.168.0.50:8791&quot; autocomplete=&quot;off&quot; aria-label=&quot;адрес моста&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;&lt;button id=&quot;save&quot;&gt;Сохранить&lt;/button&gt;&lt;button id=&quot;re&quot; class=&quot;sec&quot;&gt;Переподключить&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;st ok&quot;&gt;Подключено · задержка 4 мс&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-tok&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-tok&quot;&gt;Токен&lt;/h2&gt;&lt;span class=&quot;chip ok&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;принят&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;Токен сессии моста. Возьми содержимое файла &lt;code&gt;~/sidekick/bridge/hub/token&lt;/code&gt; на машине Hermes и вставь сюда. Хранится только локально в расширении.&lt;/p&gt;
+  &lt;div class=&quot;meta&quot;&gt;обновлён сегодня · 64 hex&lt;/div&gt;
+  &lt;input id=&quot;tok&quot; type=&quot;password&quot; placeholder=&quot;вставь новый токен&quot; autocomplete=&quot;off&quot; aria-label=&quot;новый токен моста&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;&lt;button id=&quot;toksave&quot;&gt;Сохранить&lt;/button&gt;&lt;button class=&quot;sec&quot;&gt;Стереть&lt;/button&gt;&lt;button class=&quot;sec&quot;&gt;Проверить подключение&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;st&quot;&gt;Сохранено · только что&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-bell&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-bell&quot;&gt;Звонок&lt;/h2&gt;&lt;span class=&quot;chip warn&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;macOS: звук выключен&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;«Проверить звонок» выпускает живое системное уведомление со звуком — тем же путём, что колокольчик агента. На macOS включи «Позволить уведомления» и «Звуки» для Firefox.&lt;/p&gt;
+  &lt;div class=&quot;meta&quot;&gt;проверка: 06:40 · доставлено&lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;&lt;button class=&quot;sec&quot;&gt;Проверить звонок&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;st&quot;&gt;Открыть Системные настройки → Уведомления → Firefox&lt;/div&gt;
+&lt;/section&gt;
+&lt;/main&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" title="Светлая тема — grouped inset: карточки без бордеров, чипы пастель+ink" loading="eager"></iframe><figcaption>Светлая тема — grouped inset: карточки без бордеров, чипы пастель+ink</figcaption></figure>
+<figure><iframe srcdoc="&lt;!doctype html&gt;&lt;html data-theme=&quot;dark&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;link rel=&quot;preconnect&quot; href=&quot;https://fonts.gstatic.com&quot; crossorigin&gt;&lt;link href=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/theme.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;apple.css&quot;&gt;&lt;link rel=&quot;stylesheet&quot; href=&quot;../extension/options.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;svg id=&quot;spr&quot; aria-hidden=&quot;true&quot;&gt;&lt;defs&gt;
+&lt;symbol id=&quot;ic-bolt&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M13 2 3 14h9l-1 8 10-12h-9l1-8z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-bell&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9&quot;/&gt;&lt;path d=&quot;M13.7 21a2 2 0 0 1-3.4 0&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-collapse&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M11 17l-5-5 5-5&quot;/&gt;&lt;path d=&quot;M18 17l-5-5 5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-menu&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;5&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;circle cx=&quot;19&quot; cy=&quot;12&quot; r=&quot;1.6&quot; fill=&quot;currentColor&quot; stroke=&quot;none&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-check&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-cross&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M18 6 6 18M6 6l12 12&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-hand&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 11V7.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M9 11V5.5a1.5 1.5 0 0 1 3 0V11&quot;/&gt;&lt;path d=&quot;M12 11V6a1.5 1.5 0 0 1 3 0v5&quot;/&gt;&lt;path d=&quot;M15 11.5V9a1.5 1.5 0 0 1 3 0v5a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.1-2.2l-3-3.4a1.6 1.6 0 0 1 2.4-2.1L6 15&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevron&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18l6-6-6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-chevdown&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M6 9l6 6 6-6&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-stop&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;rect x=&quot;6&quot; y=&quot;6&quot; width=&quot;12&quot; height=&quot;12&quot; rx=&quot;2&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-send&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M22 2 11 13&quot;/&gt;&lt;path d=&quot;M22 2 15 22l-4-9-9-4z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-ring&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;8&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-globe&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;9&quot;/&gt;&lt;path d=&quot;M3 12h18&quot;/&gt;&lt;path d=&quot;M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-think&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M9 18h6M10 22h4&quot;/&gt;&lt;path d=&quot;M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2h6c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-alert&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z&quot;/&gt;&lt;path d=&quot;M12 9v4M12 17h.01&quot;/&gt;&lt;/symbol&gt;
+&lt;symbol id=&quot;ic-user&quot; viewBox=&quot;0 0 24 24&quot;&gt;&lt;path d=&quot;M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;/symbol&gt;
+&lt;linearGradient id=&quot;g-bolt&quot; x1=&quot;2&quot; y1=&quot;2&quot; x2=&quot;22&quot; y2=&quot;22&quot; gradientUnits=&quot;userSpaceOnUse&quot;&gt;
+&lt;stop offset=&quot;0&quot; style=&quot;stop-color:var(--bolt-a)&quot;/&gt;&lt;stop offset=&quot;1&quot; style=&quot;stop-color:var(--bolt-b)&quot;/&gt;
+&lt;/linearGradient&gt;
+&lt;/defs&gt;&lt;/svg&gt;&lt;main&gt;
+&lt;h1&gt;Hermes Sidekick&lt;/h1&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-srv&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-srv&quot;&gt;Сервер&lt;/h2&gt;&lt;span class=&quot;chip ok&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;онлайн&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;WS-адрес моста Hermes. Пусто = ws://127.0.0.1:8791 — режим ssh-туннеля. Для подключения без ssh по локальной сети укажи адрес машины с мостом, например ws://192.168.0.50:8791.&lt;/p&gt;
+  &lt;div class=&quot;meta&quot;&gt;ws://127.0.0.1:8791 · 1 вкладка · кадр v1&lt;/div&gt;
+  &lt;input id=&quot;srv&quot; placeholder=&quot;ws://192.168.0.50:8791&quot; autocomplete=&quot;off&quot; aria-label=&quot;адрес моста&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;&lt;button id=&quot;save&quot;&gt;Сохранить&lt;/button&gt;&lt;button id=&quot;re&quot; class=&quot;sec&quot;&gt;Переподключить&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;st ok&quot;&gt;Подключено · задержка 4 мс&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-tok&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-tok&quot;&gt;Токен&lt;/h2&gt;&lt;span class=&quot;chip ok&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;принят&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;Токен сессии моста. Возьми содержимое файла &lt;code&gt;~/sidekick/bridge/hub/token&lt;/code&gt; на машине Hermes и вставь сюда. Хранится только локально в расширении.&lt;/p&gt;
+  &lt;div class=&quot;meta&quot;&gt;обновлён сегодня · 64 hex&lt;/div&gt;
+  &lt;input id=&quot;tok&quot; type=&quot;password&quot; placeholder=&quot;вставь новый токен&quot; autocomplete=&quot;off&quot; aria-label=&quot;новый токен моста&quot;&gt;
+  &lt;div class=&quot;row&quot;&gt;&lt;button id=&quot;toksave&quot;&gt;Сохранить&lt;/button&gt;&lt;button class=&quot;sec&quot;&gt;Стереть&lt;/button&gt;&lt;button class=&quot;sec&quot;&gt;Проверить подключение&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;st&quot;&gt;Сохранено · только что&lt;/div&gt;
+&lt;/section&gt;
+&lt;section class=&quot;card&quot; aria-labelledby=&quot;h-bell&quot;&gt;
+  &lt;div class=&quot;chead&quot;&gt;&lt;h2 id=&quot;h-bell&quot;&gt;Звонок&lt;/h2&gt;&lt;span class=&quot;chip warn&quot;&gt;&lt;i&gt;&lt;/i&gt;&lt;span&gt;macOS: звук выключен&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;p&gt;«Проверить звонок» выпускает живое системное уведомление со звуком — тем же путём, что колокольчик агента. На macOS включи «Позволить уведомления» и «Звуки» для Firefox.&lt;/p&gt;
+  &lt;div class=&quot;meta&quot;&gt;проверка: 06:40 · доставлено&lt;/div&gt;
+  &lt;div class=&quot;row&quot;&gt;&lt;button class=&quot;sec&quot;&gt;Проверить звонок&lt;/button&gt;&lt;/div&gt;
+  &lt;div class=&quot;st&quot;&gt;Открыть Системные настройки → Уведомления → Firefox&lt;/div&gt;
+&lt;/section&gt;
+&lt;/main&gt;
+&lt;script&gt;document.fonts.ready.then(()=&gt;document.documentElement.classList.add(&quot;fonts-ok&quot;));&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;" title="Тёмная тема — настройки в тёмной теме" loading="eager"></iframe><figcaption>Тёмная тема — настройки в тёмной теме</figcaption></figure></div>
+</section>
+</div>
+<script>document.fonts.ready.then(()=>document.documentElement.classList.add("fonts-ok"));</script>
+</body></html>

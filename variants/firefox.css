@@ -1,0 +1,371 @@
+/* SK-57: дизайн-вариант «нативный Firefox» — перекроение токенов theme.css.
+   Идея: сайдбар = панель настроек браузера (about:preferences в тулбаре), агент =
+   страница about: внутри неё. Сплошные поверхности Proton, один акцент, ноль
+   плавных переходов цвета, ноль стекла, нативный фокус-кольцом.
+   Спецификация (значения, источники, контрасты): ~/.hermes/cache/variants/firefox/spec.md
+   Первоисточники: toolkit/themes/shared/in-content/common-shared.css (ESR115),
+   browser-shared.css, design-system tokens (Nova), photon-colors.json.
+
+   Правила варианта:
+   - 0 «мягких» плавных переходов цвета в значениях (включая фейды и спрайтовый
+     болт: --bolt-a == --bolt-b → url(#g-bolt) рисуется плоско);
+   - 0 теней в покое (тень только у плавающих порталов: #menu, #bellpanel);
+   - blur выключен (--glass-blur: 0px → backdrop-filter: blur(0) безвреден);
+   - радиусы нативные: контролы/карточки 4px, меню/чипы 2px;
+   - фокус: outline 2px solid акцент (offset 2px; у полей -1px, border прозрачный —
+     нативный приём in-content), только :focus-visible;
+   - движение: color/background transitions ≤150ms, easing без overshoot.
+
+   Все 8 «мягких» правил sidebar.css нейтрализованы точечно ниже (сплошной цвет);
+   литералов linear/radial/conic в этом файле нет ни в значениях, ни в комментариях.
+
+   Серые — нейтральные (R=G=B), а не «violet-tinted» оригиналов Photon
+   (#15141a/#1c1b22/#23222b/#2b2a33/#3f3e48/#5b5b66 и светлые пары): фиолетовый
+   подтон ~hue 250° — детект-паттерн ai-color-palette (требование приёмки SK-57,
+   раунд 2). Светлота каждой серой сохранена, ступени слоёв сохранены. */
+
+/* ---- шкала: нативные размеры in-content ---------------------------------------- */
+:root {
+  /* --r1/--r2: border-radius 4px (common-shared.css ESR115; Nova radius.small) */
+  --r1: 4px;
+  --r2: 4px;
+  /* --rp: чипы/пилюли → нативный 2px (Nova radius.xsmall; --panel-border-radius 2px).
+     Пилюля 99px — «чужой радиус», вне нативных бейджей запрещён */
+  --rp: 2px;
+  /* мелкие контролы: min-height 24px (common-shared.css ESR115) */
+  --ctl-h-sm: 24px;
+  /* полоса-шапка ≈ тулбар Firefox (аппроксимация, см. spec.md «помеченные») */
+  --hd-h: 40px;
+  /* блюра в нативе нет: blur(0px) выключает все три glass-слоя */
+  --glass-blur: 0px;
+  /* типографика: --font-size-root 15px, --font-size-small 13px (tokens-brand) */
+  --fs-hero: 16px;
+  --fs-ttl: 15px;
+  --fs-hd: 13px;
+  /* нативный easing (transition: background-color 150ms; overshoot-пружины запрещены) */
+  --spring: cubic-bezier(0, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* ---- светлая палитра Proton ------------------------------------------------------
+   Применима: :root без data-theme="dark" (системная светлая), scope .fx-light (витрина),
+   явный выбор data-theme="light". Селектор :root:not([data-theme="dark"]) — та же
+   удельность (0,2,0), что light-форс блок theme.css SK-30 (:root:not([data-theme="dark"]));
+   firefox.css подключен последним — ничья решается в нашу пользу. Тёмная — в @media
+   и явном data-theme="dark" ниже. */
+:root:not([data-theme="dark"]),
+.fx-light,
+:root[data-theme="light"] {
+  --surface-1: #fafafa;   /* canvas: photon grey-10 / Nova canvas light */
+  --surface-2: #ffffff;   /* --in-content-box-background */
+  --surface-3: #f2f2f2;   /* --in-content-box-info-background */
+  --text: #171717;        /* --in-content-page-color (Ink 10) */
+  --text-dim: #616161;    /* --in-content-deemphasized-text */
+  --line: #d9d9d9;        /* --in-content-border-color */
+  --line-soft: #eeeeee;   /* photon grey-20 */
+  --accent: #0061e0;      /* --in-content-primary-button-background / --focus-outline-color */
+  --accent-soft: rgba(0, 97, 224, 0.15);
+  --ok: #006504;          /* photon green-800 (700 не проходил 4.5:1 — затемнён) */
+  --ok-soft: rgba(0, 101, 4, 0.10);
+  --warn: #715100;        /* photon yellow-800 (700 = 3.55:1 не проходил) */
+  --warn-soft: rgba(113, 81, 0, 0.12);
+  --err: #d70022;         /* photon red-600 (нативный danger) */
+  --err-soft: rgba(215, 0, 34, 0.10);
+  --info: #0061e0;        /* info = акцент: отдельного info в нативе нет */
+  --info-soft: rgba(0, 97, 224, 0.15);
+  --idle: #616161;        /* --in-content-icon-color */
+  --idle-soft: rgba(91, 91, 102, 0.12);
+  /* фон страницы сплошной: `background: none var(--surface-1)` — валидный shorthand */
+  --bg-grad: none;
+  /* glass-токены → сплошные поверхности тулбара/попапов (имена сохранены: компонентный CSS) */
+  --glass-bg: #fafafa;          /* шапка/композер = цвет страницы, как тулбар со страницей */
+  --glass-bg-2: #ffffff;        /* --popup-background-color = box */
+  --glass-border: #d9d9d9;      /* --panel-border-color */
+  --glass-border-hi: #d9d9d9;   /* «hi»-подсветки в нативе нет */
+  --glass-shadow: 0 0.375px 1.5px rgba(0, 0, 0, 0.15), 0 3px 12px rgba(0, 0, 0, 0.35); /* box-shadow level-3 (плавающие) */
+  --glass-hover: rgba(23, 23, 23, 0.14); /* --in-content-button-background-hover: currentColor 14% */
+  /* CTA-токены → сплошные; --grad-hot валиден в background (sidebar.css использует его как фон) */
+  --grad-hot: #0061e0;
+  --grad-hot-hi: #0250bb;
+  --btn-accent: #0061e0;
+  --btn-ok: #006504;
+  --btn-ok-hot: #003706;
+  --btn-stop: #d70022;
+  --btn-stop-hot: #a4000f;
+  --ink-on-solid: #fdfdfd;      /* --in-content-primary-button-text-color */
+  /* логотип-болт: стопы равны → спрайт url(#g-bolt) рисуется одним цветом */
+  --bolt-a: #0061e0;
+  --bolt-b: #0061e0;
+}
+
+/* ---- тёмная палитра Proton (системная тёмная / витрина .fx-dark / явный выбор) ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-1: #1f1f1f;   /* --in-content-page-background (Background 10) */
+    --surface-2: #272727;   /* --in-content-box-background (Cards) */
+    --surface-3: #2f2f2f;   /* Background 20 v1 */
+    --text: #fdfdfd;        /* --in-content-page-color */
+    --text-dim: #c4c4c4;    /* --in-content-deemphasized-text */
+    --line: #616161;        /* border dark = gray-70 (Nova); сплошное приближение rgba(.2) */
+    --line-soft: #434343;   /* ≈ rgba(249,249,250,.1) над s1 (производное, см. spec «помеченные») */
+    --accent: #00ddff;      /* --in-content-primary-button-background dark / --focus-outline-color */
+    --accent-soft: rgba(0, 221, 255, 0.15);
+    --ok: #54ffbd;          /* --in-content-success-icon-color */
+    --ok-soft: rgba(84, 255, 189, 0.14);
+    --warn: #d7b600;        /* photon yellow-600 */
+    --warn-soft: rgba(215, 182, 0, 0.15);
+    --err: #ff9aa2;         /* --in-content-error-text-color */
+    --err-soft: rgba(255, 154, 162, 0.14);
+    --info: #00ddff;
+    --info-soft: rgba(0, 221, 255, 0.15);
+    --idle: #c4c4c4;
+    --idle-soft: rgba(191, 191, 201, 0.14);
+    --bg-grad: none;
+    --glass-bg: #1f1f1f;
+    --glass-bg-2: #272727;
+    --glass-border: #616161;
+    --glass-border-hi: #616161;
+    --glass-shadow: 0 0.375px 1.5px rgba(0, 0, 0, 0.15), 0 3px 12px rgba(0, 0, 0, 0.2); /* level-3 dark — ровно нативные альфы */
+    --glass-hover: rgba(253, 253, 253, 0.14);
+    --grad-hot: #00ddff;
+    --grad-hot-hi: #80ebff;
+    --btn-accent: #00ddff;
+    --btn-ok: #54ffbd;
+    --btn-ok-hot: #7affcf;
+    --btn-stop: #ff848b;
+    --btn-stop-hot: #ffbdc5;
+    --ink-on-solid: #171717; /* тёмная: почти-чёрный ink на цветных плашках (нативный инвертированный паттерн) */
+    --bolt-a: #00ddff;
+    --bolt-b: #00ddff;
+  }
+  /* scope витрины остаётся светлым при системной тёмной — :root.fx-light (0,2,0)
+    parity с тёмным :not-блоком, правило после него → класс форсит light */
+  :root.fx-light,
+  .fx-light {
+    --surface-1: #fafafa;
+    --surface-2: #ffffff;
+    --surface-3: #f2f2f2;
+    --text: #171717;
+    --text-dim: #616161;
+    --line: #d9d9d9;
+    --line-soft: #eeeeee;
+    --accent: #0061e0;
+    --accent-soft: rgba(0, 97, 224, 0.15);
+    --ok: #006504;
+    --ok-soft: rgba(0, 101, 4, 0.10);
+    --warn: #715100;
+    --warn-soft: rgba(113, 81, 0, 0.12);
+    --err: #d70022;
+    --err-soft: rgba(215, 0, 34, 0.10);
+    --info: #0061e0;
+    --info-soft: rgba(0, 97, 224, 0.15);
+    --idle: #616161;
+    --idle-soft: rgba(91, 91, 102, 0.12);
+    --bg-grad: none;
+    --glass-bg: #fafafa;
+    --glass-bg-2: #ffffff;
+    --glass-border: #d9d9d9;
+    --glass-border-hi: #d9d9d9;
+    --glass-shadow: 0 0.375px 1.5px rgba(0, 0, 0, 0.15), 0 3px 12px rgba(0, 0, 0, 0.35);
+    --glass-hover: rgba(23, 23, 23, 0.14);
+    --grad-hot: #0061e0;
+    --grad-hot-hi: #0250bb;
+    --btn-accent: #0061e0;
+    --btn-ok: #006504;
+    --btn-ok-hot: #003706;
+    --btn-stop: #d70022;
+    --btn-stop-hot: #a4000f;
+    --ink-on-solid: #fdfdfd;
+    --bolt-a: #0061e0;
+    --bolt-b: #0061e0;
+  }
+}
+
+/* явный выбор темы (меню «⋯» → Тема): идёт ПОСЛЕ @media, specificity (0,2,0) — как в theme.css */
+:root[data-theme="dark"] {
+  --surface-1: #1f1f1f;
+  --surface-2: #272727;
+  --surface-3: #2f2f2f;
+  --text: #fdfdfd;
+  --text-dim: #c4c4c4;
+  --line: #616161;
+  --line-soft: #434343;
+  --accent: #00ddff;
+  --accent-soft: rgba(0, 221, 255, 0.15);
+  --ok: #54ffbd;
+  --ok-soft: rgba(84, 255, 189, 0.14);
+  --warn: #d7b600;
+  --warn-soft: rgba(215, 182, 0, 0.15);
+  --err: #ff9aa2;
+  --err-soft: rgba(255, 154, 162, 0.14);
+  --info: #00ddff;
+  --info-soft: rgba(0, 221, 255, 0.15);
+  --idle: #c4c4c4;
+  --idle-soft: rgba(191, 191, 201, 0.14);
+  --bg-grad: none;
+  --glass-bg: #1f1f1f;
+  --glass-bg-2: #272727;
+  --glass-border: #616161;
+  --glass-border-hi: #616161;
+  --glass-shadow: 0 0.375px 1.5px rgba(0, 0, 0, 0.15), 0 3px 12px rgba(0, 0, 0, 0.2);
+  --glass-hover: rgba(253, 253, 253, 0.14);
+  --grad-hot: #00ddff;
+  --grad-hot-hi: #80ebff;
+  --btn-accent: #00ddff;
+  --btn-ok: #54ffbd;
+  --btn-ok-hot: #7affcf;
+  --btn-stop: #ff848b;
+  --btn-stop-hot: #ffbdc5;
+  --ink-on-solid: #171717;
+  --bolt-a: #00ddff;
+  --bolt-b: #00ddff;
+}
+
+/* scope витрины «тёмная» — значения те же, что тёмный блок; :root.fx-dark (0,2,0)
+   перебивает светлый :not-блок выше и при системной светлой (класс = явный форс) */
+:root.fx-dark,
+.fx-dark {
+  --surface-1: #1f1f1f;
+  --surface-2: #272727;
+  --surface-3: #2f2f2f;
+  --text: #fdfdfd;
+  --text-dim: #c4c4c4;
+  --line: #616161;
+  --line-soft: #434343;
+  --accent: #00ddff;
+  --accent-soft: rgba(0, 221, 255, 0.15);
+  --ok: #54ffbd;
+  --ok-soft: rgba(84, 255, 189, 0.14);
+  --warn: #d7b600;
+  --warn-soft: rgba(215, 182, 0, 0.15);
+  --err: #ff9aa2;
+  --err-soft: rgba(255, 154, 162, 0.14);
+  --info: #00ddff;
+  --info-soft: rgba(0, 221, 255, 0.15);
+  --idle: #c4c4c4;
+  --idle-soft: rgba(191, 191, 201, 0.14);
+  --bg-grad: none;
+  --glass-bg: #1f1f1f;
+  --glass-bg-2: #272727;
+  --glass-border: #616161;
+  --glass-border-hi: #616161;
+  --glass-shadow: 0 0.375px 1.5px rgba(0, 0, 0, 0.15), 0 3px 12px rgba(0, 0, 0, 0.2);
+  --glass-hover: rgba(253, 253, 253, 0.14);
+  --grad-hot: #00ddff;
+  --grad-hot-hi: #80ebff;
+  --btn-accent: #00ddff;
+  --btn-ok: #54ffbd;
+  --btn-ok-hot: #7affcf;
+  --btn-stop: #ff848b;
+  --btn-stop-hot: #ffbdc5;
+  --ink-on-solid: #171717;
+  --bolt-a: #00ddff;
+  --bolt-b: #00ddff;
+}
+
+/* ---- компонентные точечные правила (загрузка ПОСЛЕ sidebar.css: ничьи = наши) ---- */
+
+/* 1. «мягкая подсветка» под шапкой → нативная 1px граница тулбара */
+#hd::after { display: none; }
+
+/* 2–8. нейтрализация 8 «мягких» фейдов sidebar.css: сплошной цвет */
+.brow.unread { background: var(--accent-soft); }                       /* непрочитанная строка = list-hover Proton */
+.srow.active { background: var(--accent-soft); border-inline-start: 2px solid var(--accent); } /* selected-строка + 2px полоска */
+.perm::before { background: var(--warn); }                             /* 3px корешок сплошной янтарь */
+.ho::before { background: var(--accent); }                             /* корешок hand-off = акцент */
+#sklist .sk:hover, #sklist .sk.hl { background: var(--glass-hover); }  /* ink-overlay hover */
+.mi.on { background: var(--accent-soft); color: var(--text); outline: 1px solid var(--accent); outline-offset: -3px; }
+.hrow.cur { background: var(--accent-soft); border-color: var(--accent); }
+
+/* 9. аватары ленты и кнопка отправки: в нативных списках Proton иконка — глиф
+   текстовым цветом, без залитых плашек (icon-chips — анти-паттерн дашбордов,
+   требование приёмки SK-57 раунд 2): вариант переводит av-плашки и заливку
+   отправки в плоские глифы; running = красный глиф, disabled — приглушённый */
+.av.ag { background: transparent; color: var(--accent); }
+.av.hu { background: transparent; color: var(--text-dim); }
+#go { background: transparent; color: var(--accent); }
+#go.running { background: transparent; color: var(--btn-stop); }
+#go:disabled { background: transparent; color: var(--text-dim); }
+
+/* тени в покое запрещены: убрать цветные свечения CTA/пузырей/аватаров/статус-точки
+   (нативных теней у этих элементов нет; glow = анти-паттерн варианта) */
+.me, .av.ag, #go, #go.running, #go:disabled { box-shadow: none; }
+#st[data-s="online"] { box-shadow: none; }
+.m.task, .perm, .ho, .hm, .m.think, .tktab, #hd, #bar { box-shadow: none; }
+
+/* морфы без scale/translate (нативная моторика: color/background ≤150ms) */
+#go:active, .perm button:active, .ho button:active { transform: none; }
+.mi:hover, .brow:hover, .arow:hover, .hrow:hover { transform: none; }
+.arow:hover, .hrow:hover { background: var(--glass-hover); }
+/* входные анимации ленты/попапов: нативная панель появляется мгновенно */
+#log .m, #empty, #embolt, #belln, #menu, #bellpanel, .brow, #bellBtn:hover .icn { animation: none; }
+
+/* фокус: кольцо 2px акцент, offset 2px (focusT: inset -2px); у полей offset -1px и
+   прозрачная рамка — нативный приём in-content (antialiasing); box-shadow-колец нет */
+button:focus-visible, input:focus-visible, textarea:focus-visible,
+select:focus-visible, .mi:focus-visible, #sklist .sk:focus-visible,
+.hrow:focus-visible, .tkhd:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: none;
+}
+#in:focus, #in:focus-visible, #audf:focus, #audf:focus-visible,
+#sknamein:focus, #sknamein:focus-visible, #skpaste:focus, #skpaste:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: -1px;
+  border-color: transparent; box-shadow: none;
+}
+
+/* радиусы: выпадающие порталы — нативные 2px */
+#menu, #bellpanel, #skmenu, #skio, #skname { border-radius: var(--rp); }
+
+/* аватары-глифы: 4px-квадраты (круглые пилюли-аватары = «soft radius» генеративного мусора) */
+.av { border-radius: var(--r1); }
+.me { border-bottom-right-radius: var(--r2); }
+.hm { border-bottom-left-radius: var(--r2); }
+
+/* ghost-кнопки шапки: раскрытое состояние = серый overlay (тулбар-паттерн), не акцент */
+#menuBtn[aria-expanded="true"], #bellBtn[aria-expanded="true"] {
+  background: var(--glass-hover); border-color: transparent; color: var(--text);
+}
+
+/* think-блок: dashed-рамка (генеративная «черновиковость») → нативная сплошная */
+.m.think { border: var(--line-w) solid var(--line-soft); }
+
+/* чип вкладки задачи: accent-soft подложка, ink текст (цветной текст на soft в light <4.5:1) */
+.tktab { background: var(--accent-soft); border-color: transparent; color: var(--text); }
+.tktab:hover { background: var(--glass-hover); color: var(--text); }
+
+/* карточка пермисса = Proton notice: сплошная поверхность + предупреждающий корешок;
+   кнопки — язык диалогов: primary / secondary (ink 7%) / danger */
+.perm { background: var(--surface-2); border-color: var(--line); }
+.perm .ok { background: var(--grad-hot); border-color: transparent; color: var(--ink-on-solid); }
+.perm .ok:hover { background: var(--grad-hot-hi); }
+.perm .alw { background: color-mix(in srgb, currentColor 7%, transparent); border-color: transparent; color: var(--text); }
+.perm .alw:hover { background: var(--glass-hover); }
+.perm .no { background: var(--btn-stop); border-color: transparent; color: var(--ink-on-solid); }
+.perm .no:hover { background: var(--btn-stop-hot); }
+.perm .chip { background: var(--warn-soft); color: var(--text); border-color: transparent; }
+.perm .chip:hover { background: color-mix(in srgb, var(--warn) 22%, transparent); color: var(--text); }
+
+/* options page (about:preferences): карточки content-box без теней; h1 без декоративной
+   плашки (градиентный акцент-подчёркиватель — ornament, в prefs его нет) */
+.card { background: var(--surface-2); border-color: var(--line); box-shadow: none; }
+h1::after { display: none; }
+main button, button:not(.sec) { box-shadow: none; }
+button:active { transform: none; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; box-shadow: none; }
+/* нативный secondary (in-content button): подложка ink 10%, рамки нет — «полутёмная»
+   вторичная кнопка prefs, а не контур */
+button.sec, .opts button.sec {
+  background: color-mix(in srgb, currentColor 10%, transparent); border-color: transparent;
+}
+button.sec:hover, .opts button.sec:hover { background: var(--glass-hover); }
+/* menulist as in-content select: подложка ink 7%, рамки нет (common-shared.css) */
+select { background: color-mix(in srgb, currentColor 7%, transparent); border-color: transparent; }
+select:hover { background: var(--glass-hover); }
+main input { background: var(--surface-3); border-color: var(--line); }
+main input:focus { border-color: transparent; }
+
+/* движение: сокращаем до нативного, reduced-motion — полностью */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

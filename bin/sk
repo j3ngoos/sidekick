@@ -1,0 +1,303 @@
+#!/usr/bin/env python3
+"""sk — CLI-обвязка jsonl-хаба Sidekick для агента (SK-33).
+
+Аудит 21.10 п.7: агент переклеивал 20-строчный rpc()-хелпер в каждом execute_code,
+плодил гонки тредов, ловил ложный «мост лежит» от systemctl без XDG_RUNTIME_DIR.
+Всё это — здесь. Правила для агента: AGENTS.md п.11 (рукойписные хелперы запрещены).
+
+Команды:
+  sk rpc <method> ['<json>'] [--timeout N]  — строка в rpc_in, вердикт по id из
+      rpc_out, JSON в stdout. Выход: 0 ok:true | 1 ok:false (вердикт напечатан) |
+      2 клиентская проблема (битый json параметров, client_timeout — мост не ответил).
+      Таймаут по умолчанию: 15 с; для перм-гейтированных perm.check/tabs.close — 90 с
+      (перм-гейт ждёт человека 60 с, SK-34), для блокирующего handoff.request — 615 с
+      (мост ждёт человека дольше rpc-лимита).
+  sk status [--json]                        — мост/расширение/агентд без systemctl:
+      hub/health.json пишет мост (connect/disconnect + тик 10 с), агентд ищем по /proc.
+      Выход: 0 мост жив + расширение подключено | 1 мост жив, расширение offline |
+      2 health.json нет/протух — мост действительно лежит.
+  sk events [--since <epoch>] [--limit N]   — events.jsonl (stop/resume/perm_answer),
+      по ts мостового штампа (SK-33); --limit — хвост, по умолчанию 50.
+  sk capabilities [--timeout N]              — контракт моста (SK-43 п.2): rpc
+      capabilities — методы, глаголы action.do, типы пермисов с границами. Границы
+      берём отсюда, а не из grep исходников моста (аудит №2, проблема 6).
+
+Hub: env SIDEKICK_HOME (default ~/sidekick/bridge/hub) — тот же, что у моста.
+Ротация rpc_out/audit/events — на мосту (5 МБ, 2 бэкапа); sk переживает ротацию
+во время ожидания вердикта (следит за inode, читает и старый fd, и новый файл).
+"""
+import argparse
+import json
+import os
+import sys
+import time
+import uuid
+
+HUB_DEFAULT = "~/sidekick/bridge/hub"
+HEALTH_FRESH_S = 30          # ts свежее — мост жив (пишет каждые 10 с, трёхкратный запас)
+RPC_DEFAULT_TIMEOUT = 15.0
+# Гейтированные методы: мост сам ждёт человека дольше обычного rpc-лимита
+# (PERM_TIMEOUT_S=60 — SK-34 п.3, HANDOFF_TIMEOUT_S=600 на мосту) — sk ждёт их дольше,
+# чтобы не «терять» вердикт, который просто ещё не наступил.
+GATED_TIMEOUTS = {"perm.check": 90.0, "tabs.close": 90.0, "handoff.request": 615.0}
+
+
+def hub_dir():
+    return os.path.expanduser(os.environ.get("SIDEKICK_HOME", HUB_DEFAULT))
+
+
+def emit(obj):
+    print(json.dumps(obj, ensure_ascii=False), flush=True)
+
+
+# ---- sk rpc -----------------------------------------------------------------------
+
+class _Tail:
+    """Инкрементальное чтение jsonl с fd, начиная с off (строка вердикта — всегда
+    после этой отметки). Неполный хвост до \\n доживает до следующего поллинга."""
+
+    def __init__(self, fd, off):
+        self.fd, self.off, self.buf = fd, off, b""
+
+    def poll(self):
+        os.lseek(self.fd, self.off, os.SEEK_SET)
+        chunk = b""
+        while True:
+            b = os.read(self.fd, 1 << 18)
+            if not b:
+                break
+            chunk += b
+        if not chunk:
+            return []
+        self.off += len(chunk)
+        lines = (self.buf + chunk).split(b"\n")
+        self.buf = lines.pop()
+        out = []
+        for ln in lines:
+            ln = ln.strip()
+            if not ln:
+                continue
+            try:
+                obj = json.loads(ln)
+            except ValueError:
+                continue
+            if isinstance(obj, dict):
+                out.append(obj)
+        return out
+
+
+def cmd_rpc(args):
+    home = hub_dir()
+    rpc_in, rpc_out = f"{home}/rpc_in.jsonl", f"{home}/rpc_out.jsonl"
+    try:
+        params = json.loads(args.params) if args.params else {}
+    except json.JSONDecodeError as e:
+        emit({"ok": False, "err": f"bad_params_json: {e}"})
+        return 2
+    if not isinstance(params, dict):
+        emit({"ok": False, "err": "bad_params_json: params must be a JSON object"})
+        return 2
+    # SK-36: `caption` — человекочитаемая подпись шага для агентда (он читает её из
+    # командной строки tool_use), не параметр моста: срезается на клиенте, в провод
+    # не летит (контракт v1 не расширяется приватной подписью).
+    params.pop("caption", None)
+    timeout = args.timeout if args.timeout is not None \
+        else GATED_TIMEOUTS.get(args.method, RPC_DEFAULT_TIMEOUT)
+    rid = str(uuid.uuid4())
+    os.makedirs(home, exist_ok=True)
+    # Отметку хвоста rpc_out берём ДО запроса: вердикт мост допишет строго после.
+    out_fd = os.open(rpc_out, os.O_RDWR | os.O_CREAT, 0o644)
+    try:
+        tails = [_Tail(out_fd, os.lseek(out_fd, 0, os.SEEK_END))]
+        base_ino = os.fstat(out_fd).st_ino
+        with open(rpc_in, "a") as f:
+            f.write(json.dumps({"v": 1, "id": rid, "method": args.method, "params": params},
+                               ensure_ascii=False) + "\n")
+        deadline = time.time() + timeout
+        while True:
+            # ротация моста (SK-33): путь показывает другой inode — вердикт мог уйти
+            # в свежий файл, старый fd (переименованный в .1) остаётся под наблюдением
+            try:
+                if os.stat(rpc_out).st_ino != base_ino and len(tails) == 1:
+                    nfd = os.open(rpc_out, os.O_RDONLY)
+                    tails.append(_Tail(nfd, 0))
+            except FileNotFoundError:
+                pass
+            for t in tails:
+                for obj in t.poll():
+                    if obj.get("id") == rid:
+                        emit(obj)
+                        return 0 if obj.get("ok") else 1
+            if time.time() >= deadline:
+                emit({"ok": False, "id": rid, "err": "client_timeout",
+                      "timeout_s": timeout,
+                      "hint": "мост не ответил за таймаут sk; вердикт мог прийти позже — "
+                              "достань по id из rpc_out.jsonl; состояние моста: sk status"})
+                return 2
+            time.sleep(0.1)
+    finally:
+        for t in tails:
+            os.close(t.fd)
+
+
+# ---- sk status --------------------------------------------------------------------
+
+def _proc_alive(needle):
+    """Есть ли процесс с needle в cmdline — без systemctl (без XDG_RUNTIME_DIR
+    `systemctl --user` врёт «мост лежит», аудит 21.10 п.7)."""
+    me = os.getpid()
+    for pid in os.listdir("/proc"):
+        if not pid.isdigit() or int(pid) == me:
+            continue
+        try:
+            with open(f"/proc/{pid}/cmdline", "rb") as f:
+                cmd = f.read().replace(b"\0", b" ").decode("utf-8", "replace")
+        except OSError:
+            continue
+        if needle in cmd:
+            return int(pid)
+    return None
+
+
+def _size(path):
+    try:
+        return os.path.getsize(path)
+    except OSError:
+        return None
+
+
+def _mb(n):
+    return f"{n / (1024 * 1024):.1f} MB" if n is not None else "—"
+
+
+def cmd_status(args):
+    home = hub_dir()
+    now = int(time.time())
+    health, health_err = None, None
+    try:
+        health = json.loads(open(f"{home}/health.json").read())
+    except FileNotFoundError:
+        health_err = "health.json нет (мост не запускался с SK-33?)"
+    except Exception as e:
+        health_err = f"health.json не читается: {e}"
+    age = None
+    if isinstance(health, dict) and isinstance(health.get("ts"), (int, float)):
+        age = now - int(health["ts"])
+    if health is not None and age is not None and age <= HEALTH_FRESH_S:
+        bridge = "active"
+    elif health is not None:
+        bridge = "stale"
+    else:
+        bridge = "down"
+    ext = health.get("extension") if isinstance(health, dict) else None
+    ws_count = health.get("ws_count") if isinstance(health, dict) else None
+    # SK-49: peer активного расширения — «агент бьёт не туда» видно прямо в sk status
+    peer = health.get("peer") if isinstance(health, dict) else None
+    agentd_pid = _proc_alive("sidekick_agentd.py")
+    bridge_pid = _proc_alive("sidekick_bridge.py")
+    rpc_out = _size(f"{home}/rpc_out.jsonl")
+    rotations = [f"{home}/rpc_out.jsonl.{i}" for i in (1, 2)
+                 if os.path.exists(f"{home}/rpc_out.jsonl.{i}")]
+    rep = {
+        "bridge": bridge,
+        "bridge_pid": bridge_pid,
+        "extension": ext if bridge == "active" else ("unknown" if bridge == "stale" else None),
+        "ws_count": ws_count,
+        "peer": peer if bridge == "active" else None,
+        "health_ts": (health or {}).get("ts") if isinstance(health, dict) else None,
+        "health_age_s": age,
+        "agentd": "running" if agentd_pid else "down",
+        "agentd_pid": agentd_pid,
+        "hub": home,
+        "rpc_out_bytes": rpc_out,
+        "rpc_out_rotations": len(rotations),
+    }
+    if health_err:
+        rep["health_err"] = health_err
+    if args.json:
+        emit(rep)
+    else:
+        print(f"bridge    : {bridge}"
+              + (f" (health {age} с назад, pid {bridge_pid})" if age is not None else
+                 (f" (pid {bridge_pid})" if bridge_pid else "")))
+        print(f"extension : {rep['extension']} (ws_count={ws_count})"
+              + (f" peer={peer}" if peer else ""))
+        print(f"agentd    : {rep['agentd']}"
+              + (f" (pid {agentd_pid})" if agentd_pid else ""))
+        print(f"hub       : {home}")
+        print(f"rpc_out   : {_mb(rpc_out)} + {len(rotations)} ротация(и)")
+        if health_err:
+            print(f"health    : {health_err}")
+    if bridge != "active":
+        return 2
+    return 0 if ext == "connected" else 1
+
+
+# ---- sk events --------------------------------------------------------------------
+
+def cmd_events(args):
+    path = f"{hub_dir()}/events.jsonl"
+    try:
+        raw = open(path, encoding="utf-8", errors="replace").read().splitlines()
+    except FileNotFoundError:
+        raw = []
+    out = []
+    for ln in raw:
+        if not ln.strip():
+            continue
+        if args.since is not None:
+            try:
+                ts = json.loads(ln).get("ts")
+            except ValueError:
+                ts = None
+            if not isinstance(ts, (int, float)) or ts < args.since:
+                continue  # строки без ts-штампа (до SK-33) с --since не показываем
+        out.append(ln)
+    if args.limit:
+        out = out[-args.limit:]
+    for ln in out:
+        print(ln, flush=True)
+    return 0
+
+
+# ---- sk capabilities ----------------------------------------------------------------
+
+def cmd_capabilities(args):
+    """SK-43 п.2: контракт моста одним вызовом — методы, глаголы action.do, типы
+    пермисов с границами. Тот же rpc-путь, что `sk rpc capabilities '{}'`, только
+    короче; мост отвечает без расширения и без браузера."""
+    ns = argparse.Namespace(method="capabilities", params="{}", timeout=args.timeout)
+    return cmd_rpc(ns)
+
+
+# ---- main -------------------------------------------------------------------------
+
+def main():
+    ap = argparse.ArgumentParser(
+        prog="sk", description=__doc__.splitlines()[0],
+        epilog="контракт: ~/sidekick/AGENTS.md п.11; hub: env SIDEKICK_HOME")
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    p = sub.add_parser("rpc", help="rpc через мост: sk rpc <method> '<json>' [--timeout N]")
+    p.add_argument("method")
+    p.add_argument("params", nargs="?", default="{}")
+    p.add_argument("--timeout", type=float,
+                   help="ждать вердикт N с (default: 15, гейтированные: 90/615)")
+    p.set_defaults(fn=cmd_rpc)
+    p = sub.add_parser("status", help="мост/расширение/агентд без systemctl")
+    p.add_argument("--json", action="store_true", help="машинный отчёт одним JSON")
+    p.set_defaults(fn=cmd_status)
+    p = sub.add_parser("events", help="events.jsonl (stop/resume/perm_answer)")
+    p.add_argument("--since", type=int, help="только события с ts >= <epoch>")
+    p.add_argument("--limit", type=int, default=50, help="хвост (default 50, 0 — все)")
+    p.set_defaults(fn=cmd_events)
+    p = sub.add_parser("capabilities",
+                       help="контракт моста: методы, глаголы action.do, типы пермисов (SK-43)")
+    p.add_argument("--timeout", type=float, default=None,
+                   help="ждать вердикт N с (тот же sk rpc дефолт)")
+    p.set_defaults(fn=cmd_capabilities)
+    args = ap.parse_args()
+    sys.exit(args.fn(args))
+
+
+if __name__ == "__main__":
+    main()

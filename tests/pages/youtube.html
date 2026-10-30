@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>sk43-boot</title>
+<style>
+  /* Реплика YouTube (аудит №2, инцидент B): тёмный хром, русская локаль UI.
+     Цель SK-43 — превью с русской подписью: агент тащит ASCII-мусор
+     («Account menu», «empty area»), мост подставляет читаемое из DOM. */
+  body { margin: 0; font: 14px/1.4 Roboto, system-ui, sans-serif; background: #0f0f0f; color: #f1f1f1; }
+  header { display: flex; align-items: center; gap: 16px; padding: 8px 16px;
+           border-bottom: 1px solid #272727; position: sticky; top: 0; background: #0f0f0f; }
+  .logo { font-weight: 700; font-size: 18px; color: #ff0033; letter-spacing: -1px; }
+  #q { flex: 1; max-width: 480px; background: #12161a; border: 1px solid #303030;
+       color: #f1f1f1; padding: 8px 12px; border-radius: 20px; }
+  #avatar-btn { margin-left: auto; width: 40px; height: 40px; border-radius: 50%;
+                border: 0; background: #6b3fa0; color: #fff; font-weight: 700; cursor: pointer; }
+  #avatar-menu { position: absolute; right: 16px; top: 56px; background: #282828;
+                 border: 1px solid #3f3f3f; border-radius: 8px; padding: 6px 0; min-width: 200px;
+                 display: none; z-index: 10; }
+  #avatar-menu.open { display: block; }
+  #avatar-menu button { display: block; width: 100%; text-align: left; padding: 8px 14px;
+                        background: none; border: 0; color: #f1f1f1; cursor: pointer; font: inherit; }
+  #avatar-menu button:hover { background: #3f3f3f; }
+  #feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+          max-width: 640px; gap: 16px; padding: 16px; }
+  .vcard { cursor: pointer; }
+  .vcard:focus { outline: 2px solid #6b3fa0; }
+  .thumb { height: 146px; border-radius: 8px; background: linear-gradient(135deg, #263238, #37474f); }
+  .vtitle { margin: 8px 0 2px; font-weight: 500; }
+  .vmeta { color: #aaa; font-size: 12px; }
+  #state-mirror { position: fixed; left: 16px; bottom: 8px; color: #6b6b6b; font-size: 11px; }
+</style>
+</head>
+<body>
+<header>
+  <span class="logo">Сидюб</span>
+  <input id="q" type="search" placeholder="Введите запрос" aria-label="Поиск">
+  <!-- инцидент B: аватар без текста, только aria-label — агент подписывал его «Account menu» -->
+  <button id="avatar-btn" aria-label="Меню аккаунта">Я</button>
+  <nav id="avatar-menu" aria-label="Меню аккаунта">
+    <button id="mi-channel">Ваш канал</button>
+    <button id="mi-settings">Настройки</button>
+    <button id="mi-exit">Выйти</button>
+  </nav>
+</header>
+
+<main id="feed">
+  <!-- «empty area» из инцидента: кольцо на видео-карточке без aria — только видимый текст -->
+  <div class="vcard" id="vcard-1" tabindex="0">
+    <div class="thumb"></div>
+    <div class="vtitle">Как собрать стенд Sidekick за вечер</div>
+    <div class="vmeta">Мастерская Hermes · 12 тыс. просмотров · 2 дня назад</div>
+  </div>
+  <div class="vcard" id="vcard-2" tabindex="0">
+    <div class="thumb"></div>
+    <div class="vtitle">Топ-5 ошибок голосового ассистента</div>
+    <div class="vmeta">Джев ТВ · 2,9 тыс. просмотров · 5 часов назад</div>
+  </div>
+</main>
+
+<div id="state-mirror">state: <span id="mirror">—</span></div>
+
+<script>
+(function () {
+  // Тот же паттерн, что primitives.html: состояние дублируется в заголовок
+  // («sk43:{json}») — харнесс читает его через page.text без vision.
+  var S = { clicks: [], menuOpen: false };
+  function mirror() {
+    document.title = "sk43:" + JSON.stringify(S);
+    document.getElementById("mirror").textContent = JSON.stringify(S.clicks.slice(-4));
+  }
+  var menu = document.getElementById("avatar-menu");
+  document.getElementById("avatar-btn").addEventListener("click", function () {
+    S.menuOpen = menu.classList.toggle("open");
+    S.clicks.push("avatar");
+    mirror();
+  });
+  menu.querySelectorAll("button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      S.clicks.push(b.id);
+      menu.classList.remove("open");
+      S.menuOpen = false;
+      mirror();
+    });
+  });
+  document.querySelectorAll(".vcard").forEach(function (c) {
+    c.addEventListener("click", function () {
+      S.clicks.push(c.id);
+      mirror();
+    });
+  });
+  // лента длиннее вьюпорта: приёмке нужен настоящий прокручиваемый документ
+  // (D1: action.do scroll dy -> viewport.sy>0)
+  var feed = document.getElementById("feed");
+  for (var i = 3; i <= 20; i++) {
+    var d = document.createElement("div");
+    d.className = "vcard"; d.id = "vcard-" + i; d.tabIndex = 0;
+    d.innerHTML = '<div class="thumb"></div>' +
+      '<div class="vtitle">Урок ' + i + ': прокручиваемая лента стенда</div>' +
+      '<div class="vmeta">Мастерская Hermes · ' + (i * 137) + ' просмотров · вчера</div>';
+    d.addEventListener("click", function () { S.clicks.push(this.id); mirror(); });
+    feed.appendChild(d);
+  }
+  mirror();
+})();
+</script>
+</body>
+</html>

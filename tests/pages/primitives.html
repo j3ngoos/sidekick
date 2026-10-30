@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>sk42-boot</title>
+<style>
+  body { margin: 0; font: 14px/1.4 system-ui, sans-serif; min-height: 4000px; }
+  .row { padding: 8px 16px; }
+  #composer { border: 1px solid #888; min-height: 44px; padding: 8px; max-width: 420px;
+              white-space: pre-wrap; }
+  #composer:empty::before { content: "Сообщение…"; color: #999; }
+  #controlled { border: 1px dashed #46f; min-height: 32px; padding: 6px; max-width: 420px; }
+  #ce-plaintext { border: 1px dashed #4a4; min-height: 32px; padding: 6px; max-width: 420px; }
+  #ce-outer { border: 1px solid #a4a; padding: 8px; max-width: 420px; }
+  #ce-false { background: #fee; }
+  #banner { background: #eee; border: 1px solid #999; padding: 10px; max-width: 400px; }
+  #feed { height: 240px; width: 360px; overflow-y: scroll; border: 1px solid #666; }
+  #feed > div { padding: 6px 10px; border-bottom: 1px solid #eee; }
+  #deep { background: #ff6; }
+  #bottom-marker { position: absolute; top: 3900px; }
+  .bubble { background: #dcf8c6; border-radius: 8px; padding: 4px 10px; margin: 2px 0;
+            display: inline-block; }
+</style>
+</head>
+<body>
+<h1 class="row">SK-42 primitives — стенда-реплика (композер как в Telegram Web)</h1>
+
+<div class="row">
+  <div id="composer" contenteditable data-placeholder="Сообщение…"><span id="phint">подсказка</span></div>
+  <div id="log-mirror" class="row">mirror: <span id="mirror">—</span></div>
+  <div id="log-bi" class="row">beforeinput: <span id="bi">—</span></div>
+  <div id="log-sent" class="row">sent: <span id="sent">—</span></div>
+  <div id="chatlog" class="row"></div>
+</div>
+
+<div class="row"><input id="native" type="text" placeholder="native"></div>
+<div class="row"><div id="controlled" contenteditable></div></div>
+<div class="row"><div id="ce-plaintext" contenteditable="plaintext-only"></div></div>
+<div class="row"><div id="ce2" contenteditable><span id="inner2">посыльный span</span></div></div>
+<div class="row"><div id="ce-outer" contenteditable>внешний <span id="ce-false" contenteditable="false">FALSE-остров</span> конец</div></div>
+<div class="row"><div id="banner">обычный div — не поле</div></div>
+<div class="row"><button id="btn">Кнопка</button></div>
+
+<div class="row"><div id="feed">
+  <!-- 60 элементов ленты: внутренний скролл-контейнер, #deep внизу -->
+</div></div>
+
+<div class="row" id="bottom-marker">НИЗ СТРАНИЦЫ</div>
+
+<script>
+// ---- состояние: страница сама докладывает всё через document.title ----------
+// (харнесс читает title через page.text/page.dom — тот же канал, что видит агент)
+const S = { comp: "", mir: "—", bi: "—", sent: "—", nat: "", ctl: "", ctlRewrites: 0,
+            clk: "—", clkHit: "—", clkN: 0, feedTop: 0, winY: 0, bannerClk: 0, cePlaintext: "",
+            ce2: "", ceOuter: "", ceFalseTyped: 0 };
+function render() {
+  document.title = "sk42:" + JSON.stringify(S);
+  // DOM-строки — для скриншотов-доказательств (харнесс читает title)
+  $("mirror").textContent = S.mir;
+  $("bi").textContent = S.bi;
+  $("sent").textContent = S.sent;
+}
+const $ = (id) => document.getElementById(id);
+
+// ---- композер: replica Telegram Web (contenteditable + span внутри) ---------
+const comp = $("composer");
+comp.addEventListener("beforeinput", (e) => { S.bi = e.inputType; render(); });
+comp.addEventListener("input", () => {
+  S.comp = comp.textContent;
+  S.mir = comp.textContent;   // «контролируемый» mirror — доказывает input-событие
+  render();
+});
+comp.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    S.sent = comp.textContent;
+    if (S.sent) { // «отправленное сообщение» — видимое в чат-логе (для скрина-доказательства)
+      const b = document.createElement("div");
+      b.className = "bubble";
+      b.textContent = "✓ " + S.sent;
+      $("chatlog").appendChild(b);
+    }
+    comp.textContent = "";
+    render();
+  }
+});
+
+// ---- controlled: framework-стиль — input-слушатель переписывает содержимое --
+const ctl = $("controlled");
+ctl.addEventListener("input", () => {
+  const up = ctl.textContent.toUpperCase();
+  if (ctl.textContent !== up) { S.ctlRewrites++; ctl.textContent = up; }
+  S.ctl = ctl.textContent;
+  render();
+});
+
+$("ce-plaintext").addEventListener("input", (e) => {
+  S.cePlaintext = e.target.textContent; render();
+});
+$("ce2").addEventListener("input", () => { S.ce2 = $("ce2").textContent; render(); });
+$("ce-outer").addEventListener("input", (e) => {
+  S.ceOuter = $("ce-outer").textContent; render();
+});
+$("ce-false").addEventListener("beforeinput", () => { S.ceFalseTyped++; render(); });
+
+$("native").addEventListener("input", (e) => { S.nat = e.target.value; render(); });
+$("banner").addEventListener("click", () => { S.bannerClk++; render(); });
+$("btn").addEventListener("click", (e) => {
+  S.clkN++;
+  S.clk = "btn:" + e.detail + ":" + e.detail;
+  S.clkHit = (e.target.id || e.target.tagName) + ":" + Math.round(e.clientX) + "x" + Math.round(e.clientY);
+  render();
+});
+
+// ---- внутренний скролл-фид --------------------------------------------------
+const feed = $("feed");
+for (let i = 1; i <= 60; i++) {
+  let d = document.createElement("div");
+  d.textContent = "элемент ленты " + i;
+  if (i === 60) { d = document.createElement("a"); d.id = "deep"; d.href = "#";
+                  d.textContent = "элемент ленты 60"; d.style.display = "block"; }
+  feed.appendChild(d);
+}
+feed.addEventListener("scroll", () => { S.feedTop = Math.round(feed.scrollTop); render(); });
+window.addEventListener("scroll", () => { S.winY = Math.round(scrollY); render(); }, { passive: true });
+
+render();
+</script>
+</body>
+</html>

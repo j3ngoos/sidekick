@@ -1,0 +1,13 @@
+bridge/hub/*.log
+bridge/hub/inbox.jsonl
+bridge/hub/outbox.jsonl
+bridge/hub/token
+bridge/hub/
+__pycache__/
+*.pyc
+dist/
+.taste-skill/
+.venv/
+.pytest_cache/
+.env
+.env.*

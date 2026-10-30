@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>SK41-CAL-wait</title>
+<script>
+// SK-41 калибровка ПРАВДИВОГО page-world. Этот скрипт — самый первый JS страницы:
+// MutationObserver ставится ДО любого контента расширения (document_idle) и ловит
+// появление чужих узлов. window.__sk41head фиксирует состояние DOM в ранний момент.
+window.__obs = [];
+try {
+  new MutationObserver((rs) => {
+    for (const r of rs) for (const n of r.addedNodes) {
+      if (window.__obs.length < 40)
+        window.__obs.push({ t: Math.round(performance.now()), tag: n.nodeName || "?",
+                            id: n.id || "", cls: (n.className && String(n.className).slice(0, 30)) || "" });
+    }
+  }).observe(document, { childList: true, subtree: true });
+} catch (e) { window.__obs.push({ err: String(e) }); }
+window.__sk41head = { deAtHead: !!document.documentElement, t: Math.round(performance.now()) };
+</script>
+</head><body>
+<h3>SK-41 calibration</h3>
+<div id="x">probe page</div>
+<script>
+const j = (o) => { try { return JSON.stringify(o); } catch (e) { return "ERR"; } };
+const djb2 = (s) => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return h >>> 0; };
+
+function probeNav() {
+  const o = { webdriver: null, desc: null, keys: null };
+  try { o.webdriver = navigator.webdriver; } catch (e) { o.webdriver = "throw"; }
+  try {
+    const d = Object.getOwnPropertyDescriptor(Navigator.prototype, "webdriver");
+    o.desc = d ? { e: d.enumerable, c: d.configurable, hasSet: d.set !== undefined,
+                   ts: Function.prototype.toString.call(d.get || function () {}).slice(0, 70) } : null;
+  } catch (e) { o.desc = "throw:" + e.message; }
+  try { o.keys = Object.keys(navigator); } catch (e) { o.keys = "throw"; }
+  try { o.webexpando = "webdriver" in navigator; } catch (e) {}
+  return o;
+}
+function probeExtDom() {
+  const o = { host: null, shadowOpen: 0, sidekickExpando: null, lsKeys: null };
+  try {
+    const h = document.getElementById("hermes-sidekick-host");
+    o.host = h ? { exists: true, shadowRoot: !!h.shadowRoot, attrs: h.getAttributeNames(),
+                   kids: h.childNodes.length, style: (h.getAttribute("style") || "").slice(0, 80) } : null;
+  } catch (e) { o.host = "throw:" + e.message; }
+  try {
+    let n = 0; for (const el of document.querySelectorAll("*")) { try { if (el.shadowRoot) n++; } catch (e) {} }
+    o.shadowOpen = n;
+  } catch (e) {}
+  try { o.sidekickExpando = typeof window.__hermesSidekick; } catch (e) {}
+  try { o.lsKeys = Object.keys(localStorage); } catch (e) { o.lsKeys = "throw"; }
+  return o;
+}
+function probeCanvas() {
+  const o = {};
+  try {
+    const c = document.createElement("canvas"); c.width = 120; c.height = 30;
+    const g = c.getContext("2d");
+    g.textBaseline = "top"; g.font = '14px "Arial"'; g.fillStyle = "#f60"; g.fillRect(2, 2, 40, 10);
+    g.fillStyle = "#069"; g.fillText("SK41 éhü∮", 3, 14);
+    o.hash = djb2(c.toDataURL()); o.len = c.toDataURL().length;
+  } catch (e) { o.err = String(e).slice(0, 80); }
+  try {
+    const c2 = document.createElement("canvas");
+    const gl = c2.getContext("webgl") || c2.getContext("experimental-webgl");
+    if (gl) {
+      const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+      o.glRenderer = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
+      o.glVendor = dbg ? gl.getParameter(dbg.UNMASKED_VENDOR_WEBGL) : "";
+    } else o.glRenderer = "no-webgl";
+  } catch (e) { o.glErr = String(e).slice(0, 80); }
+  return o;
+}
+function probeTiming() {
+  try {
+    let res = 1e9, prev = performance.now();
+    for (let i = 0; i < 200; i++) { const t = performance.now(); const d = t - prev; if (d > 0 && d < res) res = d; prev = t; }
+    return { minDelta: res, coarsened: res > 0.09 };
+  } catch (e) { return { err: String(e) }; }
+}
+function probeWs() {
+  return new Promise((res) => {
+    const WSPORT = new URLSearchParams(location.search).get("port") || "8791";
+    const o = { url: "ws://127.0.0.1:" + WSPORT, open: 0, close: null, err: 0 };
+    const t0 = performance.now();
+    try {
+      const ws = new WebSocket("ws://127.0.0.1:" + WSPORT);
+      ws.onopen = () => { o.open = 1; };
+      ws.onerror = () => { o.err = 1; };
+      ws.onclose = (e) => { o.close = [e.code, e.reason || ""]; o.ms = Math.round(performance.now() - t0); res(o); };
+      setTimeout(() => res(o), 6500);
+    } catch (e) { o.throw = String(e).slice(0, 100); res(o); }
+  });
+}
+
+window.addEventListener("load", () => {
+  setTimeout(async () => {
+    const out = {
+      head: window.__sk41head, obs: window.__obs,
+      nav: probeNav(), dom: probeExtDom(), fp: probeCanvas(), timing: probeTiming(),
+      ws: await probeWs(),
+      ua: navigator.userAgent, lang: navigator.language, langs: navigator.languages,
+      tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      plugins: navigator.plugins.length, chrome: typeof window.chrome,
+      outer: [window.outerWidth, window.outerHeight], dpr: window.devicePixelRatio,
+      touch: navigator.maxTouchPoints,
+    };
+    window.__sk41raw = out;
+    try { document.title = "SK41:" + btoa(unescape(encodeURIComponent(JSON.stringify(out)))); }
+    catch (e) { document.title = "SK41ERR:" + e.message; }
+    // путь без marionette: результат читает мост через page.text
+    document.body.textContent = "SK41JSON:" + JSON.stringify(out);
+  }, 2500);
+});
+</script>
+</body></html>

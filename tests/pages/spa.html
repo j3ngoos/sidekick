@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><title>SPA стенд</title></head>
+<body>
+<h1>SPA</h1>
+<button id="rerender">Обновить</button>
+<ul id="list"></ul>
+<script>
+let n = 0;
+function render() {
+  n++;
+  document.getElementById("list").innerHTML =
+    [1, 2, 3].map((i) => `<li><button class="item">Пункт ${n}-${i}</button></li>`).join("");
+}
+document.getElementById("rerender").addEventListener("click", render);
+render();
+</script>
+</body>
+</html>

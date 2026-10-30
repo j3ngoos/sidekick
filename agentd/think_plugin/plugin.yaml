@@ -1,0 +1,3 @@
+name: sidekick-think
+version: 0.1.0
+description: "SK-21: стрим reasoning-дельт модели в файл для sidekick-agentd (no-op без SIDEKICK_THINK_FILE)."

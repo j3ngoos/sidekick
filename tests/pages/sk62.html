@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><title>SK-72 echo-форма</title><style>
+body{font:14px system-ui;max-width:520px;margin:30px auto;padding:0 12px}
+input{padding:6px 8px;width:100%;box-sizing:border-box;margin:6px 0}
+button{margin-top:14px;padding:8px 16px}
+#out{margin-top:16px;font-weight:600;color:#059669;min-height:20px;font-family:monospace}
+</style></head><body>
+<h2>SK-72: echo-форма (значения впадаются в #out, пароль — только длиной)</h2>
+<form id="login-form" autocomplete="off">
+  <label for="login-email">Эл. почта</label>
+  <input id="login-email" name="email" type="email">
+  <label for="login-pass">Пароль</label>
+  <input id="login-pass" name="password" type="password" autocomplete="current-password">
+  <button id="login-btn" type="submit">Войти</button>
+</form>
+<div id="out"></div>
+<script>
+const E = document.getElementById("login-email");
+const P = document.getElementById("login-pass");
+const O = document.getElementById("out");
+function echo() { O.textContent = "E:" + E.value + "|P:" + P.value.length; }
+E.addEventListener("input", echo);
+P.addEventListener("input", echo);
+document.getElementById("login-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  echo();
+  O.textContent = O.textContent + " SUBMITTED";
+});
+</script>
+</body></html>

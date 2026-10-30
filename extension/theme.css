@@ -1,0 +1,300 @@
+/* SK-13: shared design tokens — the single source of truth for the sidebar AND the
+   options page. Semantic variables only; components consume them via var().
+   Light/dark follows the Firefox theme through prefers-color-scheme (verified live on
+   the stand: ui.systemUsesDarkTheme flips matchMedia inside the extension realm).
+   Contrast budgets (text on --surface-1): body text >= 7:1, dim/colored text >= 4.5:1
+   in BOTH themes.
+
+   SK-53: production tokens = «Steel Terminal» (победитель SK-52, вариант 5;
+   источник истины — variants/choice.css, спека ~/.hermes/cache/variants/choice/spec.md).
+   Лестница плоских поверхностей + стальные hairline-линии; glassmorphism мёртв
+   (--glass-blur: 0px, --glass-* непрозрачные, --glass-shadow: none); тень только
+   на всплывающих слоях (--pop-shadow: меню «⋯», bellpanel); timestamps/цифры —
+   mono tabular (компоненты sidebar.css/options.css ставят var(--font-mono) на
+   .stime/.btime/.arow/.adm/.hdate); акцент один — стал-синий (dark #4a8ad6 /
+   light #1d6fc2), каждое выделение = 1px акцентная линия на ближайшем ребре.
+   Ручной оверрайд темы — data-theme на <html> (меню «Тема»), по умолчанию — как
+   в системе (прецедент SK-30 сохранён).
+
+   Анти-slop (спека §8/§9 многоцветных градиентов 0): функция linear-gradient
+   остаётся РОВНО в трёх токенах (--grad-hot, --grad-hot-hi, --bg-grad): значения —
+   одноцветные, две одинаковые остановки. Причина: токены потребляются в
+   `background: var(--grad-hot)` носителями и в шортханде theme.css body
+   `background: var(--bg-grad) var(--surface-1)`, где нужен слой фона; градиент из
+   двух идентичных стоп = плоский solid (это не декор). */
+
+:root {
+  color-scheme: light dark;
+  /* spacing scale (SK-13): 4 / 8 / 12 */
+  --sp1: 4px;
+  --sp2: 8px;
+  --sp3: 12px;
+  /* radius scale (SK-53: Steel Terminal — лестница Binance 4/6/8 → controls 6,
+     blocks 8; pill = radius.control) */
+  --r1: 6px;    /* controls: inputs, buttons, rows */
+  --r2: 8px;    /* blocks: bubbles, prompts, cards, menu */
+  --rp: 99px;   /* chips, морф-кнопка композера */
+  --line-w: 1px;
+  /* SK-53: glass убивается (Binance don'ts: «no glassmorphism — depth comes from
+     color-block contrast»): блюр 0, --glass-bg/-bg-2 непрозрачные, тени none.
+     backdrop-filter в sidebar.css удалён — бюджет blur-слоёв SK-30 обнулён. */
+  --glass-blur: 0px;
+  --ic: 16px;   /* единые размеры иконок (SK-30) */
+  --ctl-h: 30px;   /* SK-53: компактные контролы Binance (было 32) */
+  --ctl-h-sm: 26px; /* (было 28) */
+  /* SK-38: постоянная высота шапки (padding 8+8 + строка 24 + граница 1) — от неё
+     позиционируется меню-портал; шапка однострочная и не меняется по состоянию.
+     SK-53: НЕ трогаем (меню-портал). */
+  --hd-h: 41px;
+
+  /* SK-53 шрифты: только системные стеки (MV3 офлайн, web-шрифты запрещены;
+     спека §5): macOS: SF Pro / SF Mono, Ubuntu-dev: DejaVu.
+     Роль mono (BinancePlex у Binance, DM Mono у Warp): timestamps, .stime, .arow,
+     .adm, .hdate, счётчики — font-variant-numeric: tabular-nums. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto,
+               "Helvetica Neue", "DejaVu Sans", Ubuntu, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas,
+               "Liberation Mono", "DejaVu Sans Mono", monospace;
+  /* SK-40: типографика — контраст размеров: hero 17 / ttl 15 / hd 13.5 / body 13.
+     Движение — сдержанность Warp (спека §6): пружина без overshoot + мягкий выход;
+     анимации только transform/opacity. */
+  --spring: cubic-bezier(.3, 0, .2, 1);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --av: 22px;      /* аватар-глиф пузыря */
+  --fs-hero: 17px;
+  --fs-ttl: 15px;
+  --fs-hd: 13.5px;
+  /* логотип-молния: градиент живёт в спрайте (url(#g-bolt)), стопы --bolt-a/--bolt-b
+     заданы по темам одинаково = плоская одноцветная сталь (спека §8) */
+}
+
+/* ---- light (default + explicit override) ---------------------------------------- */
+:root {
+  --surface-1: #ffffff;
+  --surface-2: #f5f5f5;
+  --surface-3: #eef0f2;
+  --text: #181a20;
+  --text-dim: #575f6a;
+  --line: #d9dde2;
+  --line-soft: #e9ecef;
+  --accent: #1d6fc2;
+  --accent-soft: #e3edf8;
+  --ok: #077a4d;
+  --ok-soft: #d9f2e6;
+  --warn: #8a6110;
+  --warn-soft: #fbf0d4;
+  --err: #d3273f;
+  --err-soft: #fff0f3; /* AA: --err text on the chip/belln pill = 4.57:1 (пересчёт; spec §4 had #fde8ec = 4.34 — fail) */
+  --info: #1d6fc2;
+  --info-soft: #e3edf8;
+  --idle: #575f6a;
+  --idle-soft: #eef0f2;
+  --bg-grad: linear-gradient(#ffffff, #ffffff); /* плоский solid (см. шапку файла) */
+  --glass-bg: #ffffff;
+  --glass-bg-2: #f5f5f5;
+  --glass-border: #d9dde2;
+  --glass-border-hi: #c9ced6;
+  --glass-shadow: none;
+  --glass-hover: #eef0f2;
+  /* SK-53: единственная тень — всплывающие слои (меню «⋯», bellpanel);
+     на покоящемся — 0 (warp: «hairlines + surface contrast carry elevation») */
+  --pop-shadow: 0 2px 8px rgba(24, 26, 32, 0.10);
+  /* solid action buttons: белый ink на steel-акценте = 5.12:1 (спека §4) */
+  --btn-accent: #1d6fc2;
+  --btn-accent-hot: #1a63ae; /* SK-53 press-ступень (спека §7д), white ink 5.90:1 */
+  --btn-ok: #077a4d;
+  --btn-ok-hot: #066841;
+  --btn-stop: #d3273f;
+  --btn-stop-hot: #b81f34;
+  --ink-on-solid: #ffffff;
+  --grad-hot: linear-gradient(#1d6fc2, #1d6fc2);
+  --grad-hot-hi: linear-gradient(#1a63ae, #1a63ae);
+  --bolt-a: #1d6fc2;
+  --bolt-b: #1d6fc2;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --surface-1: #ffffff;
+    --surface-2: #f5f5f5;
+    --surface-3: #eef0f2;
+    --text: #181a20;
+    --text-dim: #575f6a;
+    --line: #d9dde2;
+    --line-soft: #e9ecef;
+    --accent: #1d6fc2;
+    --accent-soft: #e3edf8;
+    --ok: #077a4d;
+    --ok-soft: #d9f2e6;
+    --warn: #8a6110;
+    --warn-soft: #fbf0d4;
+    --err: #d3273f;
+    --err-soft: #fff0f3; /* AA: --err text on the chip/belln pill = 4.60:1 */
+    --info: #1d6fc2;
+    --info-soft: #e3edf8;
+    --idle: #575f6a;
+    --idle-soft: #eef0f2;
+    --bg-grad: linear-gradient(#ffffff, #ffffff);
+    --glass-bg: #ffffff;
+    --glass-bg-2: #f5f5f5;
+    --glass-border: #d9dde2;
+    --glass-border-hi: #c9ced6;
+    --glass-shadow: none;
+    --glass-hover: #eef0f2;
+    --pop-shadow: 0 2px 8px rgba(24, 26, 32, 0.10);
+    --btn-accent: #1d6fc2;
+    --btn-accent-hot: #1a63ae;
+    --btn-ok: #077a4d;
+    --btn-ok-hot: #066841;
+    --btn-stop: #d3273f;
+    --btn-stop-hot: #b81f34;
+    --ink-on-solid: #ffffff;
+    --grad-hot: linear-gradient(#1d6fc2, #1d6fc2);
+    --grad-hot-hi: linear-gradient(#1a63ae, #1a63ae);
+    --bolt-a: #1d6fc2;
+    --bolt-b: #1d6fc2;
+  }
+}
+
+/* ---- dark: основной режим (спека §3; «whole screen sits in one continuous
+   dark mode» — raycast). Контраст: --text/#s1 = 16.00; --text-dim = 5.83/5.28/4.70
+   на s1/s2/s3; ink-on-solid на accent/ok/stop = 14.78/8.42/5.07 (специконтракт ≥7/≥4.5). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-1: #171719;
+    --surface-2: #212023;
+    --surface-3: #2a292d;
+    --text: #f2f2f3;
+    --text-dim: #919399;
+    --line: #333236;
+    --line-soft: #242327;
+    --accent: #4a8ad6;
+    --accent-soft: #1b2633;
+    --ok: #0ecb81;
+    --ok-soft: #16291f;
+    --warn: #d9a441;
+    --warn-soft: #2a2416;
+    --err: #e5566f;
+    --err-soft: #2c1a20;
+    --info: #4a8ad6;
+    --info-soft: #1b2633;
+    --idle: #919399;
+    --idle-soft: #212023;
+    --bg-grad: linear-gradient(#171719, #171719);
+    --glass-bg: #171719;
+    --glass-bg-2: #212023;
+    --glass-border: #333236;
+    --glass-border-hi: #3f3e43;
+    --glass-shadow: none;
+    --glass-hover: #212023;
+    --pop-shadow: 0 2px 8px rgba(0, 0, 0, 0.30);
+    /* off-white CTA (warp primary / raycast white pill); dark ink #171719 по нему
+       = 14.78:1; press-ступень #dcdcde (спека §7д) */
+    --btn-accent: #e9e9ec;
+    --btn-accent-hot: #dcdcde;
+    --btn-ok: #0ecb81;
+    --btn-ok-hot: #0bb472;
+    --btn-stop: #f6465d;
+    --btn-stop-hot: #ff5f74;
+    --ink-on-solid: #171719;
+    --grad-hot: linear-gradient(#e9e9ec, #e9e9ec);
+    --grad-hot-hi: linear-gradient(#f7f7f9, #f7f7f9);
+    --bolt-a: #4a8ad6;
+    --bolt-b: #4a8ad6;
+  }
+}
+
+/* Ручной оверрайд темы (меню «⋯» → Тема). Идёт ПОСЛЕ media-блоков: явный выбор
+   перебивает системную схему; specificity (0,2,0) выше базового :root. */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --surface-1: #ffffff;
+  --surface-2: #f5f5f5;
+  --surface-3: #eef0f2;
+  --text: #181a20;
+  --text-dim: #575f6a;
+  --line: #d9dde2;
+  --line-soft: #e9ecef;
+  --accent: #1d6fc2;
+  --accent-soft: #e3edf8;
+  --ok: #077a4d;
+  --ok-soft: #d9f2e6;
+  --warn: #8a6110;
+  --warn-soft: #fbf0d4;
+  --err: #d3273f;
+  --err-soft: #fff0f3; /* AA: --err text on the chip/belln pill = 4.57:1 */
+  --info: #1d6fc2;
+  --info-soft: #e3edf8;
+  --idle: #575f6a;
+  --idle-soft: #eef0f2;
+  --bg-grad: linear-gradient(#ffffff, #ffffff);
+  --glass-bg: #ffffff;
+  --glass-bg-2: #f5f5f5;
+  --glass-border: #d9dde2;
+  --glass-border-hi: #c9ced6;
+  --glass-shadow: none;
+  --glass-hover: #eef0f2;
+  --pop-shadow: 0 2px 8px rgba(24, 26, 32, 0.10);
+  --btn-accent: #1d6fc2;
+  --btn-accent-hot: #1a63ae;
+  --btn-ok: #077a4d;
+  --btn-ok-hot: #066841;
+  --btn-stop: #d3273f;
+  --btn-stop-hot: #b81f34;
+  --ink-on-solid: #ffffff;
+  --grad-hot: linear-gradient(#1d6fc2, #1d6fc2);
+  --grad-hot-hi: linear-gradient(#1a63ae, #1a63ae);
+  --bolt-a: #1d6fc2;
+  --bolt-b: #1d6fc2;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-1: #171719;
+  --surface-2: #212023;
+  --surface-3: #2a292d;
+  --text: #f2f2f3;
+  --text-dim: #919399;
+  --line: #333236;
+  --line-soft: #242327;
+  --accent: #4a8ad6;
+  --accent-soft: #1b2633;
+  --ok: #0ecb81;
+  --ok-soft: #16291f;
+  --warn: #d9a441;
+  --warn-soft: #2a2416;
+  --err: #e5566f;
+  --err-soft: #2c1a20;
+  --info: #4a8ad6;
+  --info-soft: #1b2633;
+  --idle: #919399;
+  --idle-soft: #212023;
+  --bg-grad: linear-gradient(#171719, #171719);
+  --glass-bg: #171719;
+  --glass-bg-2: #212023;
+  --glass-border: #333236;
+  --glass-border-hi: #3f3e43;
+  --glass-shadow: none;
+  --glass-hover: #212023;
+  --pop-shadow: 0 2px 8px rgba(0, 0, 0, 0.30);
+  --btn-accent: #e9e9ec;
+  --btn-accent-hot: #dcdcde;
+  --btn-ok: #0ecb81;
+  --btn-ok-hot: #0bb472;
+  --btn-stop: #f6465d;
+  --btn-stop-hot: #ff5f74;
+  --ink-on-solid: #171719;
+  --grad-hot: linear-gradient(#e9e9ec, #e9e9ec);
+  --grad-hot-hi: linear-gradient(#f7f7f9, #f7f7f9);
+  --bolt-a: #4a8ad6;
+  --bolt-b: #4a8ad6;
+}
+
+/* Base: the pages paint their own surface now (contrast is deterministic, not
+   whatever the browser chrome happened to be behind a transparent body).
+   SK-53: --bg-grad плоский (2 одинаковые стопы = solid) поверх --surface-1:
+   один ровный steel-canvas, ноль виньеток/атмосферы (Raycast). */
+body {
+  background: var(--bg-grad) var(--surface-1);
+  color: var(--text);
+}
