@@ -1,0 +1,9 @@
+{
+  "manifest_name": { "message": "Hermes Sidekick" },
+  "manifest_desc": {
+    "message": "Hermes agent works in your Firefox: watch its steps live, answer permission asks, chat with it. Self-hosted: the bridge runs on your own machine."
+  },
+  "manifest_cmd_toggle": { "message": "Open the Hermes Sidekick sidebar" },
+  "manifest_sidebar_title": { "message": "Hermes" },
+  "manifest_action_title": { "message": "Hermes Sidekick" }
+}

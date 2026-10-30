@@ -1,7 +1,7 @@
-/* SK-22: feed rendering — the task «работа» card and the collapsible think block.
+/* SK-22: feed rendering — the task "working" card and the collapsible think block.
    The chat feed must not spam: steps live INSIDE one card per task (collapsed
-   header «⚙ <active step>» + work indicator, click expands the step list), the
-   think stream is one collapsed «💭 Думает…» block per task, and only the final
+   header "⚙ <active step>" + work indicator, click expands the step list), the
+   think stream is one collapsed "Thinking…" block per task, and only the final
    chat answer is always expanded.
 
    DOM-agnostic by contract: every builder takes `doc` — the real document in the
@@ -16,10 +16,28 @@ const STEP_ICON = { queued: "○", active: "▶", done: "✓", failed: "✗" };
 // task-level header mark: spinner while running, text marks otherwise (spec SK-22)
 const TASK_MARK = { running: "spin", paused: "⏸", done: "✓", failed: "✗" };
 const THINK_TAIL = 20000; // memory cap: the think stream keeps only its tail
-// SK-30: статус-глифы мигрируют в inline-SVG. В живом DOM (document есть) метка
-// подменяется иконкой из спрайта сайдбара; в DOM-заглушке node-контрактов
-// (makeEl без createElementNS) остаётся текстовый глиф — контракты SK-22 зелёные,
-// живой UI без эмодзи (карточка задачи/шаги/think — «SVG-кандидаты» спеки п.2).
+// i18n (SK-71): the sidebar page injects the active-language translator via
+// Feed.setT(I18N.t, I18N.has). The node render contracts get the built-in EN
+// default pack below, whose values mirror extension/locales/en.json feed.*
+// byte-for-byte (parity is pinned by tests/test_i18n_sk71.py).
+const EN_PACK = {
+  "feed.sec": " sec", "feed.min": " min ", "feed.working": "working",
+  "feed.thinking": "💭 Thinking…", "feed.thought": "💭 Thought ({{d}})",
+  "feed.tab_closed": "🌐 tab closed", "feed.hide": "hide", "feed.more": "details",
+  "feed.shot_alt": "what the agent saw at step {{n}}",
+};
+let T = null, HAS = null;
+function setT(tfn, hasfn) { T = typeof tfn === "function" ? tfn : null; HAS = typeof hasfn === "function" ? hasfn : null; }
+function fill(s, args) {
+  if (!args) return s;
+  return s.replace(/\{\{(\w+)\}\}/g, (_, k) => (Object.prototype.hasOwnProperty.call(args, k) ? String(args[k]) : ""));
+}
+function L(key, args) { return fill(T ? T(key, args) : (EN_PACK[key] !== undefined ? EN_PACK[key] : key), args); }
+function Lhas(key) { return HAS ? HAS(key) : Object.prototype.hasOwnProperty.call(EN_PACK, key); }
+// SK-30: status glyphs migrate to inline-SVG. In the live DOM (document exists) the label
+// is replaced by the sidebar sprite icon; in the node contracts' DOM stub
+// (makeEl without createElementNS) the text glyph stays — SK-22 contracts are green,
+// live UI without emoji (task card/steps/think — spec p.2's "SVG candidates").
 const SVG_NS = "http://www.w3.org/2000/svg";
 const STEP_ICO = { queued: "ring", active: "play", done: "check", failed: "cross" };
 const TASK_ICO = { paused: "pause", done: "check", failed: "cross" };
@@ -33,8 +51,8 @@ function svgIcon(doc, name) {
   s.appendChild(u);
   return s;
 }
-// el ← <svg ic-name/> + текст (strip — срезать ведущий глиф); SVG недоступен
-// (stub) — текст verbatim вместе с глифом: fallback честен и тестируем.
+// el ← <svg ic-name/> + text (strip — cut the leading glyph); when SVG is unavailable
+// (stub) — text verbatim together with the glyph: the fallback is honest and tested.
 function setIcoText(doc, el, name, text, strip) {
   const ic = name ? svgIcon(doc, name) : null;
   if (!ic) { el.textContent = text; return; }
@@ -50,8 +68,8 @@ function fmtTime(ts) { // local "HH:MM:SS"; "" for unknown
 }
 function fmtDur(sec) {
   sec = Math.max(0, Math.round(sec || 0));
-  if (sec < 60) return sec + " сек";
-  return Math.floor(sec / 60) + " мин " + (sec % 60) + " сек";
+  if (sec < 60) return sec + L("feed.sec");
+  return Math.floor(sec / 60) + L("feed.min") + (sec % 60) + L("feed.sec");
 }
 // Step clocks are sidebar-side: the bridge's step frames carry no ts (contract v1
 // is frozen), so we record first-seen and last state-change per step. Rows show
@@ -65,24 +83,32 @@ function noteStep(times, key, state, now) {
   return t;
 }
 // collapsed header: the ACTIVE step, else the last one by n, else the task title
-// SK-36: человекочитаемый текст шага = подпись агента, иначе шаблон/модель (text).
-function stepLabel(s) { return (s && (s.caption || s.text)) || ""; }
+// SK-36: the human-readable step text = the agent caption, else the dictionary
+// caption template (capkey/capargs from agentd, SK-71), else model-refined text.
+// st.model (agentd's small-model refinement, Russian-only) outranks the template
+// so RU keeps the model phrase; EN users see the EN template of the same step.
+function stepLabel(s) {
+  if (!s) return "";
+  if (s.caption) return s.caption;
+  if (!s.model && s.capkey && Lhas(s.capkey)) return L(s.capkey, s.capargs);
+  return s.text || "";
+}
 function headerText(tl) {
   const steps = (tl.steps || []).slice().sort((a, b) => a.n - b.n);
   const cur = steps.find((s) => s.state === "active") || steps[steps.length - 1];
-  return "⚙ " + (stepLabel(cur) || tl.title || "работа");
+  return "⚙ " + (stepLabel(cur) || tl.title || L("feed.working"));
 }
 function hasFailed(tl) {
   return tl.state === "failed" || (tl.steps || []).some((s) => s.state === "failed");
 }
-function thinkHead() { return "💭 Думает…"; }
-function thinkDoneHead(sec) { return "💭 Подумал (" + fmtDur(sec) + ")"; }
+function thinkHead() { return L("feed.thinking"); }
+function thinkDoneHead(sec) { return L("feed.thought", { d: fmtDur(sec) }); }
 
 // ---- task card ------------------------------------------------------------------
-// SK-25 п.4: buildCard(doc, task, onFocusTab) — в заголовке появился чип вкладки
-// («🌐 <title>», hidden пока у задачи нет вкладки). Клик по чипу = фокус вкладки
-// агента (жест человека), stopPropagation: клик по заголовку остаётся сворачиванием
-// шагов (SK-22). Вызывающий без onFocusTab получает карточку ровно как раньше.
+// SK-25 p.4: buildCard(doc, task, onFocusTab) — the header gained a tab chip
+// ("🌐 <title>", hidden while the task has no tab). Clicking the chip = tab focus
+// the agent (a human gesture); stopPropagation: clicking the header stays a collapse
+// steps (SK-22). Callers without onFocusTab get the card exactly as before.
 function buildCard(doc, task, onFocusTab) {
   const card = doc.createElement("div"); card.className = "m task";
   const hd = doc.createElement("div"); hd.className = "tkhd";
@@ -111,23 +137,23 @@ function paintCard(doc, c, tl, times, now) {
   if (hasFailed(tl) && !c.failedShown) { c.open = true; c.failedShown = true; }
   c.card.className = "m task " + (tl.state || "running") + (c.open ? " open" : "") +
     (c.stale ? " stale" : "");
-  // stale (задача пропала без терминального кадра) — честное «○»; иначе метка
-  // состояния из терминала: running → спиннер, done → ✓, failed → ✗
+  // stale (the task vanished with no terminal frame) — an honest "○"; else the label
+  // terminal states: running → spinner, done → ✓, failed → ✗
   const mark = c.stale ? "○" : (TASK_MARK[tl.state] || "spin");
   if (mark === "spin") { c.ic.className = "tkic spin"; c.ic.textContent = ""; }
   else {
     c.ic.className = "tkic";
     setIcoText(doc, c.ic, c.stale ? "ring" : TASK_ICO[tl.state], mark);
   }
-  setIcoText(doc, c.tx, "settings", headerText(tl), true); // SK-30: шестерня — SVG
-  // SK-25 п.4: чип вкладки — заголовок вкладки задачи + клик = фокус (пока вкладки нет
-  // или tl старый формату без tabTitle — чип скрыт, карточка ведёт себя как в SK-22)
+  setIcoText(doc, c.tx, "settings", headerText(tl), true); // SK-30: the gear — SVG
+  // SK-25 p.4: the tab chip — the task tab's title + click = focus (while there is no tab
+  // or tl in the old format without tabTitle — the chip hides, the card behaves as in SK-22)
   c.gone = !!tl.tabGone;
   if (c.tb) {
     if (tl.tabTitle || tl.tabGone) {
       c.tb.hidden = false;
       setIcoText(doc, c.tb, "globe",
-        tl.tabGone ? "🌐 вкладка закрыта" : "🌐 " + String(tl.tabTitle).slice(0, 40), true);
+        tl.tabGone ? L("feed.tab_closed") : "🌐 " + String(tl.tabTitle).slice(0, 40), true);
       c.tb.title = String(tl.url || "");
       c.tb.className = "tktab" + (tl.tabGone ? " gone" : "");
     } else { c.tb.hidden = true; c.tb.textContent = ""; }
@@ -135,23 +161,23 @@ function paintCard(doc, c, tl, times, now) {
   const rows = (tl.steps || []).slice().sort((a, b) => a.n - b.n).map((s) => {
     const t = noteStep(times, c.task + "|" + s.n, s.state, now);
     const row = doc.createElement("div");
-    // SK-40: «open» (перенос строк) нужен и для раскрытого raw — pre с
-    // flex-basis:100% в nowrap-ряду сжимал подпись шага в вертикальный столбик.
+    // SK-40: "open" (word wrap) is needed for the expanded raw too — a pre with
+    // flex-basis:100% in a nowrap row squeezed the step caption into a vertical column.
     row.className = "srow " + (s.state || "queued") + (s.shot ? " hasshot" : "") +
       ((c.shots.has(s.n) || c.raws.has(s.n)) ? " open" : "");
     const ic = doc.createElement("span"); ic.className = "ic";
     setIcoText(doc, ic, STEP_ICO[s.state] || "ring", STEP_ICON[s.state] || "○");
     const tx = doc.createElement("span"); tx.className = "tx";
-    tx.textContent = s.n + ". " + stepLabel(s); // SK-36: подпись агента важнее шаблона
+    tx.textContent = s.n + ". " + stepLabel(s); // SK-36: the agent's caption outranks the template
     const tm = doc.createElement("span"); tm.className = "stime";
     tm.textContent = fmtTime(t.last);
     row.append(ic, tx, tm);
-    // SK-36: сырая команда (method+params) спрятана по умолчанию — только по клику
-    // «подробнее», моноширинно. Голый JSON/селекторы в ленте не светятся.
+    // SK-36: the raw command (method+params) is hidden by default — only on click
+    // "details", monospace. Bare JSON/selectors never show in the feed.
     if (s.raw) {
       const more = doc.createElement("button");
       more.type = "button"; more.className = "smore";
-      more.textContent = c.raws.has(s.n) ? "скрыть" : "подробнее";
+      more.textContent = c.raws.has(s.n) ? L("feed.hide") : L("feed.more");
       more.onclick = (e) => {
         if (e && typeof e.stopPropagation === "function") e.stopPropagation();
         c.raws.has(s.n) ? c.raws.delete(s.n) : c.raws.add(s.n);
@@ -164,10 +190,10 @@ function paintCard(doc, c, tl, times, now) {
         row.append(pre);
       }
     }
-    if (s.shot) { // «что агент видел» — the SK-06 shot stays, inside the expanded card
+    if (s.shot) { // "what the agent saw" — the SK-06 shot stays inside the expanded card
       if (c.shots.has(s.n)) {
         const img = doc.createElement("img"); img.className = "shot";
-        img.src = s.shot; img.alt = "что агент видел на шаге " + s.n;
+        img.src = s.shot; img.alt = L("feed.shot_alt", { n: s.n });
         row.append(img);
       } else {
         const hint = doc.createElement("span"); hint.className = "hint";
@@ -225,7 +251,8 @@ function thinkFinish(b, now) {
 
 const api = { STEP_ICON, TASK_MARK, THINK_TAIL, fmtTime, fmtDur, noteStep, headerText,
   hasFailed, thinkHead, thinkDoneHead, buildCard, paintCard, markStale,
-  buildThink, paintThink, thinkDelta, thinkFinish, stepLabel };
+  buildThink, paintThink, thinkDelta, thinkFinish, stepLabel,
+  setT, L, Lhas };
 if (typeof module !== "undefined" && module.exports) module.exports = api;
 else root.Feed = api;
 

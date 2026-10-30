@@ -34,6 +34,18 @@ content.js (node-юниты):
 """
 import asyncio
 import json
+import pathlib
+
+# SK-71 node shim: the spliced blocks call L() for dictionary strings; the unit
+# renders from the real EN pack (extension/locales/en.json) — same data as production.
+SK71_SHIM = (
+    '(() => { const en = JSON.parse(require("fs").readFileSync("%s", "utf8"));'
+    'const fill = (s, a) => a ? s.replace(/\{\{(\w+)\}\}/g, (_, k) => (a[k] !== undefined ? String(a[k]) : "")) : s;'
+    'global.I18N = { t: (k, a) => fill(en[k] !== undefined ? en[k] : k, a),'
+    ' has: (k) => Object.prototype.hasOwnProperty.call(en, k), locale: () => "en-US",'
+    ' initFromRuntime: () => Promise.resolve(), watchRuntime: () => {}, load: () => Promise.resolve() };'
+    'global.L = (k, a) => global.I18N.t(k, a); })();\n'
+) % (pathlib.Path(__file__).resolve().parent.parent / "extension" / "locales" / "en.json")
 import re
 import shutil
 import subprocess
@@ -613,7 +625,7 @@ def _run_node(tmp_path, block_re, harness):
     block = tmp_path / "block.js"
     block.write_text(m.group(1), encoding="utf-8")
     h = tmp_path / "harness.js"
-    h.write_text(harness, encoding="utf-8")
+    h.write_text(SK71_SHIM + harness, encoding="utf-8")
     r = subprocess.run([node, str(h), str(block)], capture_output=True, text=True, timeout=30)
     assert r.returncode == 0, f"node упал: {r.stderr}"
     out = json.loads(r.stdout)
@@ -710,7 +722,7 @@ def test_snapshot_and_media_node_unit(tmp_path):
     assert ms and mm, "блоки SK-48 исчезли из content.js"
     b1 = tmp_path / "snap.js"; b1.write_text(ms.group(1), encoding="utf-8")
     b2 = tmp_path / "media.js"; b2.write_text(mm.group(1), encoding="utf-8")
-    h = tmp_path / "harness.js"; h.write_text(NODE_SNAP_HARNESS, encoding="utf-8")
+    h = tmp_path / "harness.js"; h.write_text(SK71_SHIM + NODE_SNAP_HARNESS, encoding="utf-8")
     r = subprocess.run([node, str(h), str(b1), str(b2)], capture_output=True, text=True, timeout=30)
     assert r.returncode == 0, f"node упал: {r.stderr}"
     out = json.loads(r.stdout)

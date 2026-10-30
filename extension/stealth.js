@@ -1,21 +1,21 @@
-// SK-41: webdriver-патч — ТОЛЬКО когда автоматизация реально активна.
+// SK-41: webdriver patch — ONLY when automation is actually active.
 //
-// Прежняя версия всегда подменяла геттер на Navigator.prototype — и страница
-// могла увидеть след: non-native toString у геттера и потерянный enumerable.
-// Теперь:
-//   * геттер нативно возвращает false (обычный браузер без сессии Marionette/
-//     WebDriver) — прототип НЕ трогаем вообще, следов нет;
-//   * геттер вернул true (автоматизация активна) — подменяем, сохраняя
-//     enumerable/configurable/set оригинала (атрибуты дескриптора совпадают
-//     с нативными; non-native toString геттера остаётся известным остаточным
-//     следом — патч Function.prototype.toString рискованнее самого следа,
-//     см. ~/.hermes/notes/sidekick-stealth-2026-10.md).
-// Вызывается document_start в MAIN world (content_scripts, world: MAIN).
+// The old version always replaced the getter on Navigator.prototype — and a page
+// could see the tell: non-native toString on the getter and a lost enumerable.
+// Now:
+//   * the getter natively returns false (a normal browser with no Marionette/
+//     WebDriver session) — we do NOT touch the prototype at all, no tells;
+//   * the getter returned true (automation is active) — we replace it, keeping
+//     the original's enumerable/configurable/set (descriptor attributes match the
+//     native ones; the non-native getter toString stays a known residual tell —
+//     patching Function.prototype.toString is riskier than the tell itself,
+//     see ~/.hermes/notes/sidekick-stealth-2026-10.md).
+// Runs at document_start in the MAIN world (content_scripts, world: MAIN).
 (() => {
   try {
     const d = Object.getOwnPropertyDescriptor(Navigator.prototype, 'webdriver');
     if (!d || typeof d.get !== 'function') return;
-    if (d.get.call(navigator) !== true) return; // не автоматизированы — прототип не трогаем
+    if (d.get.call(navigator) !== true) return; // not automated — leave the prototype alone
     Object.defineProperty(Navigator.prototype, 'webdriver', {
       get: () => false,
       set: d.set,

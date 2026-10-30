@@ -236,10 +236,10 @@ def _node_bin():
 
 
 def test_options_server_card_and_warnings():
-    assert ">Сервер<" in OPT_HTML
+    assert ">Server<" in OPT_HTML  # SK-71: EN-разметка
     assert "ws://host-a.local:8791" in OPT_HTML          # плейсхолдер-пример
     assert "SIDEKICK_BIND=0.0.0.0" in OPT_HTML            # шаг на машине Hermes
-    assert "открытым текстом" in OPT_HTML                  # предупреждение о ws://
+    assert "clear text" in OPT_HTML  # SK-71: предупреждение о ws:// (EN-разметка)
     assert 'id="srv"' in OPT_HTML and 'id="srvSave"' in OPT_HTML
 
 
@@ -250,8 +250,10 @@ def test_options_js_validates_and_persists_server():
 
 
 def test_sidebar_human_hints_with_address():
-    assert "retry:" in SIDE and "переподключаюсь" in SIDE
-    assert "проверь мост" in SIDE and "«Сервер»" in SIDE
+    # SK-71: hints live in the dictionary; the source wires the keys
+    _ru = json.loads((EXT / "locales" / "ru.json").read_text(encoding="utf-8"))
+    assert "sb.bridge_retry" in SIDE and "sb.bridge_offline_hint" in SIDE
+    assert "проверь мост" in _ru["sb.bridge_offline_hint"] and "Сервер" in _ru["sb.bridge_offline_hint"]
     assert "function setBridge(state, url)" in SIDE
     assert "setBridge(m.state, m.url)" in SIDE
 

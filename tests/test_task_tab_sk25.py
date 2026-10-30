@@ -343,7 +343,10 @@ def test_background_multitask_and_watcher_contracts():
 def test_feed_card_tab_chip_contracts():
     assert "tktab" in FEED and "onFocusTab" in FEED
     assert "stopPropagation" in FEED                            # чип ≠ сворачивание шагов
-    assert "вкладка закрыта" in FEED                            # tabGone-состояние чипа
+    # SK-71: tabGone-состояние чипа — из словаря (feed.tab_closed)
+    assert '"feed.tab_closed"' in FEED
+    _ru = json.loads((ROOT / "extension" / "locales" / "ru.json").read_text(encoding="utf-8"))
+    assert "вкладка закрыта" in _ru["feed.tab_closed"]
     assert "function buildCard(doc, task, onFocusTab)" in FEED
 
 

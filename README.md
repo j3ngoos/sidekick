@@ -38,13 +38,13 @@ executed, cancelled, timed-out, stale — never silently ignored.
   one chat ↔ one resumable session.
 - **`sk` CLI** (`bin/sk`): the only sanctioned agent-facing hub tool —
   `sk rpc <method> '<json>'`, `sk status`, `sk events`, `sk capabilities`.
-- **MCP adapter (spec: [docs/mcp-spec.md](docs/mcp-spec.md); implementation
-  in progress)**: a thin MCP server (stdio + Streamable HTTP
-  `127.0.0.1:8796`, bearer key) that reuses `bin/sk` as a library — the hub's
-  standard RPC consumer, **not** a second WebSocket and **not** a bypass:
-  MCP clients pass exactly the same human gates. The tool surface is a fixed
-  list of 21 tools; client quick-configs live in
-  [docs/mcp-spec.md §7](docs/mcp-spec.md).
+- **MCP adapter** (`mcp/sidekick_mcp.py`; spec:
+  [docs/mcp-spec.md](docs/mcp-spec.md)): a thin MCP server (stdio +
+  Streamable HTTP `127.0.0.1:8796`, bearer key) that reuses `bin/sk` as a
+  library — the hub's standard RPC consumer, **not** a second WebSocket
+  and **not** a bypass: MCP clients pass exactly the same human gates.
+  The tool surface is a fixed list of 21 tools; per-client quick configs
+  live in [docs/mcp-clients.md](docs/mcp-clients.md).
 
 ## How it works
 
@@ -108,16 +108,12 @@ Core mechanisms (the full contract is [AGENTS.md](AGENTS.md)):
 
 ## Demo / gallery
 
-Five design systems (Linear, Stripe, Apple, native-Firefox, Steel Terminal —
-the one in production) × dark/light × 5 surfaces (chat, journal, permission
-card, composer, settings) live in [`variants/`](variants/):
-
-- [`variants/gallery.html`](variants/gallery.html) — all 50 shots on one page;
-- [`variants/preview-choice.html`](variants/preview-choice.html) — Steel
-  Terminal showcase (also `preview-{linear,stripe,apple,firefox}.html`).
-
-Open them locally — fully self-contained, no network needed. All mockups
-carry synthetic demo content only.
+The UI ships in five design systems (Linear, Stripe, Apple, native-Firefox,
+Steel Terminal — the one in production), each in dark and light across the
+chat, journal, permission-card, composer and settings surfaces. Browse all
+of them in [variants/gallery.html](variants/gallery.html): open it locally —
+fully self-contained, no network needed; every mockup carries synthetic
+demo content only.
 
 ![Permission card (dark)](docs/images/steel-perm-dark.png)
 
@@ -191,13 +187,11 @@ per client) and Streamable HTTP on `127.0.0.1:8796` (bearer
 `SIDEKICK_MCP_KEY`, Origin allowlist, public-mode rate limit 10/min).
 Per-client quick configs — Claude Desktop, Claude Code, Cursor, ChatGPT
 developer mode via a named HTTPS tunnel, Hermes — are in
-[docs/mcp-spec.md §7](docs/mcp-spec.md). Generate a key:
+[docs/mcp-clients.md](docs/mcp-clients.md). Generate a key:
 `openssl rand -hex 32`; keep it in env / systemd drop-in (0600) — docs and
-git only ever show `<MCP_KEY>` placeholders.
-
-> Adapter status: spec is final, the implementation is being re-landed after
-> a review revert; `mcp/sidekick_mcp.py` ships with that card. Sections 1–3
-> work today.
+git only ever show `<MCP_KEY>` placeholders. The adapter is stdlib-only and
+passes through the same human gates as the sidebar agent; the full protocol
+spec is [docs/mcp-spec.md](docs/mcp-spec.md).
 
 ## Security model
 
@@ -246,16 +240,14 @@ Report vulnerabilities through the private channel in
 
 ## Development
 
-`pytest tests/` — full suite (786 tests, ~3 min). Live acceptance harnesses
-(`tests/sk*_acc.py`) run against an **isolated bridge on `:8797`** with a
-test Firefox (Marionette) — production `:8791` is never used by tests, and
-the harness Firefox is killed by PID afterwards. No npm dependencies
-anywhere. See [CONTRIBUTING.md](CONTRIBUTING.md).
+`pytest tests/` — full suite (819 tests, ~3 min). Live harnesses
+(`tests/sk*_acc.py`) drive an **isolated bridge on `:8797`** with a
+temporary Firefox (Marionette) — production `:8791` is never used by tests.
+No npm dependencies anywhere. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-[MIT](LICENSE) — copyright holder is a `Sidekick contributors` placeholder
-until the maintainer sets the name at publication.
+[MIT](LICENSE).
 
 ---
 
@@ -271,8 +263,8 @@ Sidekick — агентный браузер в вашем Firefox: расшир
 запрещён контрактом ([AGENTS.md](AGENTS.md)); мост режет шум плохих токенов
 (4003). Задача привязана к своей вкладке, лента шагов и журнал — в сайдбаре;
 Firefox закрыли — задачи на паузе, открыли — продолжаются сами. MCP-адаптер
-(спека `docs/mcp-spec.md`, реализация доводится) даёт те же гейты клиентам
-Claude/ChatGPT/Cursor/Hermes. Секретов в репозитории нет; мост слушает
+(`mcp/`, 21 инструмент; спека `docs/mcp-spec.md`, конфиги клиентов
+`docs/mcp-clients.md`) даёт те же гейты клиентам Claude/ChatGPT/Cursor/Hermes. Секретов в репозитории нет; мост слушает
 loopback, `ws://` в LAN — только доверенная сеть; уязвимости — приватно
 (SECURITY.md). Лицензия MIT. Политика приватности:
 [docs/PRIVACY.md](docs/PRIVACY.md); маршрут публикации в Firefox Add-ons

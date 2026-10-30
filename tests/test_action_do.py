@@ -33,6 +33,18 @@ from conftest import kill_bridge, refire_noext, start_bridge, token_of
 from test_rpc_e2e import mock_extension, read_rpc_out, rpc_call
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+
+# SK-71 node shim: the spliced blocks call L() for dictionary strings; the unit
+# renders from the real EN pack (extension/locales/en.json) — same data as production.
+SK71_SHIM = (
+    '(() => { const en = JSON.parse(require("fs").readFileSync("%s", "utf8"));'
+    'const fill = (s, a) => a ? s.replace(/\{\{(\w+)\}\}/g, (_, k) => (a[k] !== undefined ? String(a[k]) : "")) : s;'
+    'global.I18N = { t: (k, a) => fill(en[k] !== undefined ? en[k] : k, a),'
+    ' has: (k) => Object.prototype.hasOwnProperty.call(en, k), locale: () => "en-US",'
+    ' initFromRuntime: () => Promise.resolve(), watchRuntime: () => {}, load: () => Promise.resolve() };'
+    'global.L = (k, a) => global.I18N.t(k, a); })();\n'
+) % (pathlib.Path(__file__).resolve().parent.parent / "extension" / "locales" / "en.json")
+
 JS = (ROOT / "extension" / "content.js").read_text()
 URI = "ws://127.0.0.1:8799"
 
@@ -440,7 +452,7 @@ def test_executor_node_unit(tmp_path):
     block = tmp_path / "sk17_executor.js"
     block.write_text(m.group(1), encoding="utf-8")
     harness = tmp_path / "harness.js"
-    harness.write_text(NODE_HARNESS, encoding="utf-8")
+    harness.write_text(SK71_SHIM + NODE_HARNESS, encoding="utf-8")
     r = subprocess.run([node, str(harness), str(block)],
                        capture_output=True, text=True, timeout=30)
     assert r.returncode == 0, f"node упал: {r.stderr}"

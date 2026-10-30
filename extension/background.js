@@ -6,6 +6,11 @@
 // Порядок fallback (спека п.3): сохранённый bridgeServer → ws://127.0.0.1:8791
 // (туннельная совместимость) → ошибка с инструкцией (бейдж ✗ + подсказка в сайдбаре).
 // Ретраи экспоненциалом 2с..60с; бейдж: ● зелёный (агентский) / ◌ ретрай / ✗ offline.
+// SK-71: chrome strings come from the locale pack (i18n.js is loaded before this
+// file; the L() alias lives there). Kick the pack load ahead of any event, and
+// watch storage: the core also rebroadcasts i18n_changed to every tab's content.
+I18N.load();
+I18N.watchStorage();
 const FALLBACK_SERVER = "ws://127.0.0.1:8791"; // чистый профиль = туннельный режим, как до SK-28
 const PROTO_V = 1;
 const BACKOFF_MIN = 2000, BACKOFF_MAX = 60000; // спека SK-28: 2с..60с
@@ -167,9 +172,12 @@ async function finishLong(id, state) {
   const e = TASKS.get(id);
   const title = (e && e.title) || id;
   const chat = (e && e.chat) || "";
-  bellRing(id, { kind: "task_" + state, title: "Hermes: задача " + (state === "done" ? "сделана" : "не сделана"),
+  bellRing(id, { kind: "task_" + state, title: L(state === "done" ? "notif.task_done" : "notif.task_failed"),
                  message: title, chat });
-  bellLogPush({ kind: "task_" + state, id, text: state === "done" ? "Задача сделана" : "Задача не сделана",
+  // SK-71: journal rows carry the dictionary key — the sidebar re-renders them
+  // in the viewer's language; text stays the language of the moment (legacy rows).
+  bellLogPush({ kind: "task_" + state, id, key: state === "done" ? "notif.j_task_done" : "notif.j_task_failed",
+                text: L(state === "done" ? "notif.j_task_done" : "notif.j_task_failed"),
                 sub: title, chat, ts: Date.now() });
   const gid = await ownGroupId();
   if (gid == null) return;
@@ -197,8 +205,9 @@ async function expandGroupForPerm() {
 const NAV_GRACE_MS = 4000;      // базовое окно агентской навигации после исполненного глагола
 const NAV_GRACE_MAX_MS = 15000; // SK-44: потолок динамического окна SPA-цепочки после exec:True
 const TAB_TRACK = new Map(); // tabId -> {url, moved, graceUntil, navOpenedAt}
-const ERR_TAB_GONE = "tab_gone: вкладка задачи закрыта — переспроси человека в чате, не бей по чужой вкладке";
-const ERR_TAB_MOVED = "tab_moved: вкладка задачи ушла на другой URL не агентом — переспроси человека; tabs.use_tab {tabId, task} перепривяжет";
+// SK-71: lazy getters — the dictionary loads after this line, at use time
+const ERR_TAB_GONE = () => L("err.tab_gone");
+const ERR_TAB_MOVED = () => L("err.tab_moved");
 // ЧИСТАЯ функция (контракт гоняет её под node): что свидетель знает о вкладке сейчас.
 function tabGate(track, now) {
   if (!track) return "fresh";
@@ -240,9 +249,9 @@ function witnessTabUrl(tabId, url) {
   if (!tr) return false;
   const next = witnessNav(tr, url, Date.now(), NAV_GRACE_MS, NAV_GRACE_MAX_MS);
   if (next === tr) return true;
-  if (next.moved && !tr.moved) log("SK-25: tab", tabId, "ушёл от задачи ->", String(url).slice(0, 90));
-  else if (!next.moved && tr.moved) log("SK-25: tab", tabId, "вернулся к задаче");
-  else if (next.url !== tr.url) log("SK-44: свидетель tab", tabId, "признал агентскую навигацию ->", String(url).slice(0, 90));
+  if (next.moved && !tr.moved) log("SK-25: tab", tabId, "left the task ->", String(url).slice(0, 90));
+  else if (!next.moved && tr.moved) log("SK-25: tab", tabId, "back on the task");
+  else if (next.url !== tr.url) log("SK-44: tab witness", tabId, "accepted agent navigation ->", String(url).slice(0, 90));
   TAB_TRACK.set(tabId, next);
   return true;
 }
@@ -253,9 +262,9 @@ async function resolveTargetTab(tabId) { // -> {tab, legacy?} | {err}
     return tab ? { tab, legacy: true } : { err: "no_tab" };
   }
   let tab;
-  try { tab = await browser.tabs.get(tabId); } catch (e) { return { err: ERR_TAB_GONE }; }
+  try { tab = await browser.tabs.get(tabId); } catch (e) { return { err: ERR_TAB_GONE() }; }
   if (tabGate(TAB_TRACK.get(tabId), Date.now()) === "moved")
-    return { err: ERR_TAB_MOVED + " · current=" + String(tab.url || "").slice(0, 160) };
+    return { err: ERR_TAB_MOVED() + " · current=" + String(tab.url || "").slice(0, 160) };
   return { tab };
 }
 function taskTabFrame(m) { // {type:"task_tab",task,tab,window?,url?} — tab:null = отвязана (tab_gone)
@@ -317,7 +326,7 @@ function connect() {
       if (res === "token_rejected" || res === "proto_mismatch" || res === "replaced") {
         trying = false; schedule(); return; // проблема не в адресе: любой мост отвергнет то же
       }
-      log("SK-28: адрес", url, "недоступен — следующий кандидат");
+      log("SK-28: address", url, "unreachable — next candidate");
     }
     // ни один адрес не ответил — человекочитаемый вердикт (бейдж ✗ + сайдбар-подсказка),
     // ретрай НЕ прекращаем: экспоненциал 2с..60с живёт дальше.
@@ -367,7 +376,7 @@ function wsAttempt(url, token) {
           backoff = 15000; verdict = "proto_mismatch";
         } else if (ev.code === 4009) { // SK-49: мост замещён новым hello — перебор
           // адресов бессилен (тот же мост вытеснит снова), ждём и пробуем тем же списком.
-          log("SK-49: сокет вытеснен новым подключением (4009), пауза", REPLACED_BACKOFF_MS, "мс");
+          log("SK-49: socket evicted by a new connection (4009), pausing", REPLACED_BACKOFF_MS, "ms");
           backoff = REPLACED_BACKOFF_MS; verdict = "replaced";
         } else log("bridge connection lost (code", ev.code + "), retry in", backoff, "ms");
       }
@@ -406,7 +415,7 @@ function schedule() {
 function wsAddr() { return (wsUrl || FALLBACK_SERVER).split(/[?#]/)[0]; } // адрес без токена (токен и не живёт в URL — strip на всякий случай)
 async function wsCheck(sendResponse) {
   const token = await getToken();
-  if (!token) { sendResponse({ state: "not_connected", reason: "токен не задан" }); return; }
+  if (!token) { sendResponse({ state: "not_connected", reasonKey: "opt.reason_no_token", reason: L("opt.reason_no_token") }); return; }
   if (ws && ws.readyState === 1 && BRIDGE_ST === "online") { sendResponse({ state: "connected", url: wsAddr() }); return; }
   backoff = BACKOFF_MIN;
   if (ws) { try { ws.close(); } catch {} ws = null; }
@@ -415,10 +424,12 @@ async function wsCheck(sendResponse) {
   while (Date.now() - t0 < 6000) {
     await new Promise((r) => setTimeout(r, 250));
     if (ws && ws.readyState === 1 && BRIDGE_ST === "online") { sendResponse({ state: "connected", url: wsAddr() }); return; }
-    if (BRIDGE_ST === "token_rejected") { sendResponse({ state: "not_connected", reason: "мост отверг токен (ротация?) — вставь свежий" }); return; }
-    if (BRIDGE_ST === "proto_mismatch") { sendResponse({ state: "not_connected", reason: "несовместимость протокола" }); return; }
+    if (BRIDGE_ST === "token_rejected") { sendResponse({ state: "not_connected", reasonKey: "opt.reason_token_rejected", reason: L("opt.reason_token_rejected") }); return; }
+    if (BRIDGE_ST === "proto_mismatch") { sendResponse({ state: "not_connected", reasonKey: "opt.reason_proto", reason: L("opt.reason_proto") }); return; }
   }
-  sendResponse({ state: "not_connected", reason: BRIDGE_ST === "no_token" ? "токен не задан" : "мост не отвечает" });
+  sendResponse({ state: "not_connected",
+    reasonKey: BRIDGE_ST === "no_token" ? "opt.reason_no_token" : "opt.reason_no_answer",
+    reason: L(BRIDGE_ST === "no_token" ? "opt.reason_no_token" : "opt.reason_no_answer") });
 }
 function send(msg) {
   // SK-46: structural hello-first — этот путь живёт только для сокета с
@@ -456,10 +467,10 @@ async function route(msg) {
     PENDING_PERM.set(msg.id, msg);
     sendToUi(msg);
     // SK-37: не видно карточку — звени (уведомление+бейдж решит bellRefresh).
-    bellRing(msg.id, { kind: "perm", title: "Hermes нужен ты", message: bellPermMessage(msg) });
+    bellRing(msg.id, { kind: "perm", title: L("notif.need_you"), message: bellPermMessage(msg) });
     // SK-35: пермисс — единственный повод развернуть свёрнутую долгую задачу
     // группу: человек идёт решать, вкладки агента должны быть на виду.
-    bellLogPush({ kind: "perm", id: msg.id, text: "Нужно разрешение",
+    bellLogPush({ kind: "perm", id: msg.id, key: "notif.j_perm", text: L("notif.j_perm"),
                   sub: bellPermMessage(msg), chat: "", ts: Date.now() });
     expandGroupForPerm().catch(() => {});
     return;
@@ -522,16 +533,16 @@ function pageClass(url) {
   const u = String(url || "").trim().toLowerCase();
   return /^(https?|file):/.test(u) ? "injectable" : "internal";
 }
-const ERR_INTERNAL_PAGE = "internal_page: это служебная страница браузера (about:, moz-extension:, devtools:), content.js туда не инджектится — работай на http(s) или file";
-const ERR_INJECT_FAILED = "inject_failed: автоинжект content.js не поднялся — перезагрузи вкладку (Cmd+R) и повтори запрос";
+const ERR_INTERNAL_PAGE = () => L("err.internal_page");   // SK-71: lazy, dictionary-first
+const ERR_INJECT_FAILED = () => L("err.inject_failed");
 async function selfHealRpc(id, tab, msg, unwrapErr) {
   // Служебная страница опознаётся ДО любой попытки инжекта (никаких циклов: один
   // инжект, один повтор, дальше только честная ошибка — rpc_result ровно один раз).
   // Лог-строки («internal page», «inject threw», «retry failed», «self-heal: healed») —
   // якоря атрибуции живого харнесса, не менять без синхронной правки харнесса.
   if (pageClass(tab.url) === "internal") {
-    log("self-heal: internal page, отказ от инжекта:", tab.id, String(tab.url || "").slice(0, 80));
-    return rpcResult(id, false, ERR_INTERNAL_PAGE);
+    log("self-heal: internal page, refusing inject:", tab.id, String(tab.url || "").slice(0, 80));
+    return rpcResult(id, false, ERR_INTERNAL_PAGE());
   }
   try {
     // bootstrap: сироты прошлой жизни — гард и хост от МЁРТВОГО content.js (аддон
@@ -541,13 +552,13 @@ async function selfHealRpc(id, tab, msg, unwrapErr) {
     await browser.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] });
   } catch (e) {
     log("self-heal: inject threw:", String(e && e.message || e).slice(0, 140));
-    return rpcResult(id, false, ERR_INJECT_FAILED);
+    return rpcResult(id, false, ERR_INJECT_FAILED());
   }
   let res;
   try { res = await browser.tabs.sendMessage(tab.id, msg); } // РОВНО ОДИН автоповтор
   catch (e) {
-    log("self-heal: retry failed — content.js после инжекта не отвечает:", tab.id);
-    return rpcResult(id, false, ERR_INJECT_FAILED);
+    log("self-heal: retry failed — content.js silent after inject:", tab.id);
+    return rpcResult(id, false, ERR_INJECT_FAILED());
   }
   log("self-heal: healed", msg && msg.type, "tab", tab.id);
   noteUrl(tab.id, res && res.url); // SK-25: URL-свидетель обновляется и на залеченном пути
@@ -621,7 +632,7 @@ function sk47Plan(cap, vp, clip, mw) {
   if (clip) {
     if (!num(clip.x) || !num(clip.y) || !num(clip.w) || !num(clip.h) || clip.w <= 0 || clip.h <= 0)
       return { err: "bad_clip" };
-    if (!hasVp) return { err: "no_metrics: clip задаётся в CSS-пикселях, метрик вьюпорта вкладки нет" };
+    if (!hasVp) return { err: L("err.no_metrics") };
   }
   const sx = hasVp ? cap.w / vp.w : 1, sy = hasVp ? cap.h / vp.h : 1; // device-пикселей на CSS-пиксель (DPR)
   let cx = 0, cy = 0, cw = cap.w, ch = cap.h;
@@ -728,7 +739,7 @@ async function pageScreenshot(id, params) {
       try {
         marksRes = await browser.tabs.sendMessage(tab.id, { type: "som_marks" });
       } catch (e) {
-        return rpcResult(id, false, "marks_unavailable: content-скрипт вкладки не отвечает — залечи вкладку (page.dom/self-heal SK-18) и повтори скрин");
+        return rpcResult(id, false, L("err.marks_unavailable"));
       }
       if (!marksRes || marksRes.err) return rpcResult(id, false, (marksRes && marksRes.err) || "marks_failed");
     }
@@ -742,7 +753,7 @@ async function pageScreenshot(id, params) {
         ? await browser.tabs.captureVisibleTab(tab ? tab.windowId : null, { format: "png" })
         : null;
     if (raw === null)
-      return rpcResult(id, false, "capture_unsupported_background_tab: в этой сборке нет tabs.captureTab — активная вкладка окна доступна, фоновая нет");
+      return rpcResult(id, false, L("err.capture_bg"));
     const x = await sk47Xform(raw, vp, clip, mw);
     if (x.err) return rpcResult(id, false, x.err);
     out.dataUrl = x.dataUrl;
@@ -998,7 +1009,7 @@ browser.runtime.onConnect.addListener((port) => {
       const e = TASKS.get(String(m.task || "").slice(0, 60)) || taskOf(TLK || "t");
       e.state = "paused"; TLK = e.task; // paused-by-Stop stays visibly distinct from task-done
       const delivered = send({ type: "stop", ...(m.task ? { task: String(m.task).slice(0, 60) } : {}) });
-      TLW.warn = delivered ? "" : "мост офлайн — агент не уведомлён";
+      TLW.warn = delivered ? "" : L("bg.warn_stop_offline");
       tlPush();
     } else if (m.type === "tab_focus") { // SK-25 п.4: клик по чипу вкладки карточки — ЖЕСТ ЧЕЛОВЕКА, фокус вкладку задачи
       const e = TASKS.get(String(m.task || "").slice(0, 60));
@@ -1057,6 +1068,9 @@ browser.runtime.onMessage.addListener((m, _s, sendResponse) => {
     backoff = BACKOFF_MIN; optionsShown = false; failStreak = 0;
     if (ws) { try { ws.close(); } catch {} ws = null; }
     connect();
+  } else if (m.type === "i18n_get") { // SK-71: content packs come from the bg (fetch is off there)
+    I18N.answerGet(sendResponse);
+    return true; // async sendResponse
   } else if (m.type === "ws-check") { // SK-15: options «проверить подключение»
     wsCheck(sendResponse);
     return true; // async sendResponse
@@ -1072,15 +1086,15 @@ browser.runtime.onMessage.addListener((m, _s, sendResponse) => {
 // getPermissionLevel: «denied/prompt» честнее, чем «ок, но тихо».
 async function bellTest(sendResponse) {
   const reply = (obj) => { try { sendResponse(obj); } catch (e) {} };
-  if (!browser.notifications) { reply({ ok: false, error: "browser.notifications недоступен в этой сборке" }); return; }
+  if (!browser.notifications) { reply({ ok: false, error: L("bg.notif_unavailable") }); return; }
   let level = "";
   try { level = String(await browser.notifications.getPermissionLevel()) || ""; }
   catch (e) { level = "unknown"; }
   const nid = "sk50test" + Date.now();
   try {
     await browser.notifications.create(nid, {
-      type: "basic", title: "Hermes: проверка звонка",
-      message: "Увидел и услышал — звонок работает. Клик открывает сайдбар.",
+      type: "basic", title: L("notif.test_title"),
+      message: L("notif.test_msg"),
       iconUrl: browser.runtime.getURL("icons/icon-96.png"),
     });
     send({ type: "bell_event", ev: "notify_test", id: nid, kind: "test" });

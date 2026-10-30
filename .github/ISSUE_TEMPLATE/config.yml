@@ -1,5 +1,5 @@
-# Privacy: contact links must not embed the owner login (SK-65 publish gate:
-# zero personal identifiers in file content). The private advisory channel is
+# Privacy: contact links must not embed the owner login (zero personal
+# identifiers in file content). The private advisory channel is
 # the repo Security tab — GitHub derives its URL, so no absolute repo URLs
 # are needed here. Vulnerability policy: SECURITY.md.
 blank_issues_enabled: true

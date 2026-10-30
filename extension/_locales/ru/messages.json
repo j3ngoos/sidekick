@@ -1,0 +1,9 @@
+{
+  "manifest_name": { "message": "Hermes Sidekick" },
+  "manifest_desc": {
+    "message": "Агент Hermes работает в твоём Firefox: живые шаги, ответы на разрешения, чат. Всё самохостится: мост на твоей машине."
+  },
+  "manifest_cmd_toggle": { "message": "Открыть сайдбар Hermes Sidekick" },
+  "manifest_sidebar_title": { "message": "Hermes" },
+  "manifest_action_title": { "message": "Hermes Sidekick" }
+}

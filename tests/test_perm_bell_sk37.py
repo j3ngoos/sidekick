@@ -260,8 +260,8 @@ def test_bell_action_ru_superset_of_sidebar():
 def test_manifest_bell_wiring():
     assert "notifications" in MANIFEST["permissions"], "browser.notifications без разрешения"
     scripts = MANIFEST["background"]["scripts"]
-    assert scripts[:2] == ["bell.js", "background.js"], \
-        "bell.js обязан грузиться до background.js (чистое ядро + обёртки)"
+    assert scripts == ["i18n.js", "bell.js", "background.js"], \
+        "i18n.js + bell.js обязаны грузиться до background.js (словарь, чистое ядро + обёртки)"
 
 
 def test_background_bell_wiring_pins():

@@ -157,7 +157,7 @@ check("shot: img после клика", c4.body.children[0].children.some((e) =
 
 // ---- сценарий 5: think-блок — свёрнут по умолчанию, заголовки, автоскролл только открытым
 const b = F.buildThink(doc, "t1");
-check("think: заголовок «💭 Думает…»", b.hd.textContent === "💭 Думает…", b.hd.textContent);
+check("think: заголовок «💭 Думает…»", b.hd.textContent === "💭 Thinking…", b.hd.textContent);
 check("think: свёрнут по умолчанию", !b.box.className.split(" ").includes("open"));
 F.thinkDelta(b, "раз ", 1000);
 F.thinkDelta(b, "два", 2000);
@@ -169,21 +169,21 @@ check("think: при открытии показан хвост", b.tx.scrollTop
 F.thinkDelta(b, " три", 3000);
 check("think: в развёрнутом автоскролл к хвосту", b.tx.scrollTop === b.tx.scrollHeight);
 F.thinkFinish(b, 12500); // t0=1000 → 11.5 с → «12 сек»
-check("think: финал «💭 Подумал (12 сек)»", b.hd.textContent === "💭 Подумал (12 сек)", b.hd.textContent);
+check("think: финал «💭 Подумал (12 сек)»", b.hd.textContent === "💭 Thought (12 sec)", b.hd.textContent);
 check("think: done-класс", b.box.className.split(" ").includes("done"));
 F.thinkDelta(b, " ещё", 13000); // поздняя дельта — заголовок честно снова «думает»
-check("think: поздняя дельта вернула «Думает…»", b.hd.textContent === "💭 Думает…");
+check("think: поздняя дельта вернула «Думает…»", b.hd.textContent === "💭 Thinking…");
 F.thinkFinish(b, 13001);
 F.thinkFinish(b, 99000); // повторный финал не переписывает время
-check("think: повторный finish идемпотентен", b.hd.textContent === "💭 Подумал (12 сек)", b.hd.textContent);
+check("think: повторный finish идемпотентен", b.hd.textContent === "💭 Thought (12 sec)", b.hd.textContent);
 const big = "х".repeat(F.THINK_TAIL + 5000);
 const b2 = F.buildThink(doc, "t9");
 F.thinkDelta(b2, big, 1000);
 check("think: хвост ограничен THINK_TAIL", b2.tx.textContent.length === F.THINK_TAIL);
 
 // ---- сценарий 6: чистые хелперы
-check("fmtDur: минуты", F.fmtDur(125) === "2 мин 5 сек", F.fmtDur(125));
-check("fmtDur: 0", F.fmtDur(0) === "0 сек");
+check("fmtDur: минуты", F.fmtDur(125) === "2 min 5 sec", F.fmtDur(125));
+check("fmtDur: 0", F.fmtDur(0) === "0 sec");
 const tm = {};
 F.noteStep(tm, "k", "queued", 100); F.noteStep(tm, "k", "queued", 500);
 check("noteStep: та же фаза время не двигает", tm.k.last === 100 && tm.k.first === 100);

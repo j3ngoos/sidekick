@@ -458,7 +458,10 @@ def test_agents_md_documents_tabs_and_bypass_ban():
 
 def test_sidebar_russian_labels_for_close_tabs():
     assert "close_tabs" in SB
-    assert "закрыть вкладки" in SB
+    # SK-71: the label lives in the dictionary; the source wires the key
+    assert 'close_tabs: "perm.close_tabs"' in SB
+    _ru = json.loads((ROOT / "extension" / "locales" / "ru.json").read_text(encoding="utf-8"))
+    assert _ru["perm.close_tabs"] == "закрыть вкладки"
 
 
 def test_bridge_contract_documents_sk32():

@@ -1,10 +1,10 @@
 <!doctype html>
-<html><head><meta charset="utf-8"><title>Hermes Sidekick — настройки</title>
+<html lang="en"><head><meta charset="utf-8"><title data-i18n="opt.title">Hermes Sidekick — settings</title>
 <link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="options.css">
 </head><body><main>
-<!-- SK-30: тот же язык, что и в сайдбаре: inline-SVG спрайт (alert/chevron),
-     liquid glass карточки поверх градиента, единые состояния кнопок. -->
+<!-- SK-30: the same language as in the sidebar: the inline-SVG sprite (alert/chevron),
+     liquid-glass cards over the gradient, unified button states. -->
 <svg id="spr" aria-hidden="true"><defs>
 <symbol id="ic-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
 <symbol id="ic-chevdown" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
@@ -12,74 +12,81 @@
 <h1>Hermes Sidekick</h1>
 
 <section class="card" aria-labelledby="h-tok">
-  <div class="chead"><h2 id="h-tok">Токен</h2>
+  <div class="chead"><h2 id="h-tok" data-i18n="opt.h_token">Token</h2>
     <span class="chip" id="tokState"><i></i><span id="tokStateTxt">…</span></span></div>
-  <p>Токен сессии моста. Возьми содержимое файла <code>~/sidekick/bridge/hub/token</code>
-     на машине Hermes (одна строка, без переноса) и вставь сюда. Хранится только локально
-     в расширении; значение на странице не показывается.</p>
+  <p><span data-i18n="opt.token_intro">Bridge session token. Take the contents of the file </span><code>~/sidekick/bridge/hub/token</code><span data-i18n="opt.token_body"> on the Hermes machine (one line, no newline) and paste it here. It is stored only locally in the extension; the value is never shown on the page.</span></p>
   <div class="meta" id="tokMeta"></div>
-  <input id="tok" type="password" placeholder="вставь новый токен (hex из hub/token)"
-         autocomplete="off" spellcheck="false" aria-label="новый токен моста">
+  <input id="tok" type="password" placeholder="paste a new token (hex from hub/token)"
+         data-i18n-placeholder="opt.ph_token"
+         autocomplete="off" spellcheck="false" aria-label="new bridge token"
+         data-i18n-aria="opt.aria_token">
   <div class="row">
-    <button id="save">Сохранить</button>
-    <button id="clear" class="sec">Стереть</button>
-    <button id="check" class="sec">Проверить подключение</button>
+    <button id="save" data-i18n="opt.save">Save</button>
+    <button id="clear" class="sec" data-i18n="opt.erase">Erase</button>
+    <button id="check" class="sec" data-i18n="opt.check">Check connection</button>
   </div>
   <div class="st" id="st"></div>
 </section>
 
 <section class="card" aria-labelledby="h-bell">
-  <div class="chead"><h2 id="h-bell">Звонок</h2></div>
-  <p>«Проверить звонок» выпускает <b>живое</b> системное уведомление со звуком — тем же
-     путём, что колокольчик агента (валидная иконка из <code>icons/</code>, без
-     <code>data:</code>). Звук даёт операционная система: у WebExtensions API звука
-     нет. На macOS — <b>Системные настройки → Уведомления → Firefox → «Позволить
-     уведомления» и «Звуки»</b>. Всплывашка завершения задачи выходит только когда
-     окно Firefox не в фокусе; пермиссы зовут всегда.</p>
+  <div class="chead"><h2 id="h-bell" data-i18n="opt.h_bell">Bell</h2></div>
+  <p><span data-i18n="opt.bell_intro">"Check bell" issues a </span><b data-i18n="opt.bell_live">live</b><span data-i18n="opt.bell_body1"> system notification with sound — the same path as the agent's bell (a valid icon from </span><code>icons/</code><span data-i18n="opt.bell_body2">, no data: URIs). The sound comes from the operating system: WebExtensions has no audio API. On macOS — </span><b data-i18n="opt.bell_macos">System Settings → Notifications → Firefox → "Allow Notifications" and "Sounds"</b><span data-i18n="opt.bell_body3">. The task-done popup appears only when the Firefox window is not focused; permissions always ring.</span></p>
   <div class="row">
-    <button id="bellTest" class="sec">Проверить звонок</button>
+    <button id="bellTest" class="sec" data-i18n="opt.bell_test">Check bell</button>
   </div>
   <div class="st" id="bellSt"></div>
   <ul class="meta" id="bellHint" hidden>
-    <li>Firefox: <code>about:preferences#privacy</code> → Уведомления — расширение не должно быть в «Блокировать».</li>
-    <li>macOS: Системные настройки → Уведомления → Firefox → «Позволить уведомления».</li>
-    <li>macOS: там же включить «Звуки» — звук даёт macOS, у расширения его нет.</li>
-    <li>Ничего не видишь при фокусе окна — так и задумано для задач: бейдж-колокольчик и журнал. «Проверить звонок» вызывает всплывашку принудительно.</li>
+    <li data-i18n="opt.bell_hint_ff">Firefox: Settings → Privacy &amp; Security → Notifications — the extension must not be in "Block".</li>
+    <li data-i18n="opt.bell_hint_macos1">macOS: System Settings → Notifications → Firefox → "Allow Notifications".</li>
+    <li data-i18n="opt.bell_hint_macos2">macOS: enable "Sounds" in the same place — the sound is macOS's, the extension has none.</li>
+    <li data-i18n="opt.bell_hint_focus">You see nothing while the window is focused — that is by design for tasks: the bell badge and the journal. "Check bell" forces a popup.</li>
   </ul>
 </section>
 
 <section class="card" aria-labelledby="h-srv">
-  <div class="chead"><h2 id="h-srv">Сервер</h2>
+  <div class="chead"><h2 id="h-srv" data-i18n="opt.h_server">Server</h2>
     <span class="chip" id="srvState"><i></i><span id="srvStateTxt">…</span></span></div>
-  <p>WS-адрес моста Hermes. <b>Пусто = ws://127.0.0.1:8791</b> — режим ssh-туннеля,
-     как раньше. Чтобы подключиться <b>без ssh по локальной сети</b>, укажи адрес машины
-     с мостом, например <code>ws://host-a.local:8791</code>; на мосту при этом должен
-     стоять <code>SIDEKICK_BIND=0.0.0.0</code> (systemd-юнит моста). Если указанный адрес
-     недоступен, расширение само откатится на localhost (туннель), а ретраи пойдут
-     экспоненциалом от 2 до 60 секунд.</p>
-  <p class="meta"><svg class="icn sm" aria-hidden="true"><use href="#ic-alert"/></svg> ws:// передаёт токен по сети открытым текстом — только доверенная
-     домашняя сеть; для всего остального оставь туннель (пустое поле).</p>
+  <p><span data-i18n="opt.server_intro">WS address of the Hermes bridge. </span><b data-i18n="opt.server_empty">Empty = ws://127.0.0.1:8791</b><span data-i18n="opt.server_body1"> — the ssh-tunnel mode, as before. To connect </span><b data-i18n="opt.server_lan">over the local network without ssh</b><span data-i18n="opt.server_body2">, set the address of the machine with the bridge, e.g. </span><code>ws://host-a.local:8791</code><span data-i18n="opt.server_body3">; the bridge must then listen on </span><code>SIDEKICK_BIND=0.0.0.0</code><span data-i18n="opt.server_body4"> (the bridge systemd unit). If the given address is unavailable, the extension falls back to localhost (tunnel) by itself, and retries ramp up exponentially from 2 to 60 seconds.</span></p>
+  <p class="meta"><svg class="icn sm" aria-hidden="true"><use href="#ic-alert"/></svg><span data-i18n="opt.server_warn"> ws:// carries the token in clear text over the network — trusted home network only; for everything else keep the tunnel (empty field).</span></p>
   <input id="srv" type="text" placeholder="ws://host-a.local:8791"
-         autocomplete="off" spellcheck="false" aria-label="WS-адрес моста">
+         autocomplete="off" spellcheck="false" aria-label="bridge WS address"
+         data-i18n-aria="opt.aria_server">
   <div class="row">
-    <button id="srvSave">Сохранить</button>
-    <button id="srvClear" class="sec">На localhost (туннель)</button>
+    <button id="srvSave" data-i18n="opt.save">Save</button>
+    <button id="srvClear" class="sec" data-i18n="opt.tunnel">localhost (tunnel)</button>
   </div>
   <div class="st" id="srvSt"></div>
 </section>
 
 <section class="card" aria-labelledby="h-tabs">
-  <div class="chead"><h2 id="h-tabs">Вкладки агента</h2></div>
-  <p>Задачи агента живут в группе вкладок <code>Sidekick</code> (синяя).
-     Что делать с группой после завершения задачи:</p>
+  <div class="chead"><h2 id="h-tabs" data-i18n="opt.h_tabs">Agent tabs</h2></div>
+  <p><span data-i18n="opt.tabs_body1">Agent tasks live in the tab group </span><code>Sidekick</code><span data-i18n="opt.tabs_body2"> (blue). What to do with the group after a task finishes:</span></p>
   <div class="row">
-    <label class="selwrap"><select id="after" aria-label="поведение группы вкладок после задачи">
-      <option value="collapse">свернуть группу (по умолчанию)</option>
-      <option value="ungroup">разгруппировать (вкладки останутся открыты)</option>
-      <option value="none">ничего (группа останется на виду)</option>
+    <label class="selwrap"><select id="after" aria-label="tab-group behaviour after a task"
+        data-i18n-aria="opt.aria_after">
+      <option value="collapse" data-i18n="opt.after_collapse">collapse the group (default)</option>
+      <option value="ungroup" data-i18n="opt.after_ungroup">ungroup (the tabs stay open)</option>
+      <option value="none" data-i18n="opt.after_none">nothing (the group stays visible)</option>
     </select><span class="caret" aria-hidden="true"><svg class="icn"><use href="#ic-chevdown"/></svg></span></label>
-    <button id="afterSave" class="sec">Применить</button>
+    <button id="afterSave" class="sec" data-i18n="opt.apply">Apply</button>
   </div>
   <div class="st" id="afterSt"></div>
 </section>
-</main><script src="options.js"></script></body></html>
+
+<!-- SK-71: interface language. The agent's own texts (captions, chat answers)
+     are NOT translated — only this chrome. The switch repaints the sidebar,
+     this page and content scripts in place, no reload. -->
+<section class="card" aria-labelledby="h-lang">
+  <div class="chead"><h2 id="h-lang" data-i18n="opt.h_lang">Language</h2></div>
+  <p data-i18n="opt.lang_intro">Interface language of the sidebar and settings. The agent's own texts are not translated.</p>
+  <div class="row">
+    <label class="selwrap"><select id="lang" aria-label="interface language"
+        data-i18n-aria="opt.aria_lang">
+      <option value="en" data-i18n="opt.lang_en">English</option>
+      <option value="ru" data-i18n="opt.lang_ru">Русский</option>
+      <option value="system" data-i18n="opt.lang_system">System</option>
+    </select><span class="caret" aria-hidden="true"><svg class="icn"><use href="#ic-chevdown"/></svg></span></label>
+    <span class="st" id="langSt"></span>
+  </div>
+</section>
+</main><script src="i18n.js"></script><script type="module" src="options.js"></script></body></html>

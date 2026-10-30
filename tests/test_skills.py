@@ -146,7 +146,7 @@ def test_sidebar_wires_skills_module():
     js_src = (ROOT / "extension" / "sidebar.js").read_text()
     # order contract: skills.js loads before sidebar.js. SK-11 added audit.js in
     # between (its own adjacency to sidebar.js is pinned in test_audit_js.py).
-    assert html.index('<script src="skills.js">') < html.index('<script src="sidebar.js">')
+    assert html.index('<script src="skills.js">') < html.index('src="sidebar.js"')  # SK-71: sidebar.js is type="module"
     for needle in ("sk10Skills", "Skills.slashQuery", "Skills.filter", "Skills.upsert",
                    "Skills.exportJson", "Skills.importJson", "skmenu", "sksave"):
         assert needle in js_src, needle

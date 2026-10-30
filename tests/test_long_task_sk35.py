@@ -170,7 +170,7 @@ def test_sidebar_html_bell_markup():
     assert 'id="bellpanel"' in SIDEBAR_HTML and 'id="bellrows"' in SIDEBAR_HTML
     assert 'id="belln"' in SIDEBAR_HTML, "счётчик непрочитанного"
     assert 'id="bellReadAll"' in SIDEBAR_HTML, "SK-50: явная кнопка «Прочитать всё» в подвале журнала"
-    assert "Прочитать всё" in SIDEBAR_HTML
+    assert "Mark all read" in SIDEBAR_HTML and 'data-i18n="sbt.read_all"' in SIDEBAR_HTML  # SK-71
     assert 'href="#ic-bell"' in SIDEBAR_HTML and 'id="ic-bell"' in SIDEBAR_HTML
     assert 'id="ic-collapse"' in SIDEBAR_HTML
 

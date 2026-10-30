@@ -1,13 +1,13 @@
 <!doctype html>
-<html><head><meta charset="utf-8">
+<html lang="en"><head><meta charset="utf-8">
 <link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="sidebar.css">
 </head><body>
-<!-- SK-30: inline SVG sprite — единственная иконочная библиотека сайдбара.
-     16px, stroke 2, currentColor (красится классом .icn в sidebar.css), без
-     файлов-картинок и без npm. Символы только геометрические: эмодзи в chrome
-     UI запрещены контрактом SK-30 п.2; статус-глифы мигрировали сюда же
-     (GLYPH_ICON в модулях сайдбара и фидa подменяют текстовую метку иконкой). -->
+<!-- SK-30: inline SVG sprite — the sidebar's only icon library.
+     16px, stroke 2, currentColor (painted by the .icn class in sidebar.css), no
+     image files and no npm. Glyphs are geometric only: emoji are banned in chrome
+     UI by the SK-30 p.2 contract; the status glyphs migrated here too
+     (GLYPH_ICON in the sidebar/feed modules swaps a text label for an icon). -->
 <svg id="spr" aria-hidden="true"><defs>
 <symbol id="ic-chat" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
 <symbol id="ic-history" viewBox="0 0 24 24"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></symbol>
@@ -18,7 +18,7 @@
 <symbol id="ic-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></symbol>
 <symbol id="ic-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
 <symbol id="ic-menu" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/></symbol>
-<!-- SK-35: колокольчик журнала «позови человека» и стрелка «свернуть панель» -->
+<!-- SK-35: the "call the human" journal bell and the "collapse panel" arrow -->
 <symbol id="ic-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
 <symbol id="ic-collapse" viewBox="0 0 24 24"><path d="M11 17l-5-5 5-5"/><path d="M18 17l-5-5 5-5"/></symbol>
 <symbol id="ic-theme" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
@@ -50,57 +50,58 @@
 <symbol id="ic-key" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.7 12.3 21 2M17 6l3 3"/></symbol>
 <symbol id="ic-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
 <symbol id="ic-state" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></symbol>
-<!-- SK-38 п.1/2: галстук-логотип — силуэт молнии из иконки расширения (PNG-комплект
-     scripts/gen-icons.py рисуется той же геометрией), опознаёт аддон и в шапке, и в тулбаре. -->
+<!-- SK-38 p.1/2: the tie logo — the extension icon's lightning silhouette (PNG set
+     scripts/gen-icons.py draws with the same geometry) — recognized in the header and the toolbar. -->
 <symbol id="ic-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
-<!-- SK-40: аватар-глиф человека (пузырь пользователя) и градиент логотипа —
-     стопы красятся токенами тем (--bolt-a/b), поэтому url(#g-bolt) адаптивен. -->
+<!-- SK-40: the human avatar glyph (user bubble) and the logo gradient —
+     stops are painted with theme tokens (--bolt-a/b), so url(#g-bolt) is adaptive. -->
 <symbol id="ic-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
 <linearGradient id="g-bolt" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
 <stop offset="0" style="stop-color:var(--bolt-a)"/><stop offset="1" style="stop-color:var(--bolt-b)"/>
 </linearGradient>
 </defs></svg>
-<!-- SK-38 (шапка): «Hermes»-подпись и статусные чипы («думает»/«выполняет») из
-     шапки убраны — статус и так живёт внизу, в карточке задачи и think-блоке, а
-     агентский бейдж несёт иконка тулбара (background badge). В шапке: логотип-молния
-     (inline-SVG, красится --accent), заголовок чата (первый запрос с truncation, либо
-     «Новый чат»), точка моста (SK-13, тултип — честный статус) и «⋯» (переехала из
-     нижнего бара, SK-38 п.3). Высота шапки постоянная (--hd-h) — от неё позиционируется
-     меню-портал. -->
+<!-- SK-38 (header): the "Hermes" caption and the status chips ("thinking"/"acting") were
+     header captions and status chips are gone — the status lives at the bottom in the
+     task card and the think block, and the toolbar badge carries the agent state
+     (background badge). The header holds: the bolt logo (inline-SVG, painted by
+     --accent), the chat title (first request, truncated, or "New chat"), the bridge
+     dot (SK-13, tooltip = the honest status) and "⋯" (moved from the bottom bar,
+     SK-38 p.3). The header height is constant (--hd-h) — the menu portal positions
+     from it. -->
 <div id="hd">
   <div id="hdrow">
     <svg id="hdic" class="icn" aria-hidden="true"><use href="#ic-bolt"/></svg>
-    <h1 id="ttl">Новый чат</h1>
+    <h1 id="ttl">New chat</h1>
     <span id="st" data-s="idle" title="bridge: …"></span>
-    <!-- SK-35: колокольчик (непрочитанный журнал «позови человека») и ручное
-         сворачивание панели. window.close() из этого документа закрывает сайдбар
-         без жеста (пробда firefox-158) — sidebarAction.close() без жеста схема
-         Firefox отклоняет, поэтому панель закрывает себя сама. -->
-    <button id="bellBtn" title="Журнал: позвать человека" aria-label="Журнал уведомлений" aria-haspopup="true" aria-expanded="false"><svg class="icn" aria-hidden="true"><use href="#ic-bell"/></svg><span id="belln" hidden>0</span></button>
-    <button id="collapseBtn" title="Свернуть панель" aria-label="Свернуть панель"><svg class="icn" aria-hidden="true"><use href="#ic-collapse"/></svg></button>
-    <button id="menuBtn" title="Меню" aria-label="Меню" aria-haspopup="menu" aria-expanded="false"><svg class="icn" aria-hidden="true"><use href="#ic-menu"/></svg></button>
+    <!-- SK-35: the bell (unread "call the human" journal) and manual
+         panel collapse. window.close() from this document closes the sidebar without a
+         user gesture (probed on firefox-158) — Firefox rejects sidebarAction.close()
+         without a gesture, so the panel closes itself. -->
+    <button id="bellBtn" title="Journal: call the human" aria-label="Notification journal" data-i18n-title="sbt.t_bell" data-i18n-aria="sbt.aria_bell" aria-haspopup="true" aria-expanded="false"><svg class="icn" aria-hidden="true"><use href="#ic-bell"/></svg><span id="belln" hidden>0</span></button>
+    <button id="collapseBtn" title="Collapse the panel" aria-label="Collapse the panel" data-i18n-title="sbt.t_collapse" data-i18n-aria="sbt.aria_collapse"><svg class="icn" aria-hidden="true"><use href="#ic-collapse"/></svg></button>
+    <button id="menuBtn" title="Menu" aria-label="Menu" data-i18n-title="sbt.t_menu" data-i18n-aria="sbt.aria_menu" aria-haspopup="menu" aria-expanded="false"><svg class="icn" aria-hidden="true"><use href="#ic-menu"/></svg></button>
   </div>
 </div>
 <!-- SK-22: the SK-06 permanent step band is gone — steps live inside the task card
-     in the chat feed (модуль feed), so the feed no longer spams «click, click, click». -->
+     in the chat feed (feed module), so the feed no longer spams "click, click, click". -->
 <div id="log"></div>
-<!-- SK-40: пустое состояние ленты — крупный глиф-молния + приглашение. Синхронизирует
-     видимость модуль сайдбара (syncEmpty): пусто и нет второго вида → показываем. -->
+<!-- SK-40: the feed's empty state — a big lightning glyph + an invitation. Syncs
+     visibility is owned by the sidebar module (syncEmpty): empty and no second view → show it. -->
 <div id="empty" hidden>
   <svg id="embolt" class="icn" aria-hidden="true"><use href="#ic-bolt"/></svg>
-  <div id="empttl">Новый чат</div>
-  <div id="emsub">Напиши, что сделать — Hermes выполнит в браузере и покажет шаги</div>
+  <div id="empttl" data-i18n="sbt.new_chat">New chat</div>
+  <div id="emsub" data-i18n="sbt.tagline">Write what to do — Hermes will run it in the browser and show the steps</div>
 </div>
 <!-- SK-11: audit feed (second view — the chat log hides while it is open). Rows are
-     rendered from the bridge's audit.jsonl via WS audit_get; «сырой файл» shows the
+     rendered from the bridge's audit.jsonl via WS audit_get; "raw file" shows the
      same lines monospace (masked on the bridge AND re-masked here, defensively).
-     SK-30: панель — второй «стеклянный» слой, кнопки бара — SVG. -->
+     SK-30: the panel is the second "glass" layer, bar buttons are SVG. -->
 <div id="aud" hidden>
   <div id="audbar">
-    <input id="audf" placeholder="фильтр: домен / метод…" autocomplete="off">
-    <button id="audref" class="iconbtn" title="Обновить ленту"><svg class="icn" aria-hidden="true"><use href="#ic-refresh"/></svg></button>
-    <button id="audrawBtn" title="Показать сырые строки audit.jsonl">сырой файл</button>
-    <button id="audclose" class="iconbtn" title="Закрыть журнал"><svg class="icn" aria-hidden="true"><use href="#ic-close"/></svg></button>
+    <input id="audf" placeholder="filter: domain / method…" data-i18n-placeholder="sbt.ph_audit_filter" autocomplete="off">
+    <button id="audref" class="iconbtn" title="Refresh the feed" data-i18n-title="sbt.t_refresh"><svg class="icn" aria-hidden="true"><use href="#ic-refresh"/></svg></button>
+    <button id="audrawBtn" title="Show raw audit.jsonl lines" data-i18n-title="sbt.t_raw" data-i18n="sbt.aud_raw">raw file</button>
+    <button id="audclose" class="iconbtn" title="Close the journal" data-i18n-title="sbt.t_close_journal"><svg class="icn" aria-hidden="true"><use href="#ic-close"/></svg></button>
   </div>
   <div id="audlist"></div>
   <pre id="audraw" hidden></pre>
@@ -111,9 +112,9 @@
      chat's feed and switches the active chat_id (persisted in storage.local). -->
 <div id="hist" hidden>
   <div id="histbar">
-    <span id="histttl"><svg class="icn" aria-hidden="true"><use href="#ic-history"/></svg>История чатов</span>
-    <button id="histref" class="iconbtn" title="Обновить список"><svg class="icn" aria-hidden="true"><use href="#ic-refresh"/></svg></button>
-    <button id="histclose" class="iconbtn" title="Закрыть"><svg class="icn" aria-hidden="true"><use href="#ic-close"/></svg></button>
+    <span id="histttl"><svg class="icn" aria-hidden="true"><use href="#ic-history"/></svg><span data-i18n="sbt.chats_title">Chat history</span></span>
+    <button id="histref" class="iconbtn" title="Reload the list" data-i18n-title="sbt.t_reload_list"><svg class="icn" aria-hidden="true"><use href="#ic-refresh"/></svg></button>
+    <button id="histclose" class="iconbtn" title="Close" data-i18n-title="sbt.t_close"><svg class="icn" aria-hidden="true"><use href="#ic-close"/></svg></button>
   </div>
   <div id="histlist"></div>
   <div id="histn"></div>
@@ -122,40 +123,40 @@
      row, and the export/import panel. All state lives in storage.local — sk10Skills. -->
 <div id="skmenu" hidden><div id="sklist"></div><div id="skhint"></div></div>
 <div id="skname" hidden>
-  <input id="sknamein" placeholder="имя навыка (пусто = первые 40 символов)" autocomplete="off">
-  <button id="sknameok">Сохранить</button><button id="sknamecancel">Отмена</button>
+  <input id="sknamein" placeholder="skill name (empty = first 40 chars)" data-i18n-placeholder="sbt.ph_skill_name" autocomplete="off">
+  <button id="sknameok" data-i18n="sbt.save">Save</button><button id="sknamecancel" data-i18n="sbt.cancel">Cancel</button>
 </div>
 <div id="skio" hidden>
-  <div class="row"><button id="skexp"><svg class="icn" aria-hidden="true"><use href="#ic-download"/></svg>экспорт .json</button><button id="skimpr"><svg class="icn" aria-hidden="true"><use href="#ic-upload"/></svg>импорт из файла…</button></div>
-  <textarea id="skpaste" rows="3" placeholder="…или вставь JSON сюда и нажми «загрузить»"></textarea>
-  <div class="row"><button id="skpasteok">загрузить из вставки</button><span id="skioMsg"></span></div>
+  <div class="row"><button id="skexp"><svg class="icn" aria-hidden="true"><use href="#ic-download"/></svg><span data-i18n="sbt.sk_export">export .json</span></button><button id="skimpr"><svg class="icn" aria-hidden="true"><use href="#ic-upload"/></svg><span data-i18n="sbt.sk_import">import from a file…</span></button></div>
+  <textarea id="skpaste" rows="3" placeholder="…or paste JSON here and press \"load\"" data-i18n-placeholder="sbt.ph_paste_json"></textarea>
+  <div class="row"><button id="skpasteok" data-i18n="sbt.sk_paste">load from paste</button><span id="skioMsg"></span></div>
 </div>
 <input type="file" id="skfile" hidden accept=".json,application/json">
-<!-- SK-38 п.3/4/5: нижняя панель = композер + ОДНА кнопка. «⋯» уехала в шапку,
-     кнопка морфится: покой = «отправить» (самолётик), задача идёт = «стоп»
-     (квадрат, красный акцент) — 150 мс; Esc в документе = тот же стоп.
-     Живой плейсхолдер — оверлей #phin над пустым полем (нативный placeholder —
-     статичный запас для prefers-reduced-motion и до старта JS). -->
-<div id="bar"><div id="inwrap"><input id="in" placeholder="спроси что угодно" autocomplete="off"><span id="phin" class="ph" aria-hidden="true"></span></div>
-<button id="go" title="Отправить" aria-label="Отправить"><svg class="icn ic-send" aria-hidden="true"><use href="#ic-send"/></svg><svg class="icn ic-stop" aria-hidden="true"><use href="#ic-stop"/></svg></button></div>
-<div id="menu" hidden role="menu" aria-label="Меню Hermes">
-  <button class="mi" id="newBtn" role="menuitem" title="Новый чат (чистая лента, новая сессия Hermes)"><svg class="icn" aria-hidden="true"><use href="#ic-plus"/></svg><span>Новый чат</span></button>
-  <button class="mi" id="histBtn" role="menuitem" title="История чатов"><svg class="icn" aria-hidden="true"><use href="#ic-history"/></svg><span>История чатов</span></button>
-  <button class="mi" id="audBtn" role="menuitem" title="Журнал действий агента (аудит)"><svg class="icn" aria-hidden="true"><use href="#ic-audit"/></svg><span>Журнал агента</span></button>
+<!-- SK-38 p.3/4/5: the bottom bar = composer + ONE button. The "⋯" moved to the header,
+     the button morphs: idle = "send" (paper plane), running = "stop" (square, red
+     accent) — 150 ms; Esc in the document = the same stop.
+     The live placeholder is the #phin overlay above the empty field (the native
+     placeholder is the static fallback for prefers-reduced-motion and pre-JS). -->
+<div id="bar"><div id="inwrap"><input id="in" placeholder="ask anything" data-i18n-placeholder="sbt.ph_composer" autocomplete="off"><span id="phin" class="ph" aria-hidden="true"></span></div>
+<button id="go" title="Send" aria-label="Send" data-i18n-title="sbt.t_send" data-i18n-aria="sbt.aria_send"><svg class="icn ic-send" aria-hidden="true"><use href="#ic-send"/></svg><svg class="icn ic-stop" aria-hidden="true"><use href="#ic-stop"/></svg></button></div>
+<div id="menu" hidden role="menu" aria-label="Hermes menu" data-i18n-aria="sbt.aria_menu_hermes">
+  <button class="mi" id="newBtn" role="menuitem" title="New chat (clean feed, new Hermes session)" data-i18n-title="sbt.t_new_chat"><svg class="icn" aria-hidden="true"><use href="#ic-plus"/></svg><span data-i18n="sbt.new_chat">New chat</span></button>
+  <button class="mi" id="histBtn" role="menuitem" title="Chat history" data-i18n-title="sbt.t_chats"><svg class="icn" aria-hidden="true"><use href="#ic-history"/></svg><span data-i18n="sbt.chats_title">Chat history</span></button>
+  <button class="mi" id="audBtn" role="menuitem" title="Agent action journal (audit)" data-i18n-title="sbt.t_audit"><svg class="icn" aria-hidden="true"><use href="#ic-audit"/></svg><span data-i18n="sbt.journal">Agent journal</span></button>
   <div class="msep" role="separator"></div>
-  <button class="mi" id="sksave" role="menuitem" title="Сохранить текущий промпт как навык"><svg class="icn" aria-hidden="true"><use href="#ic-save"/></svg><span>Сохранить промпт</span></button>
-  <button class="mi" id="skioBtn" role="menuitem" title="Экспорт/импорт сохранённых навыков (json)"><svg class="icn" aria-hidden="true"><use href="#ic-transfer"/></svg><span>Навыки: экспорт/импорт</span></button>
+  <button class="mi" id="sksave" role="menuitem" title="Save the current prompt as a skill" data-i18n-title="sbt.t_save_prompt"><svg class="icn" aria-hidden="true"><use href="#ic-save"/></svg><span data-i18n="sbt.save_prompt">Save prompt</span></button>
+  <button class="mi" id="skioBtn" role="menuitem" title="Export/import saved skills (json)" data-i18n-title="sbt.t_skills"><svg class="icn" aria-hidden="true"><use href="#ic-transfer"/></svg><span data-i18n="sbt.skills_menu">Skills: export/import</span></button>
   <div class="msep" role="separator"></div>
-  <button class="mi" id="themeBtn" role="menuitem" title="Тема: системная → светлая → тёмная"><svg class="icn" aria-hidden="true"><use href="#ic-theme"/></svg><span id="themeLbl">Тема: как в системе</span></button>
-  <button class="mi" id="optBtn" role="menuitem" title="Настройки расширения"><svg class="icn" aria-hidden="true"><use href="#ic-settings"/></svg><span>Настройки</span></button>
-  <button class="mi danger" id="stopTask" role="menuitem" disabled title="Остановить текущую задачу агента"><svg class="icn" aria-hidden="true"><use href="#ic-stop"/></svg><span>Стоп задача</span></button>
+  <button class="mi" id="themeBtn" role="menuitem" title="Theme: system → light → dark" data-i18n-title="sbt.t_theme"><svg class="icn" aria-hidden="true"><use href="#ic-theme"/></svg><span id="themeLbl">Theme: system</span></button>
+  <button class="mi" id="optBtn" role="menuitem" title="Extension settings" data-i18n-title="sbt.t_settings_ext"><svg class="icn" aria-hidden="true"><use href="#ic-settings"/></svg><span data-i18n="sbt.settings">Settings</span></button>
+  <button class="mi danger" id="stopTask" role="menuitem" disabled title="Stop the current agent task" data-i18n-title="sbt.t_stop_task"><svg class="icn" aria-hidden="true"><use href="#ic-stop"/></svg><span data-i18n="sbt.stop">Stop task</span></button>
 </div>
-<!-- SK-35: выпадающий журнал «позови человека» (второй стеклянный портал, тот же
-     паттерн, что #menu): события task_done / task_failed / perm. Клик по событию —
-     перейти к карточке (чат задачи/пермис-карточка) и снять прочитанное. -->
-<div id="bellpanel" hidden role="dialog" aria-label="Журнал уведомлений">
-  <div id="bellhead"><span>Журнал</span><button id="bellClose" title="Закрыть" aria-label="Закрыть журнал"><svg class="icn" aria-hidden="true"><use href="#ic-close"/></svg></button></div>
+<!-- SK-35: the "call the human" dropdown journal (the second glass portal, same
+     the same pattern as #menu): task_done / task_failed / perm events. Clicking an
+     event jumps to its source (the task chat / the perm card) and marks it read. -->
+<div id="bellpanel" hidden role="dialog" aria-label="Notification journal" data-i18n-aria="sbt.aria_journal">
+  <div id="bellhead"><span data-i18n="sbt.journal_short">Journal</span><button id="bellClose" title="Close" aria-label="Close the journal" data-i18n-title="sbt.t_close" data-i18n-aria="sbt.aria_close_journal"><svg class="icn" aria-hidden="true"><use href="#ic-close"/></svg></button></div>
   <div id="bellrows"></div>
-  <div id="bellfoot"><button id="bellReadAll" type="button">Прочитать всё</button></div>
+  <div id="bellfoot"><button id="bellReadAll" type="button" data-i18n="sbt.read_all">Mark all read</button></div>
 </div>
-<script src="skills.js"></script><script src="audit.js"></script><script src="feed.js"></script><script src="sidebar.js"></script></body></html>
+<script src="skills.js"></script><script src="audit.js"></script><script src="feed.js"></script><script src="i18n.js"></script><script type="module" src="sidebar.js"></script></body></html>

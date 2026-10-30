@@ -38,9 +38,17 @@ def _body(name):
 
 
 def _err(name):
-    m = re.search(r"const " + name + r" = \"([^\"]+)\";", BG)
-    assert m, name + " пропала"
+    # SK-71: the constants became lazy getters `const X = () => L("err.*");`
+    m = re.search(r"const " + name + r' = \(\) => L\("([^"]+)"\);', BG)
+    assert m, name + ": не найдена как геттер ключа словаря"
     return m.group(1)
+
+
+def _err_texts(key):
+    en = json.loads((ROOT / "extension" / "locales" / "en.json").read_text(encoding="utf-8"))
+    ru = json.loads((ROOT / "extension" / "locales" / "ru.json").read_text(encoding="utf-8"))
+    assert key in en and key in ru, key + ": ключ обязан жить в обоих паках"
+    return en[key], ru[key]
 
 
 @pytest.fixture(scope="module")
@@ -139,22 +147,24 @@ def test_inject_is_content_js_in_isolated_world():
 # ---- форма ошибок (контракт v1 аддитивен) --------------------------------------------
 
 def test_internal_page_error_shape():
-    e = _err("ERR_INTERNAL_PAGE")
-    assert e.startswith("internal_page"), "err обязан начиняться с машинного кода (аддитивно)"
-    assert re.search(r"[а-я]{4,}", e), "в err нет человекочитаемого RU-сообщения"
-    assert "Cmd+R" not in e, "SK-18: подсказка про перезагрузку — только при сбое инжекта"
+    en, ru = _err_texts(_err("ERR_INTERNAL_PAGE"))
+    assert en.startswith("internal_page") and ru.startswith("internal_page"), \
+        "err обязан начиняться с машинного кода (аддитивно)"
+    assert re.search(r"[а-я]{4,}", ru), "в err нет человекочитаемого RU-сообщения"
+    assert "Cmd+R" not in en and "Cmd+R" not in ru, "SK-18: подсказка про перезагрузку — только при сбое инжекта"
 
 
 def test_inject_failed_error_shape():
-    e = _err("ERR_INJECT_FAILED")
-    assert e.startswith("inject_failed")
-    assert re.search(r"[а-я]{4,}", e)
-    assert "Cmd+R" in e and "агрузи вкладку" in e, "подсказка «перезагрузи вкладку (Cmd+R)» обязательна"
+    en, ru = _err_texts(_err("ERR_INJECT_FAILED"))
+    assert en.startswith("inject_failed") and ru.startswith("inject_failed")
+    assert re.search(r"[а-я]{4,}", ru)
+    assert "Cmd+R" in en and "Cmd+R" in ru and "агрузи вкладку" in ru, \
+        "подсказка «перезагрузи вкладку (Cmd+R)» обязательна в обеих языках"
 
 
 def test_errors_are_err_strings_contract_v1():
-    assert "rpcResult(id, false, ERR_INTERNAL_PAGE)" in BG
-    assert "rpcResult(id, false, ERR_INJECT_FAILED)" in BG
+    assert "rpcResult(id, false, ERR_INTERNAL_PAGE())" in BG  # SK-71: lazy getter
+    assert "rpcResult(id, false, ERR_INJECT_FAILED())" in BG
     assert 'type: "rpc_error"' not in BG, "контракт v1: ошибки идут err-строкой rpc_result"
 
 

@@ -1,8 +1,8 @@
 # Публикация Sidekick в Firefox Add-ons Store (AMO)
 
-Пошаговый маршрут для владельца аккаунта. Всё, что можно было подготовить
-без аккаунта, подготовлено карточкой SK-68: артефакты в `dist/`, манифест
-пройден `web-ext lint` с 0 ошибок, тексты ниже готовы к вставке.
+Пошаговый маршрут для владельца аккаунта. Всё, что можно подготовить без
+аккаунта, уже подготовлено: артефакты в `dist/`, манифест прошёл
+`web-ext lint` с 0 ошибок, тексты ниже готовы к вставке.
 Факты о требованиях AMO сверены с официальными страницами
 (extensionworkshop.com: submitting-an-add-on, add-on-policies,
 source-code-submission, FAQ, firefox-builtin-data-consent) и с исходным
@@ -209,7 +209,7 @@ https://github.com/j3ngoos/sidekick
 | UNSUPPORTED_API webNavigation.onLocationChange ×2 | background.js:1164–1165 | за feature-check `if (browser.webNavigation.onLocationChange)` |
 | KEY_FIREFOX_UNSUPPORTED_BY_MIN_VERSION | manifest | `data_collection_permissions` введён в Firefox 145; на 139–144 ключ игнорируется (не сбор, ключ для будущей обязательности AMO) |
 | KEY_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION | manifest | то же для Android — нас не касается: подаём Desktop-only |
-| (было) MISSING_DATA_COLLECTION_PERMISSIONS | manifest | ИСПРАВЛЕНО в SK-68: добавлен канон `"required": ["none"]` |
+| (было) MISSING_DATA_COLLECTION_PERMISSIONS | manifest | ИСПРАВЛЕНО: добавлен канон `"required": ["none"]` |
 
 ## 8. Сроки, статусы, частые отказы
 
@@ -227,7 +227,7 @@ https://github.com/j3ngoos/sidekick
      Description + Notes; включается только при активной автоматизации.
      Остаточный риск: AMO чувствителен к anti-bot тематике (известны
      прецеденты дискейба с формулировкой «Deceptive») — формулировки
-     раздела 5 максимально буквальны; решение о тоне принимает панель.
+     раздела 5 максимально буквальны; финальный тон подбирает владелец аккаунта.
   3. *Избыточные разрешения* — минимизм: ни одного домена сверх all_urls,
      8 API-разрешений, все с функцией (раздел 4).
   4. *Нет privacy policy* — docs/PRIVACY.md + ссылка в листинге.
@@ -252,10 +252,10 @@ https://github.com/j3ngoos/sidekick
      (на AMO-listed подаче этот ключ убирать) и хостить `.xpi` +
      `updates.json` (формат: MDN Add-ons/Updates).
 
-## 10. После приёмки
+## 10. После публикации
 
 - Ссылка листинга: `https://addons.mozilla.org/firefox/addon/<slug>/`.
-- Превью: 5 скриншотов `docs/images/*.png` (прошли PII/OCR-аудит SK-64 —
-  в пикселях только 127.0.0.1/192.168.0.50).
+- Превью: скриншоты `docs/images/*.png` (прошли PII/OCR-аудит — в пикселях
+  только 127.0.0.1/192.168.0.50); для листинга AMO добавь свежие снимки UI.
 - Релизы: поднимать `version` в манифесте, пересобирать, грузить XPI +
   source на страницу аддона (не новую подачу).

@@ -226,14 +226,15 @@ function bellClear(id) {
 // SK-37: человекочитаемый текст уведомления. Источник истины карточки — ACTION_RU
 // в sidebar.js; это копия для bell-текста (дрейф ловит pytest-пин: ключи сайдбара
 // обязаны быть подмножеством этих).
-const BELL_ACTION_RU = { sensitive_input: "действие с полем пароля/карты", payment: "платёж",
-  oauth: "OAuth-вход / выдача доступа", "2fa": "код 2FA", click: "клик",
-  input: "ввод текста", submit: "отправка формы", navigate: "переход", action: "действие",
-  close_tabs: "закрыть вкладки",
-  send_message: "отправить сообщение наружу", send_email: "отправить письмо наружу" };
+// SK-71: structural action -> dictionary key (perm.*); L() comes from i18n.js.
+const BELL_ACTION_RU = { sensitive_input: "perm.sensitive_input", payment: "perm.payment",
+  oauth: "perm.oauth", "2fa": "perm.2fa", click: "perm.click",
+  input: "perm.input", submit: "perm.submit", navigate: "perm.navigate", action: "perm.action",
+  close_tabs: "perm.close_tabs",
+  send_message: "perm.send_message", send_email: "perm.send_email" };
 function bellPermMessage(m) {
-  const act = BELL_ACTION_RU[m.action] || m.action || "действие";
-  return [act, m.domain || "неизвестный сайт"].filter(Boolean).join(" — ");
+  const act = L(BELL_ACTION_RU[m.action] || "perm.action");
+  return [act, m.domain || L("perm.unknown_site")].filter(Boolean).join(" — ");
 }
 
 // Клик по уведомлению: открыть сайдбар, показать окно и подсветить карточку.

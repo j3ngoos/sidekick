@@ -26,7 +26,12 @@ NODE = shutil.which("node")
 def test_execute_action_command_declared():
     cmd = MAN["commands"]["_execute_action"]
     assert cmd["suggested_key"]["default"] == "Alt+Shift+S"
-    assert re.search(r"Hermes Sidekick", cmd["description"]), "описание команды обязано называть расширение"
+    # SK-71: manifest strings are __MSG__ placeholders resolved via _locales
+    assert cmd["description"] == "__MSG_manifest_cmd_toggle__"
+    _en = json.loads((ROOT / "extension" / "_locales" / "en" / "messages.json").read_text(encoding="utf-8"))
+    _ru = json.loads((ROOT / "extension" / "_locales" / "ru" / "messages.json").read_text(encoding="utf-8"))
+    assert "Hermes Sidekick" in _en["manifest_cmd_toggle"]["message"]
+    assert "сайдбар" in _ru["manifest_cmd_toggle"]["message"]
 
 
 def test_action_has_no_popup():

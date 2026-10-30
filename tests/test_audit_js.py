@@ -75,22 +75,22 @@ def test_parse_perm_allow_and_block():
     a = parse({"ts": 1, "ev": "perm", "domain": "example.com", "action": "sensitive_input",
                "decision": "allow", "via": "human_once"})
     assert a["kind"] == "perm" and a["tone"] == "ok" and a["domain"] == "example.com"
-    assert "поле пароля/карты" in a["title"] and "человек: разово" in a["sub"]
+    assert "password/card field" in a["title"] and "human: once" in a["sub"]  # SK-71: EN default pack
     b = parse({"ts": 1, "ev": "perm", "domain": "evil.test", "action": "payment",
                "decision": "block", "via": "grant_block"})
-    assert b["tone"] == "bad" and "Заблокировано" in b["title"]
+    assert b["tone"] == "bad" and "Blocked:" in b["title"]
 
 def test_parse_preview_verdicts():
     assert parse({"ts": 1, "ev": "preview", "shown": True, "cancelled": False})["tone"] == "dim"
     c = parse({"ts": 1, "ev": "preview", "shown": True, "cancelled": True, "reason": "user_stop"})
-    assert c["verdict"] == "отменено" and c["tone"] == "bad"
+    assert c["verdict"] == "cancelled" and c["tone"] == "bad"
     n = parse({"ts": 1, "ev": "preview", "shown": False, "cancelled": False, "reason": "no_element"})
-    assert n["verdict"] == "не показан" and n["tone"] == "warn"
+    assert n["verdict"] == "not shown" and n["tone"] == "warn"
 
 def test_parse_rpc_line_with_and_without_domain():
     ok = parse({"ts": 1, "method": "page.text", "ok": True, "domain": "site.example"})
     assert ok["kind"] == "rpc" and ok["tone"] == "ok" and ok["domain"] == "site.example"
-    assert "прочитать текст страницы" in ok["title"]
+    assert "read the page text" in ok["title"]
     err = parse({"ts": 1, "method": "page.screenshot", "ok": False, "err": "capture_failed"})
     assert err["tone"] == "bad" and "capture_failed" in err["sub"] and err["domain"] == ""
     unk = parse({"ts": 1, "method": "future.method", "ok": True})
@@ -99,7 +99,7 @@ def test_parse_rpc_line_with_and_without_domain():
 def test_parse_lifecycle_events():
     assert parse({"ts": 1, "ev": "stop", "task": "t1"})["kind"] == "stop"
     assert parse({"ts": 1, "ev": "handoff", "decision": "pause", "what": "логин"})["tone"] == "warn"
-    assert parse({"ts": 1, "ev": "resume", "task": "t1"})["verdict"] == "продолжено"
+    assert parse({"ts": 1, "ev": "resume", "task": "t1"})["verdict"] == "resumed"
     g = parse({"ts": 1, "ev": "grants.set", "domain": "a.test", "level": "allow"})
     assert g["kind"] == "grants" and g["domain"] == "a.test" and g["tone"] == "warn"
     assert parse({"ts": 1, "ev": "state", "state": "acting"})["tone"] == "dim"
@@ -148,7 +148,7 @@ def test_sidebar_wires_audit_module_and_view():
                    "audit_get", "audit_data", "Audit.parseLine", "Audit.mask", "AUDREQ"):
         assert needle in src, needle
     # the card's «кнопка открыть сырой файл» and the readable-row view both exist
-    assert "сырой файл" in html and 'id="aud"' in html
+    assert "raw file" in html and 'data-i18n="sbt.aud_raw"' in html and 'id="aud"' in html  # SK-71: EN markup + dictionary key
 
 def test_background_relays_audit_pull():
     src = (ROOT / "extension" / "background.js").read_text()
@@ -167,17 +167,17 @@ def test_bridge_contract_strings():
 def test_ext_connect_row_shows_peer():
     r = parse({"ev": "ext", "decision": "connect", "peer": "192.0.2.10:53211"})
     assert r["kind"] == "ext" and r["tone"] == "ok"
-    assert "подключилось" in r["title"] and r["sub"] == "192.0.2.10:53211"
+    assert "connected" in r["title"] and r["sub"] == "192.0.2.10:53211"
 
 
 def test_ext_replaced_row_shows_both_peers():
     r = parse({"ev": "ext", "decision": "replaced",
                "peer": "192.0.2.10:53211", "by": "127.0.0.1:41000"})
-    assert r["verdict"] == "заменено" and r["tone"] == "warn"
+    assert r["verdict"] == "replaced" and r["tone"] == "warn"
     assert r["sub"] == "192.0.2.10:53211 → 127.0.0.1:41000"
 
 
 def test_ext_disconnect_row_is_dim():
     r = parse({"ev": "ext", "decision": "disconnect", "peer": "127.0.0.1:41000"})
-    assert r["verdict"] == "офлайн" and r["tone"] == "dim"
+    assert r["verdict"] == "offline" and r["tone"] == "dim"
     assert r["sub"] == "127.0.0.1:41000"

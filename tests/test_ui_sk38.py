@@ -47,7 +47,7 @@ def _hd_html():
 def test_header_holds_logo_and_title_only():
     hd = HTML.split('<div id="hd">')[1].split("\n</div>")[0]
     assert 'id="hdic"' in hd and '#ic-bolt' in hd, "в шапке обязана быть иконка-молния (inline-SVG)"
-    assert 'id="ttl"' in hd and "Новый чат" in hd, "дефолт заголовка — «Новый чат»"
+    assert 'id="ttl"' in hd and "New chat" in hd, "дефолт заголовка — «Новый чат» (EN-разметка, SK-71)"
     assert 'id="menuBtn"' in hd, "«⋯» обязана жить в шапке (п.3)"
     assert ">Hermes<" not in hd, "текстовая надпись «Hermes» из шапки убрана"
     for gone in ('id="stop"', 'id="chips"', 'id="achip"', 'id="chip"'):
@@ -65,7 +65,7 @@ def test_no_status_chip_rendering_left_in_sidebar_js():
 
 def test_chat_title_from_first_query_with_truncation():
     assert "function setChatTitle" in SB
-    assert '"Новый чат"' in SB, "пустой чат — «Новый чат»"
+    assert 'L("sb.chat_new")' in SB, "пустой чат — «Новый чат» из словаря (SK-71)"
     assert re.search(r'chatTitle\.length > \d+ .*slice\(0, \d+\).*"…"', SB), \
         "первый запрос режется с «…»"
     # источник — первый пользовательский запрос: и submit, и загрузка ленты чата
@@ -140,16 +140,19 @@ def test_morph_state_and_stop_paths_in_js():
     assert "if (GO_RUN)" in esc and 'type: "stop"' in esc
     assert SB.count("e.stopPropagation()") >= 2, "Esc в skmenu/skname гасится до document-стопa"
     # a11y: подпись кнопки меняется вместе с состоянием
-    assert 'aria-label' in SB and "Стоп задача" in SB
+    assert 'aria-label' in SB and 'L("sb.stop_esc")' in SB  # SK-71: подпись — из словаря
 
 
 # ---- п.5: живой плейсхолдер --------------------------------------------------------------
 
 def test_placeholder_rotation():
-    for phrase in ("спроси что угодно", "могу закрыть вкладки", "найду и очищу корзину",
-                   "открою YouTube"):
-        assert f'"{phrase}"' in SB, f"фраза «{phrase}» из спеки обязана ротироваться"
-    assert "PH_RU" in SB and "setInterval(phTick" in SB
+    # SK-71: the rotating phrases are dictionary keys; the RU pack keeps the spec wording
+    _ru = json.loads((ROOT / "extension" / "locales" / "ru.json").read_text(encoding="utf-8"))
+    for key, phrase in (("sb.composer_ph", "спроси что угодно"), ("sb.chip_tabs", "могу закрыть вкладки"),
+                        ("sb.chip_trash", "найду и очищу корзину"), ("sb.chip_youtube", "открою YouTube")):
+        assert f'"{key}"' in SB, f"фраза «{phrase}» из спеки обязана ротироваться"
+        assert phrase in _ru[key], key
+    assert "PH_KEYS" in SB and "setInterval(phTick" in SB
     assert re.search(r'fade|transition: opacity 150ms', CSS), "fade — CSS-переход 150 мс"
     # пауза на фокусе и на вводе
     assert "document.activeElement === inp" in SB
@@ -157,7 +160,7 @@ def test_placeholder_rotation():
     # prefers-reduced-motion → статичная первая фраза, оверлей выключен
     assert 'matchMedia("(prefers-reduced-motion: reduce)")' in SB
     rm = SB.split("function phStart")[1].split("inp.addEventListener")[0]
-    assert "RMOTION.matches" in rm and "clearInterval(PHT)" in rm and "PH_RU[0]" in rm
+    assert "RMOTION.matches" in rm and "clearInterval(PHT)" in rm and 'L(PH_KEYS[0])' in rm  # SK-71
 
 
 # ---- hygiene: редизайн не ломает старые контракты ---------------------------------------

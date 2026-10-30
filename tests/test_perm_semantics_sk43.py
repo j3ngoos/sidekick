@@ -393,5 +393,8 @@ def test_sidebar_action_ru_keeps_sensitive_wording():
     """ALWAYS_HUMAN-формулировка живёт в ACTION_RU и показывается только по типу
     пермиса (мост её больше не выдаёт для обычных глаголов — см. mismatch-тесты)."""
     src = (ROOT / "extension" / "sidebar.js").read_text(encoding="utf-8")
-    assert 'sensitive_input: "действие с полем пароля/карты"' in src
+    # SK-71: the wording moved to the dictionary; the source wires the key
+    assert 'sensitive_input: "perm.sensitive_input"' in src
     assert "ACTION_RU[m.action]" in src  # заголовок карточки — строго по типу
+    _ru = json.loads((ROOT / "extension" / "locales" / "ru.json").read_text(encoding="utf-8"))
+    assert _ru["perm.sensitive_input"] == "действие с полем пароля/карты"

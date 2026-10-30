@@ -1,6 +1,10 @@
 // Hermes Sidekick overlay — shadow DOM, isolated world.
 (() => {
   if (window.__hermesSidekick) return; window.__hermesSidekick = true;
+  // SK-71: content scripts cannot fetch extension URLs — the dictionary comes
+  // from the background ("i18n_get"), and "i18n_changed" re-pulls it live.
+  I18N.initFromRuntime();
+  I18N.watchRuntime();
   // SK-41: оверлей создаётся ЛЕНИВО — на первом ensure() (preview/cursor/toast/
   // marks), а не на каждой загрузке страницы: в пассивном серфинге наших DOM-узлов
   // нет вовсе, а MutationObserver-евристы страницы не могут поймать «появление»
@@ -758,8 +762,8 @@
   const PREVIEW_DEFAULT_MS = 450, PREVIEW_MAX_MS = 5000;
   const PREVIEW_GAP = 10;           // bubble edge -> target edge; the arrow lives in the gap
   const PREVIEW_HOLD_MAX_MS = 8000; // ring fallback when the action never lands
-  const PREVIEW_VERBS = { click: "кликну", input: "введу", submit: "отправлю", navigate: "перейду",
-    rightclick: "кликну ПКМ", hover: "наведу", dblclick: "двойной клик", move: "двину", key: "нажму" }; // SK-24: new verbs
+  const PREVIEW_VERBS = { click: "prev.click", input: "prev.input", submit: "prev.submit", navigate: "prev.navigate",
+    rightclick: "prev.rightclick", hover: "prev.hover", dblclick: "prev.dblclick", move: "prev.move", key: "prev.key" }; // SK-24 + SK-71: dictionary keys
   let previewSeq = 0;      // generation guard: a superseded preview must never settle the new one
   let previewPending = null; // {settle} of the in-flight preview promise
   let previewRingOff;
@@ -937,12 +941,12 @@
     settlePreview({ shown: true, cancelled: true, reason: "superseded" }); // old in-flight preview loses
     clearRelease(); // …and so does a held ring from the last verdict
     const mname = m.name || (markEntry ? `${markEntry.name || markEntry.tag} [${markEntry.n}]` : "");
-    const label0 = String(m.label || ((PREVIEW_VERBS[m.action] || "сделаю") +
+    const label0 = String(m.label || ((L(PREVIEW_VERBS[m.action] || "prev.default")) +
       (mname ? ` «${String(mname).slice(0, 60)}»` : (m.key ? ` «${String(m.key).slice(0, 20)}»` : "")))).slice(0, 120);
     // SK-43 п.4: ASCII-only подпись заменяем читаемой из DOM цели (key — не трогаем:
     // «нажму «Enter»» — подпись клавиши, не ярлык элемента). Кириллицу проверяем по
     // подписывающей части (label/name/key), а не по сборному шаблону с кириллическим глаголом.
-    const l43 = sk43EnrichLabel(label0, PREVIEW_VERBS[m.action] || "сделаю",
+    const l43 = sk43EnrichLabel(label0, L(PREVIEW_VERBS[m.action] || "prev.default"),
                                 isKey ? null : el,
                                 { skip: isKey, markN: markEntry ? markEntry.n : null,
                                   name: m.label || mname || (m.key ? String(m.key) : "") });
@@ -1025,7 +1029,7 @@
       pv.classList.remove("on");
       c.classList.remove("slide"); pv.classList.remove("slide");
       if (cancelled) { // red flash so the human sees their Stop landed
-        r.classList.add("no"); pt.textContent = "Отменено";
+        r.classList.add("no"); pt.textContent = L("cnt.cancelled");
         pv.classList.add("cancelled", "on");
         previewRingOff = setTimeout(() => {
           // SK-16 fix (старый баг): вместе с .cancelled снимаем и .on — иначе
@@ -1283,9 +1287,7 @@
     let ce = "null";
     try { if (el && el.getAttribute && el.getAttribute("contenteditable") != null) ce = el.getAttribute("contenteditable"); } catch (e) {}
     const tag = el ? String(el.tagName || "?").toLowerCase() : "null";
-    return `цель не редактируема (tag=${tag}, contenteditable=${ce}); попробуй ближайший ` +
-      "input/textarea/contenteditable по page.dom, или клик по полю и input без цели " +
-      "(фокус); не помогло — handoff с явной причиной";
+    return L("cnt.hint_not_editable", { tag, ce });
   }
   const sk42Value = (m) => (m.value != null ? String(m.value) : (m.text != null ? String(m.text) : ""));
   function sk42InsertCE(doc, el, value) {
@@ -1307,7 +1309,7 @@
     const bi = new w.InputEvent("beforeinput", iopts);
     el.dispatchEvent(bi);
     if (bi.defaultPrevented) return { err: "input_prevented",
-      hint: "страница отменила beforeinput — у поля свой сценарий ввода: клик + посимвольный key, либо handoff с причиной" };
+      hint: L("cnt.hint_beforeinput") };
     let ok = false;
     try { ok = !!(doc.execCommand && doc.execCommand("insertText", false, value)); } catch (e) { ok = false; }
     if (!ok) {
@@ -1391,8 +1393,7 @@
     return { kind: before.kind, before: before.checked, after,
       changed: gone ? null : after !== before.checked,
       ...(waited ? { waited_ms: waited } : {}),
-      ...(gone ? { note: "цель исчезла из DOM после клика — состояние неизвестно, " +
-                          "пересними page.dom" } : {}) };
+      ...(gone ? { note: L("cnt.hint_gone") } : {}) };
   }
   async function sk48ClickWrap(doc, el, action, fire) {
     // Общий чехол кликабельных путей: состояние ДО -> полный путь -> состояние ПОСЛЕ.
@@ -1522,9 +1523,7 @@
       const res = { done: true, executed: true, action, synthetic: true, url: doc.location.href,
                     scrolled: { dx: (w2.scrollX || 0) - x0, dy: (w2.scrollY || 0) - y0, y: w2.scrollY || 0 } };
       if (!res.scrolled.dy && !res.scrolled.dx)
-        res.note = "окно не сдвинулось (document не прокручивается) — для внутренних контейнеров " +
-                   "(лента/чат) возьми элемент из page.dom и action:scroll с sid: он центрирует цель " +
-                   "и прокручивает её контейнер";
+        res.note = L("cnt.hint_scroll");
       return res;
     }
     // SK-42 п.1: input без цели — вставка в focused-элемент (тот же принцип, что у key:
@@ -1533,8 +1532,7 @@
       const el = doc.activeElement;
       if (!el || el === doc.body || el === doc.documentElement)
         return { err: "not_editable",
-                 hint: `в фокусе нечего редактировать (activeElement=${el ? String(el.tagName || "?").toLowerCase() : "null"}); ` +
-                       "сначала клик по полю (action:click), затем input без цели; не помогло — handoff с причиной" };
+                 hint: L("cnt.hint_nofocus", { el: el ? String(el.tagName || "?").toLowerCase() : "null" }) };
       const ir = sk42DoInput(doc, el, sk42Value(m));
       if (ir) return ir;
       try { if (typeof sk39Fx === "function") sk39Fx("input", null, null, el); } catch (e) { /* визуал */ }

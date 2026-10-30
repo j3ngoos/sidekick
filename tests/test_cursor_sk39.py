@@ -27,6 +27,18 @@ import pytest
 from test_action_do import NODE_HARNESS
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
+
+# SK-71 node shim: the spliced blocks call L() for dictionary strings; the unit
+# renders from the real EN pack (extension/locales/en.json) — same data as production.
+SK71_SHIM = (
+    '(() => { const en = JSON.parse(require("fs").readFileSync("%s", "utf8"));'
+    'const fill = (s, a) => a ? s.replace(/\{\{(\w+)\}\}/g, (_, k) => (a[k] !== undefined ? String(a[k]) : "")) : s;'
+    'global.I18N = { t: (k, a) => fill(en[k] !== undefined ? en[k] : k, a),'
+    ' has: (k) => Object.prototype.hasOwnProperty.call(en, k), locale: () => "en-US",'
+    ' initFromRuntime: () => Promise.resolve(), watchRuntime: () => {}, load: () => Promise.resolve() };'
+    'global.L = (k, a) => global.I18N.t(k, a); })();\n'
+) % (pathlib.Path(__file__).resolve().parent.parent / "extension" / "locales" / "en.json")
+
 JS = (ROOT / "extension" / "content.js").read_text()
 BLOCK = re.search(r"// SK-17-BEGIN executor[^\n]*\n(.*?)// SK-17-END executor", JS, re.S)
 assert BLOCK, "маркеры SK-17 исчезли из content.js"
@@ -164,7 +176,7 @@ def _run_harness(tmp_path, prelude=""):
         pytest.skip("node не в PATH")
     block = tmp_path / "sk17_executor.js"
     block.write_text(BLOCK.group(1), encoding="utf-8")
-    harness = NODE_HARNESS.replace("eval(src);", prelude + "eval(src);")
+    harness = NODE_HARNESS.replace("eval(src);", prelude + SK71_SHIM + "eval(src);")
     harness = harness.replace("console.log(JSON.stringify(out));",
                               "out.fx = globalThis.__fx || [];\n  console.log(JSON.stringify(out));")
     h = tmp_path / "harness.js"

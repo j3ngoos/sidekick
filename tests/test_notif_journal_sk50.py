@@ -132,12 +132,12 @@ def test_bridge_bell_event_e2e(home):
 
 # ------------------------------------------------------ п.3: options-кнопка
 def test_options_bell_test_card():
-    assert 'id="bellTest"' in OPTIONS_HTML and "Проверить звонок" in OPTIONS_HTML
+    assert 'id="bellTest"' in OPTIONS_HTML and "Check bell" in OPTIONS_HTML  # SK-71: EN-разметка, RU из словаря
     assert 'id="bellSt"' in OPTIONS_HTML and 'id="bellHint"' in OPTIONS_HTML
     h = " ".join(OPTIONS_HTML.split())  # нормализация переносов чек-листа
-    assert "about:preferences#privacy" in h, "нет подсказки про разрешение Firefox"
-    assert "Позволить уведомления" in h and "Звуки" in h, "нет macOS-чек-листа"
-    assert "звук даёт" in h.lower() or "звук даёт" in h, "не сказано, что звук даёт ОС"
+    assert "Privacy" in h, "нет подсказки про разрешение Firefox"
+    assert "Allow Notifications" in h and "Sounds" in h, "нет macOS-чек-листа"
+    assert "operating system" in h, "не сказано, что звук даёт ОС"
     assert 'type: "bell-test"' in OPTIONS_JS
     assert "getPermissionLevel" in BG_SRC, "проверка обязана честно докладывать уровень разрешения"
     assert "bellHint" in OPTIONS_JS, "чек-лист обязан разворачиваться, если человек ничего не увидел"

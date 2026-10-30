@@ -29,9 +29,10 @@ def test_options_links_token_stylesheets():
 def test_options_is_card_layout_with_two_sections():
     # SK-28: третья карточка — «Сервер» (LAN-коннект без ssh)
     # SK-50: четвёртая — «Звонок» (живая проверка notifications.create + чек-лист)
-    assert HTML.count('class="card"') == 4
-    assert ">Токен<" in HTML and ">Вкладки агента<" in HTML and ">Сервер<" in HTML
-    assert ">Звонок<" in HTML
+    # SK-71: пятая — «Язык» (переключатель языка интерфейса)
+    assert HTML.count('class="card"') == 5
+    assert ">Token<" in HTML and ">Agent tabs<" in HTML and ">Server<" in HTML  # SK-71: EN-разметка, RU из словаря
+    assert ">Bell<" in HTML and 'data-i18n="opt.h_lang"' in HTML
     assert "<style" not in HTML  # SK-13: весь стиль в css, ни inline-блоков
 
 
@@ -70,7 +71,7 @@ def test_token_state_has_time_stamp():
 
 
 def test_saved_state_chip_and_meta():
-    assert "сохранён" in JS and "не сохранён" in JS
+    assert 'L("opt.saved")' in JS and 'L("opt.not_saved")' in JS  # SK-71: тексты — из словаря
     assert 'chip.className = "chip ok"' in JS and 'chip.className = "chip warn"' in JS
     assert 'id="tokMeta"' in HTML and "tokStateTxt" in HTML
 
@@ -80,7 +81,7 @@ def test_saved_state_chip_and_meta():
 def test_check_goes_through_runtime_message():
     assert 'sendMessage({ type: "ws-check" })' in JS
     # состояние на странице: проверка / подключено / не подключено (причина)
-    assert "проверка…" in JS and "подключено · " in JS and "не подключено — " in JS
+    assert 'L("opt.checking")' in JS and 'L("opt.connected")' in JS and 'L("opt.not_connected")' in JS  # SK-71
 
 
 def test_background_answers_ws_check_without_new_bridge_methods():
